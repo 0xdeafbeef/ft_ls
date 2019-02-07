@@ -66,21 +66,37 @@ t_props get_t_size_and_flags(int argc, char **argv)
 int main(int argc, char **argv)
 {
 	t_props props;
+	t_files_list *f_list;
 	props = get_t_size_and_flags(argc, argv);
-
+	f_list = read_path(".", props.flags->a);
+	while (f_list->next)
+	{
+		printf("%s\n", f_list->filename);
+		f_list = f_list->next;
+	}
 	return 0;
 }
 
-void read_without_a_flag(char *path)
+t_files_list *read_path(char *path, int need_to_exclude_system)
 {
-	t_files_list *files_list;
+	t_files_list *current_files_list;
+	t_files_list *tmp_pre;
+	t_files_list *first;
 	DIR *dir;
 	struct dirent *direntp;
-	dir = opendir(path);
 
-	while (direntp=readdir(dir))
+	first = NULL;
+	dir = opendir(path);
+	if ((direntp = readdir(dir))!=NULL)
 	{
-		
+		current_files_list = ft_list_create(direntp->d_name, NULL, NULL);
+		first = current_files_list;
+		while (NULL!=(direntp = readdir(dir)))
+		{
+			tmp_pre = current_files_list;
+			current_files_list = ft_list_create(direntp->d_name, NULL, NULL);
+			ft_list_add_tail(current_files_list, tmp_pre);
+		}
 	}
-	files_list = malloc(sizeof(t_files_list));
+	return (first);
 }

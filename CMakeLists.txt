@@ -8,6 +8,7 @@ include_directories(libft)
 
 add_executable(ft_ls
         libft/ft_atoi.c
+        list_operations.c
         libft/ft_bzero.c
         libft/ft_cpyuntil.c
         libft/ft_is_null_ptr.c

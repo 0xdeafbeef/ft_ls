@@ -11,7 +11,7 @@ t_files_list *ft_list_create(char *name, t_files_list *next, t_files_list *prev)
 	return (list);
 }
 
-t_files_list	*ft_list_add_back(t_files_list *current, t_files_list *prev)
+t_files_list	*ft_list_add_tail(t_files_list *current, t_files_list *prev)
 {
 	prev->next = current;
 	current->next = NULL;
@@ -44,5 +44,5 @@ t_files_list	*ft_list_insert(t_files_list *current, t_files_list *next,
 	if (next)
 		next->previous = current;
 	return (current);
-	
+
 }

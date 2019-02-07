@@ -39,7 +39,12 @@ typedef	struct		s_files_list
 	char *filename;
 	DIR *dir;
 }					t_files_list;
-
+t_files_list *read_path(char *path, int need_to_exclude_system);
 t_files_list *ft_list_create(char *name, t_files_list *next, t_files_list
 *prev);
+t_files_list	*ft_list_insert(t_files_list *current, t_files_list *next,
+								t_files_list *prev);
+t_files_list	*ft_list_add_head(t_files_list *current,t_files_list *next);
+t_files_list	*ft_list_add_tail(t_files_list *current, t_files_list *prev);
+
 #endif

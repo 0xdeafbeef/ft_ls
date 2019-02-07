@@ -23,7 +23,7 @@ t_flags *scan_flags(char **argv, int argc)
 		flags->noFlags = 1;
 		return (flags);
 	}
-	*(argv += 1);
+	*(argv) = *(argv) + 1;
 	while (*argv)
 	{
 		if (ft_strchr(*argv, '-'))
@@ -44,32 +44,20 @@ t_flags *scan_flags(char **argv, int argc)
 							 (char) 0 : (char) 255;
 			return (flags);
 		}
-		*(argv += 1);
+		*(argv) = *(argv) + 1;
 	}
 	flags->noFlags = 1;
 	return (flags);
 }
 
-//DIR *d = opendir(".");
-//struct dirent *dir;
-//
-//while ((dir = readdir(d)) != 0x0)
-//{
-//printf("%s\t\t%d\n", dir->d_name,dir->d_type);
-//
-//}
-//closedir(d);
 
 void get_t_size(int argc, char *const *argv)
 {
 	struct winsize w;
 	t_props props;
 
-	props.flags = *scan_flags(argv, argc);
-	if (isatty(fileno(stdin)))
-		props.flags.is_terminal = 1;
-	else
-		props.flags.is_terminal = 0;
+	props.flags = scan_flags(argv, argc);
+	props.flags->is_terminal = (char) (isatty(fileno(stdin)) ? 1 : 0);
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
 	props.win_size = w.ws_row;
 

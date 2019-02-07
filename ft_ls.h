@@ -21,6 +21,12 @@ typedef struct		s_flags
 typedef struct		s_props
 {
 	int win_size;
-	t_flags flags;
+	t_flags *flags;
 }		t_props;
+
+typedef struct		s_folder_content
+{
+	DIR		*dir;
+	char	*file_name;
+};
 #endif

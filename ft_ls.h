@@ -32,4 +32,11 @@ typedef struct		s_folder_content
 	char	*file_name;
 }					t_folder_content;
 
+typedef	struct		s_files_list
+{
+	struct s_files_list *next;
+	struct s_files_list *previous;
+	char *filename;
+	DIR *dir;
+}					t_files_list;
 #endif

@@ -71,7 +71,16 @@ int main(int argc, char **argv)
 	return 0;
 }
 
-void print_non_system(char *path)
+void read_without_a_flag(char *path)
 {
+	t_files_list *files_list;
+	DIR *dir;
+	struct dirent *direntp;
+	dir = opendir(path);
 
+	while (direntp=readdir(dir))
+	{
+		
+	}
+	files_list = malloc(sizeof(t_files_list));
 }

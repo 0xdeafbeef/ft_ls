@@ -39,4 +39,7 @@ typedef	struct		s_files_list
 	char *filename;
 	DIR *dir;
 }					t_files_list;
+
+t_files_list *ft_list_create(char *name, t_files_list *next, t_files_list
+*prev);
 #endif

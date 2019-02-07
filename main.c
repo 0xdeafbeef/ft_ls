@@ -1,5 +1,4 @@
 
-#include <sys/ioctl.h>
 #include "ft_ls.h"
 
 void ft_set_each(t_flags *flags, char n)
@@ -10,6 +9,7 @@ void ft_set_each(t_flags *flags, char n)
 	flags->l = n;
 	flags->t = n;
 	flags->noFlags = n;
+	flags->is_terminal=n;
 }
 
 t_flags *scan_flags(char **argv, int argc)
@@ -23,10 +23,10 @@ t_flags *scan_flags(char **argv, int argc)
 		flags->noFlags = 1;
 		return (flags);
 	}
-	*(argv) = *(argv) + 1;
+	*(argv)++;
 	while (*argv)
 	{
-		if (ft_strchr(*argv, '-'))
+		if (*argv[0]=='-')
 		{
 			if (ft_strchr(*argv, 'R'))
 				flags->r_big = 1;
@@ -41,17 +41,17 @@ t_flags *scan_flags(char **argv, int argc)
 			flags->noFlags = (ft_strchr(*argv, 'R') || ft_strchr(*argv, 'a') ||
 							  ft_strchr(*argv, 'r') || ft_strchr(*argv, 't') ||
 							  ft_strchr(*argv, 'l')) ?
-							 (char) 0 : (char) 255;
-			return (flags);
+							 (char) 0 : (char) 1;
 		}
-		*(argv) = *(argv) + 1;
+		*(argv) ++;
 	}
-	flags->noFlags = 1;
+	if (flags->noFlags)
+		return (flags);
 	return (flags);
 }
 
 
-void get_t_size(int argc, char *const *argv)
+t_props get_t_size_and_flags(int argc, char **argv)
 {
 	struct winsize w;
 	t_props props;
@@ -60,12 +60,18 @@ void get_t_size(int argc, char *const *argv)
 	props.flags->is_terminal = (char) (isatty(fileno(stdin)) ? 1 : 0);
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
 	props.win_size = w.ws_row;
-
+	return (props);
 }
 
 int main(int argc, char **argv)
 {
-	get_t_size(argc, argv);
+	t_props props;
+	props = get_t_size_and_flags(argc, argv);
 
 	return 0;
+}
+
+void print_non_system(char *path)
+{
+
 }

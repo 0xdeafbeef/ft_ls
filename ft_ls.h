@@ -6,6 +6,7 @@
 #include <dirent.h>
 #include <sys/types.h>
 #include "libft/libft.h"
+#include <sys/ioctl.h>
 
 typedef struct		s_flags
 {
@@ -22,11 +23,13 @@ typedef struct		s_props
 {
 	int win_size;
 	t_flags *flags;
-}		t_props;
+	char *path;
+}					t_props;
 
 typedef struct		s_folder_content
 {
 	DIR		*dir;
 	char	*file_name;
-};
+}					t_folder_content;
+
 #endif

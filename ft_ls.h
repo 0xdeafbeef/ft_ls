@@ -38,14 +38,15 @@ typedef struct			s_folder_content
 	char 				*file_name;
 }						t_folder_content;
 					t_path;
-typedef	struct				s_files_attrib
+typedef struct s_files_attrib
 {
-	struct s_files_attrib	*next;
-	struct s_files_attrib	*previous;
-	char					*filename;
-	size_t					timestamp;
-
+	struct s_files_attrib *next;
+	struct s_files_attrib *previous;
+	char *filename;
+	size_t timestamp;
 }							t_files_attrib;
+t_path						*ft_path_append(t_path *node, char *dat);
+void						ft_free_path_chain(t_path *tail);
 t_files_attrib				*read_path(char *path, int need_to_exclude_system);
 t_files_attrib				*ft_list_create(char *name, t_files_attrib *next,
 		t_files_attrib *prev);

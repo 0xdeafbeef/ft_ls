@@ -12,16 +12,20 @@ void ft_set_each(t_flags *flags, char n)
 	flags->is_terminal = n;
 }
 
-t_flags *scan_flags(char **argv, int argc)
+t_props *scan_flags_path(char **argv, int argc)
 {
-	t_flags *flags;
+	t_props *props;
+	t_path * pat;
 
-	flags = malloc(sizeof(t_flags));
-	ft_set_each(flags, 0);
+	pat = NULL;
+	props = malloc(sizeof(props));
+	props->flags = malloc(sizeof(t_flags));
+	ft_set_each(props->flags, 0);
 	if (argc < 2)
 	{
-		flags->no_flags = 1;
-		return (flags);
+		props->flags->no_flags = 1;
+		props->path = NULL;
+		return (props);
 	}
 	*(argv)++;
 	while (*argv)
@@ -29,26 +33,28 @@ t_flags *scan_flags(char **argv, int argc)
 		if (*argv[0] == '-')
 		{
 			if (ft_strchr(*argv, 'R'))
-				flags->r_big = 1;
+				props->flags->r_big = 1;
 			if (ft_strchr(*argv, 'a'))
-				flags->a = 1;
+				props->flags->a = 1;
 			if (ft_strchr(*argv, 'r'))
-				flags->r_small = 1;
+				props->flags->r_small = 1;
 			if (ft_strchr(*argv, 't'))
-				flags->t = 1;
+				props->flags->t = 1;
 			if (ft_strchr(*argv, 'l'))
-				flags->l = 1;
-			flags->no_flags = (ft_strchr(*argv, 'R') || ft_strchr(*argv, 'a') ||
-							   ft_strchr(*argv, 'r') || ft_strchr(*argv, 't') ||
-							   ft_strchr(*argv, 'l')) ?
-							  (char) 0 : (char) 1;
+				props->flags->l = 1;
+			props->flags->no_flags = (ft_strchr(*argv, 'R') ||
+									  ft_strchr(*argv, 'a') ||
+									  ft_strchr(*argv, 'r') ||
+									  ft_strchr(*argv, 't') ||
+									  ft_strchr(*argv, 'l')) ?
+									 (char) 0 : (char) 1;
 		} else
-
+			pat = ft_path_append(pat, *argv);
 		*(argv)++;
 	}
-	if (flags->no_flags)
-		return (flags);
-	return (flags);
+//	if (props->flags->no_flags)
+//		return (props); todo refactor this if ist will work
+	return (props);
 }
 
 
@@ -57,7 +63,7 @@ t_props get_t_size_and_flags(int argc, char **argv)
 	struct winsize w;
 	t_props props;
 
-	props.flags = scan_flags(argv, argc);
+	props = scan_flags_path(argv, argc);
 	props.flags->is_terminal = (char) (isatty(fileno(stdin)) ? 1 : 0);
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
 	props.win_size = w.ws_row;

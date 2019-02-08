@@ -51,6 +51,12 @@ t_files_attrib *ft_list_insert(t_files_attrib *current, t_files_attrib *next,
 t_path *ft_path_append(t_path *node, char *dat)
 {
 	t_path * nt;
+	if (node ==NULL)
+	{
+		node = malloc(sizeof(t_path *));
+		node->file_name = ft_strdup(dat);
+		return (node);
+	}
 	nt = malloc(sizeof(t_path *));
 	nt->file_name = ft_strdup(dat);
 	node->next = nt;

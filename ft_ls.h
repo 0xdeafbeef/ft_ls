@@ -10,24 +10,32 @@
 
 typedef int				t_bool;
 enum { false, true };
-typedef struct			s_flags
+typedef struct s_flags
 {
-	t_bool				no_flags;
-	t_bool				l;
-	t_bool				r_big;
-	t_bool				a;
-	t_bool				r_small;
-	t_bool				t;
-	t_bool				is_terminal;
+	t_bool no_flags;
+	t_bool l;
+	t_bool r_big;
+	t_bool a;
+	t_bool r_small;
+	t_bool t;
+	t_bool is_terminal;
 }						t_flags;
+typedef struct s_files_attrib
+{
+	struct s_files_attrib *next;
+	struct s_files_attrib *previous;
+	char *filename;
+	size_t timestamp;
+}							t_files_attrib;
 typedef struct			s_path
 {
 	struct s_path		*next;
-	char 				*file_name;
+	t_files_attrib		*attrib;
+
 }						t_path;
 typedef struct			s_props
 {
-	int					win_size;
+	int					win_size; //todo implement this
 	t_flags				*flags;
 	t_path				*path;
 }						t_props;
@@ -37,17 +45,11 @@ typedef struct			s_folder_content
 	DIR					*dir;
 	char 				*file_name;
 }						t_folder_content;
-					t_path;
-typedef struct s_files_attrib
-{
-	struct s_files_attrib *next;
-	struct s_files_attrib *previous;
-	char *filename;
-	size_t timestamp;
-}							t_files_attrib;
+
 t_path						*ft_path_append(t_path *node, char *dat);
 void						ft_free_path_chain(t_path *tail);
-t_files_attrib				*read_path(char *path, int need_to_exclude_system);
+t_files_attrib				*get_files_from_path(char *path,
+												   int need_to_exclude_system);
 t_files_attrib				*ft_list_create(char *name, t_files_attrib *next,
 		t_files_attrib *prev);
 t_files_attrib				*ft_list_insert(t_files_attrib *current,
@@ -56,6 +58,6 @@ t_files_attrib				*ft_list_add_head(t_files_attrib *current,
 		t_files_attrib *next);
 t_files_attrib				*ft_list_add_tail(t_files_attrib *current,
 		t_files_attrib *prev);
-
+void for_each_path(t_path *path,void (*fun)(t_path *));
 void						ft_free_chain(t_files_attrib *head);
 #endif

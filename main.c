@@ -12,11 +12,35 @@ void ft_set_each(t_flags *flags, char n)
 	flags->is_terminal = n;
 }
 
+void find_flag_pattern(char **argv, t_props *props)
+{
+	if (ft_strchr(*argv, 'R'))
+				props->flags->r_big = 1;
+	if (ft_strchr(*argv, 'a'))
+				props->flags->a = 1;
+	if (ft_strchr(*argv, 'r'))
+				props->flags->r_small = 1;
+	if (ft_strchr(*argv, 't'))
+				props->flags->t = 1;
+	if (ft_strchr(*argv, 'l'))
+				props->flags->l = 1;
+	props->flags->no_flags = (ft_strchr(*argv, 'R') ||
+									  ft_strchr(*argv, 'a') ||
+									  ft_strchr(*argv, 'r') ||
+									  ft_strchr(*argv, 't') ||
+									  ft_strchr(*argv, 'l')) ?
+									 (char) 0 : (char) 1;
+}
+
 t_props *scan_flags_path(char **argv, int argc)
 {
 	t_props *props;
 	t_path * pat;
+	t_path * p_handler;
+	t_bool is_first_asign;
 
+	p_handler = NULL;
+	is_first_asign = true;
 	pat = NULL;
 	props = malloc(sizeof(props));
 	props->flags = malloc(sizeof(t_flags));
@@ -31,66 +55,54 @@ t_props *scan_flags_path(char **argv, int argc)
 	while (*argv)
 	{
 		if (*argv[0] == '-')
+			find_flag_pattern(argv, props);
+		else
 		{
-			if (ft_strchr(*argv, 'R'))
-				props->flags->r_big = 1;
-			if (ft_strchr(*argv, 'a'))
-				props->flags->a = 1;
-			if (ft_strchr(*argv, 'r'))
-				props->flags->r_small = 1;
-			if (ft_strchr(*argv, 't'))
-				props->flags->t = 1;
-			if (ft_strchr(*argv, 'l'))
-				props->flags->l = 1;
-			props->flags->no_flags = (ft_strchr(*argv, 'R') ||
-									  ft_strchr(*argv, 'a') ||
-									  ft_strchr(*argv, 'r') ||
-									  ft_strchr(*argv, 't') ||
-									  ft_strchr(*argv, 'l')) ?
-									 (char) 0 : (char) 1;
-		} else
 			pat = ft_path_append(pat, *argv);
+			if (is_first_asign)
+				p_handler = pat;
+			is_first_asign = false;
+		}
 		*(argv)++;
 	}
-//	if (props->flags->no_flags)
-//		return (props); todo refactor this if ist will work
+	props->path = p_handler;
 	return (props);
 }
 
 
-t_props get_t_size_and_flags(int argc, char **argv)
+t_props *get_t_size_and_flags(int argc, char **argv)
 {
 	struct winsize w;
-	t_props props;
+	t_props *props;
 
 	props = scan_flags_path(argv, argc);
-	props.flags->is_terminal = (char) (isatty(fileno(stdin)) ? 1 : 0);
+	props->flags->is_terminal = (char) (isatty(fileno(stdin)) ? 1 : 0);
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-	props.win_size = w.ws_row;
+	props->win_size = w.ws_row;
 	return (props);
 }
 
 int main(int argc, char **argv)
 {
-	t_props props;
+	t_props *props;
 	t_files_attrib *f_list;
 	t_files_attrib *head;
 	props = get_t_size_and_flags(argc, argv);
-	f_list = read_path("/dev", !props.flags->a);
+	f_list = get_files_from_path("/dev", !props->flags->a);
 	head = f_list;
 	while (f_list->next)
 	{
 		printf("%s\n", f_list->filename);
 		f_list = f_list->next;
 	}
-	props.path = NULL;
+	props->path = NULL;
 	ft_free_chain(head);
-	free(props.flags);
-	free(props.path);
+	free(props->flags);
+	free(props->path);
 	return 0;
 }
 
-t_files_attrib *read_path(char *path, int need_to_exclude_system)
+t_files_attrib *get_files_from_path(char *path, int need_to_exclude_system)
 {
 	t_files_attrib *current_files_list;
 	t_files_attrib *tmp_pre;

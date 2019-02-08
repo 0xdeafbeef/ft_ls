@@ -50,31 +50,17 @@ t_files_attrib *ft_list_insert(t_files_attrib *current, t_files_attrib *next,
 
 t_path *ft_path_append(t_path *node, char *dat)
 {
-	t_path * nt;
-	if (node ==NULL)
+	t_path *nt;
+	if (node == NULL)
 	{
 		node = malloc(sizeof(t_path *));
-		node->file_name = ft_strdup(dat);
+		node->attrib->filename = ft_strdup(dat);
 		return (node);
 	}
 	nt = malloc(sizeof(t_path *));
-	nt->file_name = ft_strdup(dat);
+	nt->attrib->filename = ft_strdup(dat);
 	node->next = nt;
 	return (nt);
-}
-
-void ft_free_path_chain(t_path *tail)
-{
-	t_path * nrxt;
-
-//	if (tail->next)
-//		nrxt = tail->next;
-	while (nrxt = tail->next)
-	{
-		free(tail->file_name);
-		free(tail);
-		tail = nrxt;
-	}
 }
 
 void ft_free_chain(t_files_attrib *head)
@@ -88,5 +74,18 @@ void ft_free_chain(t_files_attrib *head)
 			free(nrxt->previous->filename);
 		}
 		free(head);
+	}
+}
+
+void ft_free_path_chain(t_path *tail)
+{
+	t_path *nrxt;
+
+
+	while ((nrxt = tail->next))
+	{
+		ft_free_chain(tail->attrib);
+		free(tail);
+		tail = nrxt;
 	}
 }

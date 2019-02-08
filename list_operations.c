@@ -46,3 +46,19 @@ t_files_list	*ft_list_insert(t_files_list *current, t_files_list *next,
 	return (current);
 
 }
+
+void	ft_free_chain(t_files_list *head)
+{
+	t_files_list *nrxt;
+	if (head->next)
+	{
+		while((nrxt = head->next))
+		{
+			free(nrxt->previous->filename);
+			free(nrxt->previous);
+		}
+		if (nrxt->filename)
+			free(nrxt->filename);
+		free(nrxt);
+	}
+}

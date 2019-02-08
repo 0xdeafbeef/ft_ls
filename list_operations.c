@@ -89,3 +89,15 @@ void ft_free_path_chain(t_path *tail)
 		tail = nrxt;
 	}
 }
+void for_each_attrib_in_path(t_path *pat, void (*fun)(t_files_attrib *))
+{
+	t_path *temp;
+	if (!fun|!pat)
+		return;
+	temp = pat;
+	while(temp)
+	{
+		fun(temp->attrib);
+		temp = temp->next;
+	}
+}

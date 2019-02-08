@@ -58,6 +58,6 @@ t_files_attrib				*ft_list_add_head(t_files_attrib *current,
 		t_files_attrib *next);
 t_files_attrib				*ft_list_add_tail(t_files_attrib *current,
 		t_files_attrib *prev);
-void for_each_path(t_path *path,void (*fun)(t_path *));
+void for_each_attrib_in_path(t_path *pat, void (*fun)(t_files_attrib *));
 void						ft_free_chain(t_files_attrib *head);
 #endif

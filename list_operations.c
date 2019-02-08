@@ -1,17 +1,17 @@
 #include "ft_ls.h"
 
-t_files_list *ft_list_create(char *name, t_files_list *next, t_files_list *prev)
+t_files_attrib *ft_list_create(char *name, t_files_attrib *next, t_files_attrib *prev)
 {
-	t_files_list *list;
+	t_files_attrib *list;
 
-	list = malloc(sizeof(t_files_list));
+	list = malloc(sizeof(t_files_attrib));
 	list->filename = name ? ft_strdup(name) : 0x0;
 	list->next = next;
 	list->previous = prev;
 	return (list);
 }
 
-t_files_list	*ft_list_add_tail(t_files_list *current, t_files_list *prev)
+t_files_attrib	*ft_list_add_tail(t_files_attrib *current, t_files_attrib *prev)
 {
 	prev->next = current;
 	current->next = NULL;
@@ -19,7 +19,7 @@ t_files_list	*ft_list_add_tail(t_files_list *current, t_files_list *prev)
 	return (current);
 }
 
-t_files_list	*ft_list_add_head(t_files_list *current,t_files_list *next)
+t_files_attrib	*ft_list_add_head(t_files_attrib *current,t_files_attrib *next)
 {
 	if (next)
 		next->previous = current;
@@ -31,8 +31,8 @@ t_files_list	*ft_list_add_head(t_files_list *current,t_files_list *next)
 	return (current);
 }
 
-t_files_list	*ft_list_insert(t_files_list *current, t_files_list *next,
-								t_files_list *prev)
+t_files_attrib	*ft_list_insert(t_files_attrib *current, t_files_attrib *next,
+								t_files_attrib *prev)
 {
 	if (current)
 	{
@@ -47,9 +47,9 @@ t_files_list	*ft_list_insert(t_files_list *current, t_files_list *next,
 
 }
 
-void	ft_free_chain(t_files_list *head)
+void	ft_free_chain(t_files_attrib *head)
 {
-	t_files_list *nrxt;
+	t_files_attrib *nrxt;
 	if (head->next)
 	{
 		while((nrxt = head->next))

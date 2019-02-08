@@ -66,7 +66,7 @@ t_props get_t_size_and_flags(int argc, char **argv)
 int main(int argc, char **argv)
 {
 	t_props props;
-	t_files_list *f_list;
+	t_files_attrib *f_list;
 	props = get_t_size_and_flags(argc, argv);
 	f_list = read_path(".", props.flags->a);
 	while (f_list->next)
@@ -77,11 +77,11 @@ int main(int argc, char **argv)
 	return 0;
 }
 
-t_files_list *read_path(char *path, int need_to_exclude_system)
+t_files_attrib *read_path(char *path, int need_to_exclude_system)
 {
-	t_files_list *current_files_list;
-	t_files_list *tmp_pre;
-	t_files_list *first;
+	t_files_attrib *current_files_list;
+	t_files_attrib *tmp_pre;
+	t_files_attrib *first;
 	DIR *dir;
 	struct dirent *direntp;
 

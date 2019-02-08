@@ -7,7 +7,7 @@
 #include <sys/types.h>
 #include "libft/libft.h"
 #include <sys/ioctl.h>
-
+#include <time.h>
 typedef struct		s_flags
 {
 	char noFlags;
@@ -32,20 +32,20 @@ typedef struct		s_folder_content
 	char	*file_name;
 }					t_folder_content;
 
-typedef	struct		s_files_list
+typedef	struct		s_files_attrib
 {
-	struct s_files_list *next;
-	struct s_files_list *previous;
+	struct s_files_attrib *next;
+	struct s_files_attrib *previous;
 	char *filename;
-	DIR *dir;
-}					t_files_list;
-t_files_list *read_path(char *path, int need_to_exclude_system);
-t_files_list *ft_list_create(char *name, t_files_list *next, t_files_list
+	size_t timestamp;
+}					t_files_attrib;
+t_files_attrib *read_path(char *path, int need_to_exclude_system);
+t_files_attrib *ft_list_create(char *name, t_files_attrib *next, t_files_attrib
 *prev);
-t_files_list	*ft_list_insert(t_files_list *current, t_files_list *next,
-								t_files_list *prev);
-t_files_list	*ft_list_add_head(t_files_list *current,t_files_list *next);
-t_files_list	*ft_list_add_tail(t_files_list *current, t_files_list *prev);
+t_files_attrib	*ft_list_insert(t_files_attrib *current, t_files_attrib *next,
+								t_files_attrib *prev);
+t_files_attrib	*ft_list_add_head(t_files_attrib *current,t_files_attrib *next);
+t_files_attrib	*ft_list_add_tail(t_files_attrib *current, t_files_attrib *prev);
 
-void	ft_free_chain(t_files_list *head);
+void	ft_free_chain(t_files_attrib *head);
 #endif

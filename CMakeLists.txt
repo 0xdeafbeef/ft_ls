@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.13)
 project(ft_ls C)
 
 set(CMAKE_C_STANDARD 11)
-set(CMAKE_C_FLAGS_DEBUG  "${CMAKE_C_FLAGS_DEBUG} -fsanitize=address")
+#set(CMAKE_C_FLAGS_DEBUG  "${CMAKE_C_FLAGS_DEBUG} -fsanitize=address")
 include_directories(.)
 include_directories(libft)
 

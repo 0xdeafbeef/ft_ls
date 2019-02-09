@@ -43,8 +43,8 @@ typedef struct			s_props
 {
 	int					win_size; //todo implement this
 	char 				isterm;
-	t_flags				*flags;
-	short int			flag;
+	t_flags				*flags; //todo deprecated
+	unsigned short int	flag;
 	t_path				*path;
 }						t_props;
 

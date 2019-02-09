@@ -54,12 +54,15 @@ t_path *ft_path_append(t_path *node, char *dat)
 	if (node == NULL)
 	{
 		node = malloc(sizeof(t_path *));
+		node->attrib = malloc(sizeof(t_files_attrib *));
 		node->attrib->filename = ft_strdup(dat);
 		return (node);
 	}
 	nt = malloc(sizeof(t_path *));
+	nt->attrib = malloc(sizeof(t_files_attrib *));
 	nt->attrib->filename = ft_strdup(dat);
 	node->next = nt;
+	nt->next = 0x0;
 	return (nt);
 }
 
@@ -89,15 +92,20 @@ void ft_free_path_chain(t_path *tail)
 		tail = nrxt;
 	}
 }
-void for_each_attrib_in_path(t_path *pat, void (*fun)(t_files_attrib *))
+
+void for_each_path(t_path *pat, void (*fun)(t_files_attrib *))
 {
 	t_path *temp;
-	if (!fun|!pat)
+	if (!fun | !pat)
 		return;
 	temp = pat;
-	while(temp)
+	while (temp)
 	{
 		fun(temp->attrib);
 		temp = temp->next;
 	}
 }
+//void for_each_attrib((t_path *pat, void (*fun)(t_files_attrib *)))
+//{
+//	return;
+//}

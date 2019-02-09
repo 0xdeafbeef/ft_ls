@@ -10,7 +10,7 @@
 # define NO_FLAGS 0x00
 # define L 0x01
 # define R_BIG 0x02
-# define A 0x4
+# define A 0x04
 # define R_SMALL 0x08
 # define T 0x10
 # define IS_TERM 0x20
@@ -68,4 +68,5 @@ t_files_attrib				*ft_list_add_tail(t_files_attrib *current,
 		t_files_attrib *prev);
 void for_each_path(t_path *pat, void (*fun)(t_files_attrib *));
 void						ft_free_chain(t_files_attrib *head);
+void print_bits(unsigned short int c, char bytes);
 #endif

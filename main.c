@@ -33,14 +33,14 @@
 //}
 void find_flag_pattern(char **argv, t_props *props)
 {
-	if (ft_strchr(*argv, 'R'))
+	if (ft_strchr(*argv, 'R') )
 		props->flag |= R_BIG;
 	if (ft_strchr(*argv, 'a'))
 		props->flag |= A;
 	if (ft_strchr(*argv, 'r'))
 		props->flag |= R_SMALL;
 	if (ft_strchr(*argv, 't'))
-		props->flag |= T;
+		props->flag |=T;
 	if (ft_strchr(*argv, 'l'))
 		props->flag |= L;
 }
@@ -76,6 +76,7 @@ t_props *scan_flags_path(char **argv, int argc)
 		}
 		*(argv)++;
 	}
+	print_bits(props->flag, 1);
 	props->path = p_handler;
 	return (props);
 }
@@ -99,6 +100,7 @@ int main(int argc, char **argv)
 	t_files_attrib *f_list;
 	t_files_attrib *head;
 	props = get_t_size_and_flags(argc, argv);
+	print_bits(props->flag, 2);
 	f_list = get_files_from_path("/dev", !props->flags->a);
 	head = f_list;
 	while (f_list->next)

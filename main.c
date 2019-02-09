@@ -110,8 +110,7 @@ void get_path_list(t_props *curent)
 int main(int argc, char **argv)
 {
 	t_props *props;
-	t_files_attrib *f_list;
-	t_files_attrib *head;
+
 	props = get_t_size_and_flags(argc, argv);
 	print_bits(props->flag, 2);
 
@@ -129,10 +128,7 @@ int main(int argc, char **argv)
 //		}
 //		props->path = props->path->next;
 //	}
-	props->path = NULL;
-	ft_free_chain(head);
-	free(props->flags);
-	free(props->path);
+
 	return 0;
 }
 

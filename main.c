@@ -57,11 +57,9 @@ t_props *scan_flags_path(char **argv, int argc)
 	pat = NULL;
 	props = malloc(sizeof(props));
 	props->flag = NO_FLAGS;
+	props->path = NULL;
 	if (argc < 2)
-	{
-		props->path = NULL;
 		return (props);
-	}
 	*(argv)++;
 	while (*argv)
 	{
@@ -76,7 +74,7 @@ t_props *scan_flags_path(char **argv, int argc)
 		}
 		*(argv)++;
 	}
-	print_bits(props->flag, 1);
+	//print_bits(props->flag, 1);
 	props->path = p_handler;
 	return (props);
 }
@@ -94,21 +92,19 @@ t_props *get_t_size_and_flags(int argc, char **argv)
 	return (props);
 }
 
-void get_controller(t_props *curent)
+void get_path_list(t_props *curent)
 {
-	t_path *ret;
-	t_path *handler;
-	t_path *nxt;
+	t_path *current_path;
+	t_path *holder;
+	t_bool flag;
 
-
-	ret = curent->path;
-	ret = ft_path_append(ret, NULL);
-	nxt = handler;
-	handler->attrib = get_files_from_path(handler->path, !(curent->flag & A));
-	while ((nxt = curent->next))
-	{
-
-	}
+	flag = ~curent->flag & A;
+	current_path = curent->path;
+	holder = current_path;
+	current_path->attrib = get_attr_from_path(current_path->path, flag);
+	while ((current_path = current_path->next))
+		current_path->attrib = get_attr_from_path(current_path->path, flag);
+	curent->path = holder;
 }
 
 int main(int argc, char **argv)
@@ -119,13 +115,20 @@ int main(int argc, char **argv)
 	props = get_t_size_and_flags(argc, argv);
 	print_bits(props->flag, 2);
 
-	f_list = get_controller(props);
-	head = f_list;
-	while (f_list->next)
-	{
-		printf("%s\n", f_list->filename);
-		f_list = f_list->next;
-	}
+	get_path_list(props);
+//	while(1)
+//	{
+//
+//		if(!props->path)
+//			break;
+//		head = f_list;
+//		while (f_list->next)
+//		{
+//			printf("%s\n", f_list->filename);
+//			f_list = f_list->next;
+//		}
+//		props->path = props->path->next;
+//	}
 	props->path = NULL;
 	ft_free_chain(head);
 	free(props->flags);
@@ -133,7 +136,7 @@ int main(int argc, char **argv)
 	return 0;
 }
 
-t_files_attrib *get_files_from_path(char *path, int need_to_exclude_system)
+t_files_attrib *get_attr_from_path(char *path, int need_to_exclude_system)
 {
 	t_files_attrib *current_files_list;
 	t_files_attrib *tmp_pre;

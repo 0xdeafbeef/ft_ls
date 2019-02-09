@@ -43,7 +43,7 @@ typedef struct			s_path
 typedef struct			s_props
 {
 	int					win_size; //todo implement this
-	char 				isterm;
+	t_bool 				isterm;
 	t_flags				*flags; //todo deprecated
 	unsigned short int	flag;
 	t_path				*path;
@@ -51,8 +51,8 @@ typedef struct			s_props
 
 t_path						*ft_path_append(t_path *node, char *dat);
 void						ft_free_path_chain(t_path *tail);
-t_files_attrib				*get_files_from_path(char *path,
-												   int need_to_exclude_system);
+t_files_attrib				*get_attr_from_path(char *path,
+												  int need_to_exclude_system);
 t_files_attrib				*ft_list_create(char *name, t_files_attrib *next,
 		t_files_attrib *prev);
 t_files_attrib				*ft_list_insert(t_files_attrib *current,

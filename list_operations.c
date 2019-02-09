@@ -53,9 +53,8 @@ t_path *ft_path_append(t_path *node, char *dat)
 	t_path *nt;
 
 	nt = malloc(sizeof(t_path *));
-	nt->attrib = malloc(sizeof(t_files_attrib *));
 	if (dat)
-		nt->attrib->filename = ft_strdup(dat);
+		nt->path = ft_strdup(dat);
 	nt->next = 0x0;
 	if (!node)
 		return (nt);

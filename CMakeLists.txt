@@ -7,7 +7,6 @@ include_directories(.)
 include_directories(libft)
 
 add_executable(ft_ls
-        list_merge_sort_ex.c
         utils.c
         libft/ft_atoi.c
         list_operations.c

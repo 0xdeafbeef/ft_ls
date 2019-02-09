@@ -6,7 +6,7 @@
 /*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/09 20:46:56 by qhetting          #+#    #+#             */
-/*   Updated: 2019/02/09 20:47:19 by qhetting         ###   ########.fr       */
+/*   Updated: 2019/02/09 21:31:38 by qhetting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -27,16 +27,6 @@
 # define IS_TERM 0x20
 typedef int				t_bool;
 enum { false, true };
-typedef struct s_flags //todo remove cause deprecated
-{
-	t_bool no_flags;
-	t_bool l;
-	t_bool r_big;
-	t_bool a;
-	t_bool r_small;
-	t_bool t;
-	t_bool is_terminal;
-}						t_flags;
 typedef struct s_files_attrib
 {
 	struct s_files_attrib *next;
@@ -55,7 +45,6 @@ typedef struct			s_props
 {
 	int					win_size; //todo implement this
 	t_bool 				isterm;
-	t_flags				*flags; //todo deprecated
 	unsigned short int	flag;
 	t_path				*path;
 }						t_props;
@@ -75,4 +64,5 @@ t_files_attrib				*ft_list_push(t_files_attrib *current,
 void for_each_path(t_path *pat, void (*fun)(t_files_attrib *));
 void						ft_free_chain(t_files_attrib *head);
 void print_bits(unsigned short int c, char bytes);
+void print_path_list(t_files_attrib *list);
 #endif

@@ -6,42 +6,12 @@
 /*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/09 20:47:13 by qhetting          #+#    #+#             */
-/*   Updated: 2019/02/09 20:47:19 by qhetting         ###   ########.fr       */
+/*   Updated: 2019/02/09 21:05:07 by qhetting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-//void ft_set_each(t_flags *flags, char n)
-//{
-//	flags->r_small = n;
-//	flags->a = n;
-//	flags->r_big = n;
-//	flags->l = n;
-//	flags->t = n;
-//	flags->no_flags = n;
-//	flags->is_terminal = n;
-//}
-
-//void find_flag_pattern(char **argv, t_props *props)
-//{
-//	if (ft_strchr(*argv, 'R'))
-//				props->flags->r_big = 1;
-//	if (ft_strchr(*argv, 'a'))
-//				props->flags->a = 1;
-//	if (ft_strchr(*argv, 'r'))
-//				props->flags->r_small = 1;
-//	if (ft_strchr(*argv, 't'))
-//				props->flags->t = 1;
-//	if (ft_strchr(*argv, 'l'))
-//				props->flags->l = 1;
-//	props->flags->no_flags = (ft_strchr(*argv, 'R') ||
-//									  ft_strchr(*argv, 'a') ||
-//									  ft_strchr(*argv, 'r') ||
-//									  ft_strchr(*argv, 't') ||
-//									  ft_strchr(*argv, 'l')) ?
-//									 (char) 0 : (char) 1;
-//}
 void find_flag_pattern(char **argv, t_props *props)
 {
 	if (ft_strchr(*argv, 'R'))
@@ -120,22 +90,19 @@ void get_path_list(t_props *curent)
 int main(int argc, char **argv)
 {
 	t_props *props;
+	t_path *pat;
+
 
 	props = get_t_size_and_flags(argc, argv);
 	print_bits(props->flag, 2);
 
 	get_path_list(props);
-//	while(1)
-//	{
-//		if(!props->path)
-//			break;
-//
-//		while (props->path)
-//		{
-//			printf("%s\n",props->path->path);
-//		}
-//		props->path = props->path->next;
-//	}
+	pat = props->path;
+	while (pat)
+	{
+		print_path_list(pat->attrib);
+		pat = pat->next;
+	}
 
 	return 0;
 }

@@ -102,7 +102,14 @@ void for_each_path(t_path *pat, void (*fun)(t_files_attrib *))
 		temp = temp->next;
 	}
 }
-//void for_each_attrib((t_path *pat, void (*fun)(t_files_attrib *)))
+//void for_each_attrib(t_path *pat, char *data)
 //{
+//	t_files_attrib *next;
+//	t_files_attrib *cur;
+//
+//	cur = pat->attrib;
+//
+//	while ((next = cur->next))
+//
 //	return;
 //}

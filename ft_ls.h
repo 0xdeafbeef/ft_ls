@@ -36,6 +36,7 @@ typedef struct s_files_attrib
 typedef struct			s_path
 {
 	struct s_path		*next;
+	char				*path;
 	t_files_attrib		*attrib;
 
 }						t_path;
@@ -47,12 +48,6 @@ typedef struct			s_props
 	unsigned short int	flag;
 	t_path				*path;
 }						t_props;
-
-typedef struct			s_folder_content
-{
-	DIR					*dir;
-	char 				*file_name;
-}						t_folder_content;
 
 t_path						*ft_path_append(t_path *node, char *dat);
 void						ft_free_path_chain(t_path *tail);

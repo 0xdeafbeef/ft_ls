@@ -6,7 +6,7 @@
 /*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/09 20:47:13 by qhetting          #+#    #+#             */
-/*   Updated: 2019/02/09 21:05:07 by qhetting         ###   ########.fr       */
+/*   Updated: 2019/02/09 21:44:59 by qhetting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void get_path_list(t_props *curent)
 	t_path *holder;
 	t_bool flag;
 
-	flag = ~curent->flag & A;
+	flag = !(curent->flag & A);
 	current_path = curent->path;
 	holder = current_path;
 	current_path->attrib = get_attr_from_path(current_path->path, flag);
@@ -94,8 +94,6 @@ int main(int argc, char **argv)
 
 
 	props = get_t_size_and_flags(argc, argv);
-	print_bits(props->flag, 2);
-
 	get_path_list(props);
 	pat = props->path;
 	while (pat)

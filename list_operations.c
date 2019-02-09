@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   list_operations.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/02/09 20:46:50 by qhetting          #+#    #+#             */
+/*   Updated: 2019/02/09 20:47:19 by qhetting         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "ft_ls.h"
 
 t_files_attrib *
@@ -12,11 +23,11 @@ ft_list_create(char *name, t_files_attrib *next, t_files_attrib *prev)
 	return (list);
 }
 
-t_files_attrib *ft_list_add_tail(t_files_attrib *current, t_files_attrib *prev)
+t_files_attrib *ft_list_push(t_files_attrib *current, t_files_attrib *prev)
 {
-	prev->next = current;
 	current->next = NULL;
 	current->previous = prev;
+	prev->next = current;
 	return (current);
 }
 

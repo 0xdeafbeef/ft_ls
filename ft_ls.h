@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_ls.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/02/09 20:46:56 by qhetting          #+#    #+#             */
+/*   Updated: 2019/02/09 20:47:19 by qhetting         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include <stdio.h>
 #include <dirent.h>
 #include <sys/types.h>
@@ -59,8 +70,8 @@ t_files_attrib				*ft_list_insert(t_files_attrib *current,
 		t_files_attrib *next, t_files_attrib *prev);
 t_files_attrib				*ft_list_add_head(t_files_attrib *current,
 		t_files_attrib *next);
-t_files_attrib				*ft_list_add_tail(t_files_attrib *current,
-		t_files_attrib *prev);
+t_files_attrib				*ft_list_push(t_files_attrib *current,
+											t_files_attrib *prev);
 void for_each_path(t_path *pat, void (*fun)(t_files_attrib *));
 void						ft_free_chain(t_files_attrib *head);
 void print_bits(unsigned short int c, char bytes);

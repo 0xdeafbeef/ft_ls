@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/02/09 20:47:13 by qhetting          #+#    #+#             */
+/*   Updated: 2019/02/09 20:47:19 by qhetting         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "ft_ls.h"
 
@@ -74,7 +85,6 @@ t_props *scan_flags_path(char **argv, int argc)
 		}
 		*(argv)++;
 	}
-	//print_bits(props->flag, 1);
 	props->path = p_handler;
 	return (props);
 }
@@ -117,14 +127,12 @@ int main(int argc, char **argv)
 	get_path_list(props);
 //	while(1)
 //	{
-//
 //		if(!props->path)
 //			break;
-//		head = f_list;
-//		while (f_list->next)
+//
+//		while (props->path)
 //		{
-//			printf("%s\n", f_list->filename);
-//			f_list = f_list->next;
+//			printf("%s\n",props->path->path);
 //		}
 //		props->path = props->path->next;
 //	}
@@ -154,7 +162,7 @@ t_files_attrib *get_attr_from_path(char *path, int need_to_exclude_system)
 				tmp_pre = current_files_list;
 				current_files_list = ft_list_create(direntp->d_name, NULL,
 													NULL);
-				ft_list_add_tail(current_files_list, tmp_pre);
+				ft_list_push(current_files_list, tmp_pre);
 			}
 		}
 	}

@@ -79,6 +79,8 @@ void get_path_list(t_props *curent)
 	t_bool flag;
 
 	flag = !(curent->flag & A);
+	if (!curent->path)
+		return;
 	current_path = curent->path;
 	holder = current_path;
 	current_path->attrib = get_attr_from_path(current_path->path, flag);
@@ -98,7 +100,7 @@ int main(int argc, char **argv)
 	pat = props->path;
 	while (pat)
 	{
-		print_path_list(pat->attrib);
+		print_path_list(pat);
 		pat = pat->next;
 	}
 
@@ -116,7 +118,10 @@ t_files_attrib *get_attr_from_path(char *path, int need_to_exclude_system)
 	first = NULL;
 	dir = opendir(path);
 	if (errno == ENOENT)
+	{
+		errno = 0;
 		return (NULL);
+	}
 	if ((direntp = readdir(dir)) != NULL)
 	{
 		current_files_list = ft_list_create(direntp->d_name, NULL, NULL);

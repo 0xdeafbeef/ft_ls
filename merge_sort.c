@@ -71,7 +71,7 @@ void print_path_list(t_path *path)
 
 	if (!path->attrib)
 	{
-		print_error(path->path, "No such file or directory ");
+		print_error(path->path, "Can not access ",ENOENT);
 		return;
 	}
 	list = path->attrib;

@@ -66,5 +66,5 @@ void						for_each_path(t_path *pat, void (*fun)(t_files_attrib *));
 void						ft_free_chain(t_files_attrib *head);
 void						print_bits(unsigned short int c, char bytes);
 void print_path_list(t_path *path);
-void print_error(char * error_file, char *msg);
+void print_error(char *error_file, char *msg, int error_num);
 #endif

@@ -115,6 +115,8 @@ t_files_attrib *get_attr_from_path(char *path, int need_to_exclude_system)
 
 	first = NULL;
 	dir = opendir(path);
+	if (errno == ENOENT)
+		return (NULL);
 	if ((direntp = readdir(dir)) != NULL)
 	{
 		current_files_list = ft_list_create(direntp->d_name, NULL, NULL);

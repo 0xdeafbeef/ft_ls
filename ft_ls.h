@@ -15,6 +15,7 @@
 #include "libft/libft.h"
 #include <sys/ioctl.h>
 #include <time.h>
+#include <errno.h>
 
 #ifndef FT_LS_FT_LS_H
 # define FT_LS_FT_LS_H
@@ -61,8 +62,9 @@ t_files_attrib				*ft_list_add_head(t_files_attrib *current,
 		t_files_attrib *next);
 t_files_attrib				*ft_list_push(t_files_attrib *current,
 											t_files_attrib *prev);
-void for_each_path(t_path *pat, void (*fun)(t_files_attrib *));
+void						for_each_path(t_path *pat, void (*fun)(t_files_attrib *));
 void						ft_free_chain(t_files_attrib *head);
-void print_bits(unsigned short int c, char bytes);
-void print_path_list(t_files_attrib *list);
+void						print_bits(unsigned short int c, char bytes);
+void print_path_list(t_path *path);
+void print_error(char * error_file, char *msg);
 #endif

@@ -65,15 +65,18 @@ void split_on_halves(t_files_attrib *source, t_files_attrib **front,
 	slow->next = 0x0;
 }
 
-void print_path_list(t_files_attrib *list)
+void print_path_list(t_path *path)
 {
-	if (list && list->filename)
-		ft_putstr(list->filename);
-	ft_putchar('\n');
+	t_files_attrib *list;
+
+	if (!path->attrib)
+	{
+		print_error(path->path, "No such file or directory ");
+		return;
+	}
+	list = path->attrib;
+	ft_putendl(list->filename);
 	while ((list = list->next))
 		if (list->filename)
-		{
-			ft_putstr(list->filename);
-			ft_putchar('\n');
-		}
+			ft_putendl(list->filename);
 }

@@ -26,43 +26,44 @@
 # define R_SMALL 0x08
 # define T 0x10
 # define IS_TERM 0x20
-typedef int				t_bool;
+typedef int					t_bool;
 enum { false, true };
-typedef struct s_files_attrib
+typedef struct 				s_files_attrib
 {
-	struct s_files_attrib *next;
-	struct s_files_attrib *previous;
+	struct s_files_attrib 	*next;
+	struct s_files_attrib 	*previous;
 
-	char				*filename;
-	time_t				timestamp;
-	char				permissions;
-	char				*owner_name;
-	char				*group_name;
-	size_t				file_size;
-	size_t				link_count;
-	unsigned int		filetype;
-	t_bool				is_soft_link;
-	char				*link_pointer;
+	char					*filename;
+	time_t					timestamp;
+	char					permissions;
+	char					*owner_name;
+	char					*group_name;
+	size_t					file_size;
+	size_t					link_count;
+	unsigned int			filetype;
+	t_bool					is_soft_link;
+	char					*link_pointer;
 }							t_files_attrib;
-typedef struct			s_path
+typedef struct				s_path
 {
-	struct s_path		*next;
-	struct s_path		*down;
-	struct s_path		*up;
-	char				*path;
-	t_files_attrib		*attrib;
+	struct s_path			*next;
+	struct s_path			*down;
+	struct s_path			*up;
+	char					*path;
+	t_files_attrib			*attrib;
 	}						t_path;
-typedef struct			s_props
+typedef struct				s_props
 {
-	int					win_size; //todo implement this
-	t_bool 				isterm;
-	unsigned short int	flag;
-	t_path				*path;
-}						t_props;
+	int						win_size; //todo implement this
+	t_bool 					isterm;
+	unsigned short int		flag;
+	t_path					*path;
+}							t_props;
 
 void						get_path_list(t_props *curent);
 t_path						*ft_path_append_horizontal(t_path *node,
 														 char *dat);
+void						ft_path_append_vertical(t_path *pre, char *name);
 t_props						*get_t_size_and_flags(int argc, char **argv);
 void						ft_free_path_chain(t_path *tail);
 t_files_attrib				*get_attr_from_path(char *path,
@@ -78,6 +79,6 @@ t_files_attrib				*ft_list_push(t_files_attrib *current,
 void						for_each_path(t_path *pat, void (*fun)(t_files_attrib *));
 void						ft_free_chain(t_files_attrib *head);
 void						print_bits(unsigned short int c, char bytes);
-void print_path_list(t_path *path);
-void print_error(char const *error_file, char const *msg, int error_num);
+void						print_path_list(t_path *path);
+void						print_error(char const *error_file, char const *msg, int error_num);
 #endif

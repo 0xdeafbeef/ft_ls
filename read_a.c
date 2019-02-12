@@ -35,13 +35,32 @@ t_files_attrib *get_attr_from_path(char *path, int need_to_exclude_system)
 	return (first);
 }
 
+void tree_traverse(t_path *root_node)
+{
+	DIR *dir;
+	struct dirent *direntp;
+	t_files_attrib *current_files_list;
+	t_files_attrib *tmp_pre;
+	t_files_attrib *first;
+	t_files_attrib	*upper;
+
+	dir = opendir(root_node->path);
+
+
+}
+
 void get_path_list(t_props *curent)
 {
 	t_path *current_path;
 	t_path *holder;
 	t_bool flag;
+	t_bool recurisive_traverse;
 
-	flag = !(curent->flag & A);
+	recurisive_traverse = curent->flag & R_BIG;
+
+	if (recurisive_traverse)
+
+		flag = !(curent->flag & A);
 	if (!curent->path)
 		return;
 	current_path = curent->path;

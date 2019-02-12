@@ -36,3 +36,9 @@ void print_error(char const *error_file, char const *msg, int error_num)
 	ft_putendl_fd(ptr, 2);
 	free(ptr);
 }
+int is_dir(const char *path)
+{
+	struct stat path_stat;
+	stat(path, &path_stat);
+	return S_ISDIR(path_stat.st_mode);
+}

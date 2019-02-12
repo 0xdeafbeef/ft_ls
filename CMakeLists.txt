@@ -81,4 +81,4 @@ add_executable(ft_ls
         libft/libft.h
         libft/strlen.h
         ft_ls.h
-        main.c merge_sort.c flags.c read_a.c path_operations.c)
+        main.c merge_sort.c flags.c read_a.c path_operations.c attrib_operations.c)

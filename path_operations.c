@@ -6,7 +6,7 @@
 /*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/12 16:44:35 by qhetting          #+#    #+#             */
-/*   Updated: 2019/02/12 16:48:25 by qhetting         ###   ########.fr       */
+/*   Updated: 2019/02/12 19:11:27 by qhetting         ###   ########.fr       */
 /*                                                                            */
 #include "ft_ls.h"
 
@@ -44,26 +44,12 @@ void ft_free_path_chain(t_path *tail)
 {
 	t_path *nrxt;
 
-
 	while ((nrxt = tail->next))
 	{
 		ft_free_chain(tail->attrib);
 		free(tail);
 		tail = nrxt;
 	}
-}
-
-void ft_path_append_vertical(t_path *pre, char *name)
-{
-	t_path *path;
-
-	path = malloc(sizeof(t_path *));
-	path->up = pre;
-	path->next = NULL;
-	path->path = name;
-	path->up = path;
-	if (pre)
-		pre->down = path;
 }
 
 void for_each_path(t_path *pat, void (*fun)(t_files_attrib *))

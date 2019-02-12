@@ -32,13 +32,8 @@ typedef struct s_files_attrib
 {
 	struct s_files_attrib *next;
 	struct s_files_attrib *previous;
-	char *filename;
-}							t_files_attrib;
-typedef struct			s_path
-{
-	struct s_path		*next;
-	char				*path;
-	t_files_attrib		*attrib;
+
+	char				*filename;
 	time_t				timestamp;
 	char				permissions;
 	char				*owner_name;
@@ -46,6 +41,18 @@ typedef struct			s_path
 	size_t				file_size;
 	size_t				link_count;
 	t_bool				is_link;
+}							t_files_attrib;
+typedef struct				s_child
+{
+	struct s_child	*next;
+	struct s_child *down;
+	t_files_attrib	*attrib;
+}							t_child;
+typedef struct			s_path
+{
+	struct s_path		*next;
+	char				*path;
+	t_files_attrib		*attrib;
 	}						t_path;
 typedef struct				s_link
 {

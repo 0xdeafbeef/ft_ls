@@ -33,15 +33,25 @@ typedef struct s_files_attrib
 	struct s_files_attrib *next;
 	struct s_files_attrib *previous;
 	char *filename;
-	size_t timestamp;
 }							t_files_attrib;
 typedef struct			s_path
 {
 	struct s_path		*next;
 	char				*path;
 	t_files_attrib		*attrib;
-
-}						t_path;
+	time_t				timestamp;
+	char				permissions;
+	char				*owner_name;
+	char				*group_name;
+	size_t				file_size;
+	size_t				link_count;
+	t_bool				is_link;
+	}						t_path;
+typedef struct				s_link
+{
+	t_bool					is_soft_link;
+	char					*link_pointer;
+}							t_link;	
 typedef struct			s_props
 {
 	int					win_size; //todo implement this
@@ -66,5 +76,5 @@ void						for_each_path(t_path *pat, void (*fun)(t_files_attrib *));
 void						ft_free_chain(t_files_attrib *head);
 void						print_bits(unsigned short int c, char bytes);
 void print_path_list(t_path *path);
-void print_error(char *error_file, char *msg, int error_num);
+void print_error(char const *error_file, char const *msg, int error_num);
 #endif

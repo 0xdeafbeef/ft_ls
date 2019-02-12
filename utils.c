@@ -9,7 +9,7 @@ void print_bits(unsigned short int c, char bytes)
 		(c >> i) & 1 ? write(1, "1", 1) : write(1, "0", 1);
 }
 
-void print_error(char *error_file, char *msg, int error_num)
+void print_error(char const *error_file, char const *msg, int error_num)
 {
 	char *buffer;
 	char *ptr;

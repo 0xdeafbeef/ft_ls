@@ -60,6 +60,7 @@ typedef struct			s_props
 	t_path				*path;
 }						t_props;
 
+void						get_path_list(t_props *curent);
 t_path						*ft_path_append_horizontal(t_path *node,
 														 char *dat);
 t_props						*get_t_size_and_flags(int argc, char **argv);

@@ -40,25 +40,18 @@ typedef struct s_files_attrib
 	char				*group_name;
 	size_t				file_size;
 	size_t				link_count;
-	t_bool				is_link;
+	unsigned int		filetype;
+	t_bool				is_soft_link;
+	char				*link_pointer;
 }							t_files_attrib;
-typedef struct				s_child
-{
-	struct s_child	*next;
-	struct s_child *down;
-	t_files_attrib	*attrib;
-}							t_child;
 typedef struct			s_path
 {
 	struct s_path		*next;
+	struct s_path		*down;
+	struct s_path		*up;
 	char				*path;
 	t_files_attrib		*attrib;
 	}						t_path;
-typedef struct				s_link
-{
-	t_bool					is_soft_link;
-	char					*link_pointer;
-}							t_link;	
 typedef struct			s_props
 {
 	int					win_size; //todo implement this
@@ -67,7 +60,9 @@ typedef struct			s_props
 	t_path				*path;
 }						t_props;
 
-t_path						*ft_path_append(t_path *node, char *dat);
+t_path						*ft_path_append_horizontal(t_path *node,
+														 char *dat);
+t_props						*get_t_size_and_flags(int argc, char **argv);
 void						ft_free_path_chain(t_path *tail);
 t_files_attrib				*get_attr_from_path(char *path,
 												  int need_to_exclude_system);

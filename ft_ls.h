@@ -31,12 +31,11 @@ typedef int					t_bool;
 enum { false, true };
 typedef struct 				s_files_attrib
 {
+	char					*filename;
 	struct s_files_attrib 	*next;
 	struct s_files_attrib 	*previous;
 	struct s_files_attrib	*leaf;
 	struct s_files_attrib	*root;
-
-	char					*filename;
 	time_t					timestamp;
 	char					permissions;
 	char					*owner_name;
@@ -82,6 +81,7 @@ void						print_error(char const *error_file, char const *msg, int error_num);
 int							is_dir(const char *path);
 void						ft_list_push_down(t_files_attrib *current,
 		t_files_attrib *upper);
-t_files_attrib *creat_tatr(char *name);
+
+t_files_attrib				*create_tatr(char *name);
 void						ft_open_folder(char *fld_name, t_files_attrib *root_file);
 #endif

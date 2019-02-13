@@ -12,7 +12,6 @@
 
 #include "ft_ls.h"
 
-
 int main(int argc, char **argv)
 {
 	t_props *props;
@@ -25,9 +24,9 @@ int main(int argc, char **argv)
 	char *p;
 
 	p = ft_strdup(".");
-	attrib = creat_tatr(p);
-	attrib = ft_memalloc(sizeof(t_files_attrib));
-	attrib->filename = ft_strdup(p);
+	//printf("%ld", sizeof( t_files_attrib ));
+	//free(attrib);
+	attrib = create_tatr(p);
 
 	ft_open_folder(p, attrib);
 //	pat = props->path;

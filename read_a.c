@@ -76,17 +76,18 @@ void ft_open_folder(char *fld_name, t_files_attrib *root_file)
 	DIR *dir;
 	struct dirent *dirp;
 	char name[1024];
-	t_files_attrib *first;
 
 	if (!(dir = opendir(fld_name)))
 		return;
 	while ((dirp = readdir(dir)))
 	{
+		if (!ft_strcmp(".", dirp->d_name) || !ft_strcmp("..", dirp->d_name))
+			continue;
 		name[ft_strlen(dirp->d_name)] = 0;
 		ft_strcpy(name, dirp->d_name);
 		if (dirp->d_type==DT_DIR)
 		{
-			root_file->leaf = ft_list_create_null(dirp->d_name);
+			root_file->leaf = create_tatr(name);
 			root_file->leaf->root = root_file;
 			ft_open_folder(name, root_file->leaf);
 		} else

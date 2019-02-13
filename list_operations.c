@@ -38,3 +38,17 @@ void ft_list_push_down(t_files_attrib *current, t_files_attrib *upper)
 		upper->leaf = current;
 	current->root = upper;
 }
+
+t_files_attrib *create_tatr(char *name)
+{
+	t_files_attrib *attrib;
+
+	attrib = malloc(sizeof(t_files_attrib));
+	attrib->leaf = NULL;
+	attrib->next = NULL;
+	attrib->previous = NULL;
+	attrib->filename = NULL;
+	if (name)
+		attrib->filename = ft_strdup(name);
+	return (attrib);
+}

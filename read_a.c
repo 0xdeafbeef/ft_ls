@@ -42,7 +42,7 @@ void tree_traverse(t_path *root_node)
 	t_files_attrib *current_files_list;
 	t_files_attrib *tmp_pre;
 	t_files_attrib *first;
-	t_files_attrib	*upper;
+	t_files_attrib *upper;
 
 	dir = opendir(root_node->path);
 
@@ -69,4 +69,31 @@ void get_path_list(t_props *curent)
 	while ((current_path = current_path->next))
 		current_path->attrib = get_attr_from_path(current_path->path, flag);
 	curent->path = holder;
+}
+
+void ft_open_folder(char *fld_name, t_files_attrib *root_file)
+{
+	DIR *dir;
+	struct dirent *dirp;
+	char name[1024];
+	t_files_attrib *first;
+
+	if (!(dir = opendir(fld_name)))
+		return;
+	while ((dirp = readdir(dir)))
+	{
+		name[ft_strlen(dirp->d_name)] = 0;
+		ft_strcpy(name, dirp->d_name);
+		if (dirp->d_type==DT_DIR)
+		{
+			root_file->leaf = ft_list_create_null(dirp->d_name);
+			root_file->leaf->root = root_file;
+			ft_open_folder(name, root_file->leaf);
+		} else
+		{
+			root_file->next = ft_list_create(name, NULL, root_file);
+			root_file->next->previous = root_file;
+			root_file = root_file->next;
+		}
+	}
 }

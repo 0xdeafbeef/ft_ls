@@ -13,15 +13,23 @@
 #include "ft_ls.h"
 
 
-
-
 int main(int argc, char **argv)
 {
 	t_props *props;
 	t_path *pat;
+//
+//	props = get_t_size_and_flags(argc, argv);
+//	get_path_list(props);
 
-	props = get_t_size_and_flags(argc, argv);
-	get_path_list(props);
+	t_files_attrib *attrib;
+	char *p;
+
+	p = ft_strdup(".");
+	attrib = creat_tatr(p);
+	attrib = ft_memalloc(sizeof(t_files_attrib));
+	attrib->filename = ft_strdup(p);
+
+	ft_open_folder(p, attrib);
 //	pat = props->path;
 //	while (pat)
 //	{

@@ -13,7 +13,7 @@
 #include "ft_ls.h"
 
 
-void						ft_attr_append_vertical(t_path *pre, char *name);
-{
-	
-}
+//void						ft_attr_append_vertical(t_path *pre, char *name);
+//{
+//
+//}

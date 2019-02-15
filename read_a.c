@@ -22,7 +22,7 @@ t_files_attrib *get_attr_from_path(char *path, int need_to_exclude_system)
 		while (NULL != (direntp = readdir(dir)))
 		{
 			if ((need_to_exclude_system && direntp->d_name[0] != '.') ||
-				!need_to_exclude_system)
+				! need_to_exclude_system)
 			{
 				tmp_pre = current_files_list;
 				current_files_list = ft_list_create(direntp->d_name, NULL,
@@ -60,14 +60,16 @@ void get_path_list(t_props *curent)
 
 	if (recurisive_traverse)
 
-		flag = !(curent->flag & A);
-	if (!curent->path)
+		flag = ! (curent->flag & A);
+	if (! curent->path)
 		return;
 	current_path = curent->path;
 	holder = current_path;
 	current_path->attrib = get_attr_from_path(current_path->path, flag);
 	while ((current_path = current_path->next))
+	{
 		current_path->attrib = get_attr_from_path(current_path->path, flag);
+	}
 	curent->path = holder;
 }
 
@@ -77,20 +79,18 @@ void ft_open_folder(char *fld_name, t_files_attrib *root_file)
 	struct dirent *dirp;
 	char name[1024];
 
-	if (!(dir = opendir(fld_name)))
+	if (! (dir = opendir(fld_name)))
 		return;
 	while ((dirp = readdir(dir)))
 	{
-		if (!ft_strcmp(".", dirp->d_name) || !ft_strcmp("..", dirp->d_name))
-			continue;
 		name[ft_strlen(dirp->d_name)] = 0;
 		ft_strcpy(name, dirp->d_name);
-		if (dirp->d_type==DT_DIR)
+		if (is_dir(name) && ! (ft_strequ(name, ".") || ft_strequ(name, "..")))
 		{
-			root_file->leaf = create_tatr(name);
-			root_file->leaf->root = root_file;
-			if (!(ft_strcmp(dirp->d_name, "."),ft_strcmp(dirp->d_name, "..")))
-				continue;
+			root_file->next = create_tatr(name);
+			root_file->next->previous = root_file;
+			root_file = root_file->next;
+			root_file->leaf = create_tatr(".");
 			ft_open_folder(name, root_file->leaf);
 		} else
 		{

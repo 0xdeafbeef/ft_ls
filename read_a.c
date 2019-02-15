@@ -89,6 +89,8 @@ void ft_open_folder(char *fld_name, t_files_attrib *root_file)
 		{
 			root_file->leaf = create_tatr(name);
 			root_file->leaf->root = root_file;
+			if (!(ft_strcmp(dirp->d_name, "."),ft_strcmp(dirp->d_name, "..")))
+				continue;
 			ft_open_folder(name, root_file->leaf);
 		} else
 		{

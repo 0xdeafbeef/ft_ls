@@ -2,16 +2,16 @@ cmake_minimum_required(VERSION 3.13)
 project(ft_ls C)
 
 set(CMAKE_C_STANDARD 11)
-#set(CMAKE_C_FLAGS_DEBUG  "${CMAKE_C_FLAGS_DEBUG} -fsanitize=address")
+
 include_directories(.)
 include_directories(libft)
 
 add_executable(ft_ls
-        utils.c
         libft/ft_atoi.c
-        list_operations.c
         libft/ft_bzero.c
         libft/ft_cpyuntil.c
+        libft/ft_gc.c
+        libft/ft_gc.h
         libft/ft_is_null_ptr.c
         libft/ft_isalnum.c
         libft/ft_isalpha.c
@@ -43,6 +43,7 @@ add_executable(ft_ls
         libft/ft_putnbr_fd.c
         libft/ft_putstr.c
         libft/ft_putstr_fd.c
+        libft/ft_realloc.c
         libft/ft_strcat.c
         libft/ft_strchr.c
         libft/ft_strclr.c
@@ -80,5 +81,11 @@ add_executable(ft_ls
         libft/get_next_line.h
         libft/libft.h
         libft/strlen.h
+        attrib_operations.c
+        flags.c
         ft_ls.h
-        main.c merge_sort.c flags.c read_a.c path_operations.c attrib_operations.c)
+        main.c
+        list_operations.c
+        path_operations.c
+        read_a.c
+        utils.c)

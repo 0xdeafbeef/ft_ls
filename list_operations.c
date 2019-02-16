@@ -6,7 +6,7 @@
 /*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/09 20:46:50 by qhetting          #+#    #+#             */
-/*   Updated: 2019/02/15 15:18:41 by qhetting         ###   ########.fr       */
+/*   Updated: 2019/02/16 17:23:30 by qhetting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "ft_ls.h"
@@ -32,13 +32,6 @@ t_files_attrib *ft_list_push(t_files_attrib *current, t_files_attrib *prev)
 	return (current);
 }
 
-void ft_list_push_down(t_files_attrib *current, t_files_attrib *upper)
-{
-	if (upper)
-		upper->leaf = current;
-	current->root = upper;
-}
-
 t_files_attrib *create_tatr(char *name)
 {
 	t_files_attrib *attrib;
@@ -51,4 +44,19 @@ t_files_attrib *create_tatr(char *name)
 	if (name)
 		attrib->filename = ft_strdup(name);
 	return (attrib);
+}
+void print_all(t_files_attrib *attrib)
+{
+	while (attrib)
+	{
+		if (! attrib->leaf)
+			ft_putendl(attrib->filename);
+		else
+		{
+			ft_putchar('\n');
+			ft_putendl(attrib->filename);
+			print_all(attrib->leaf);
+		}
+		attrib = attrib->next;
+	}
 }

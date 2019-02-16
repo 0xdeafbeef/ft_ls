@@ -1,3 +1,5 @@
+#include <sys/param.h>
+#include <libgen.h>
 #include "ft_ls.h"
 
 t_files_attrib *get_attr_from_path(char *path, int need_to_exclude_system)
@@ -85,14 +87,17 @@ void ft_open_folder(char *fld_name, t_files_attrib *root_file)
 	{
 		name[ft_strlen(dirp->d_name)] = 0;
 		ft_strcpy(name, dirp->d_name);
-		if (is_dir(name) && ! (ft_strequ(name, ".") || ft_strequ(name, "..")))
+		if (dirp->d_type == DT_DIR && ! (ft_strequ(name, ".") ||
+										 ft_strequ(name, "..")))
 		{
+
 			root_file->next = create_tatr(name);
 			root_file->next->previous = root_file;
 			root_file = root_file->next;
 			root_file->leaf = create_tatr(".");
-			ft_open_folder(name, root_file->leaf);
-		} else
+			ft_open_folder(ft_strjoin(ft_strjoin(fld_name, "/"), name),
+						   root_file->leaf);
+		} else if (!ft_strequ(name, "."))
 		{
 			root_file->next = ft_list_create(name, NULL, root_file);
 			root_file->next->previous = root_file;

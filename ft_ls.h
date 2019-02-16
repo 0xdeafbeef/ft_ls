@@ -84,4 +84,5 @@ void						ft_list_push_down(t_files_attrib *current,
 
 t_files_attrib				*create_tatr(char *name);
 void						ft_open_folder(char *fld_name, t_files_attrib *root_file);
+void print_all(t_files_attrib *attrib);
 #endif

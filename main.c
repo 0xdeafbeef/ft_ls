@@ -6,7 +6,7 @@
 /*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/09 20:47:13 by qhetting          #+#    #+#             */
-/*   Updated: 2019/02/15 18:07:52 by qhetting         ###   ########.fr       */
+/*   Updated: 2019/02/16 17:15:10 by qhetting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ int main(int argc, char **argv)
 	t_files_attrib *attrib;
 	char *p;
 
-	p = ft_strdup("/");
+	p = ft_strdup("/Users/qhetting");
 	//printf("%ld", sizeof( t_files_attrib ));
 	//free(attrib);
 	attrib = create_tatr(p);
-
 	ft_open_folder(p, attrib);
+	print_all(attrib);
 //	pat = props->path;
 //	while (pat)
 //	{

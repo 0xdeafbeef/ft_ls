@@ -80,9 +80,14 @@ void ft_open_folder(char *fld_name, t_files_attrib *root_file)
 	DIR *dir;
 	struct dirent *dirp;
 	char name[1024];
-
+	errno = 0;
 	if (! (dir = opendir(fld_name)))
+	{
+		if (errno)
+			print_error(errno);
 		return;
+	}
+
 	while ((dirp = readdir(dir)))
 	{
 		name[ft_strlen(dirp->d_name)] = 0;
@@ -97,11 +102,12 @@ void ft_open_folder(char *fld_name, t_files_attrib *root_file)
 			root_file->leaf = create_tatr(".");
 			ft_open_folder(ft_strjoin(ft_strjoin(fld_name, "/"), name),
 						   root_file->leaf);
-		} else if (!ft_strequ(name, "."))
-		{
-			root_file->next = ft_list_create(name, NULL, root_file);
-			root_file->next->previous = root_file;
-			root_file = root_file->next;
-		}
+		} else
+			if (! ft_strequ(name, "."))
+			{
+				root_file->next = ft_list_create(name, NULL, root_file);
+				root_file->next->previous = root_file;
+				root_file = root_file->next;
+			}
 	}
 }

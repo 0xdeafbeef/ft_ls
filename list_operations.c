@@ -45,6 +45,7 @@ t_files_attrib *create_tatr(char *name)
 		attrib->filename = ft_strdup(name);
 	return (attrib);
 }
+
 void print_all(t_files_attrib *attrib)
 {
 	while (attrib)

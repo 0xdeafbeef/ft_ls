@@ -6,7 +6,7 @@
 /*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/09 20:46:50 by qhetting          #+#    #+#             */
-/*   Updated: 2019/02/19 20:01:46 by qhetting         ###   ########.fr       */
+/*   Updated: 2019/02/19 20:51:45 by qhetting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "ft_ls.h"
@@ -30,7 +30,6 @@ void ft_list_sort_all(t_props *props)
 	path = props->path;
 	while (path)
 	{
-		if (props->flag==NO_FLAGS)
 			for_each_level_sort(path->attrib, &comparator_lex);
 		path = path->next;
 	}

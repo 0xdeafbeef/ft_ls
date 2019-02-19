@@ -1,6 +1,26 @@
 #include "ft_ls.h"
 
+/* if  a->data <= b->data else */
+
 t_bool comparator_lex(t_files_attrib *a, t_files_attrib *b)
 {
-	return (ft_strcmp(a->filename, b->filename) <= 0 ? 1 : 0);
+
+	char *s1;
+	char *s2;
+
+	s1 = a->filename;
+	s2 = b->filename;
+	while (*s1 && (*s1 == *s2))
+	{
+		s1 ++;
+		s2 ++;
+	}
+	if (ft_isupper(*s1) && ft_isupper(*s2))
+		return (*s1 <= *s2);
+	if (! ft_isupper(*s1) && ! ft_isupper(*s2))
+		return (*s2 >= *s1);
+	if (! ft_isupper(*s1))
+		return (1);
+	else
+		return (0);
 }

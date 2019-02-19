@@ -1,37 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_isuppercase.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/02/09 20:47:13 by qhetting          #+#    #+#             */
-/*   Updated: 2019/02/19 21:00:50 by qhetting         ###   ########.fr       */
+/*   Created: 2019/02/19 21:24:47 by qhetting          #+#    #+#             */
+/*   Updated: 2019/02/19 21:24:47 by qhetting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_ls.h"
-
-void main_wrap(int argc, char **argv)
+int ft_isupper(int ch)
 {
-	t_props *props;
-
-	props = get_t_size_and_flags(argc, argv);
-	get_path_list(props);
-	ft_list_sort_all(props);
-
-	print_all(props->path->attrib);
-}
-
-int main(int argc, char **argv)
-{
-	main_wrap(argc, argv);
-//	pat = props->path;
-//	while (pat)
-//	{
-//		print_path_list(pat);
-//		pat = pat->next;
-//	}
-	ft_gc(&g_memaloced);
-	return 0;
+	return (ch >= 'A' && ch <= 'Z');
 }

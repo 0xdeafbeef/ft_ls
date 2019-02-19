@@ -6,12 +6,11 @@
 /*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 19:39:35 by qhetting          #+#    #+#             */
-/*   Updated: 2019/02/19 19:40:50 by qhetting         ###   ########.fr       */
+/*   Updated: 2019/02/19 20:01:46 by qhetting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
-/* if  a->data <= b->data else */
 
 void split_on_halves(t_files_attrib *source, t_files_attrib **front,
 					 t_files_attrib **back)

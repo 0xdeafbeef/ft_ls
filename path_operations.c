@@ -6,7 +6,7 @@
 /*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/12 16:44:35 by qhetting          #+#    #+#             */
-/*   Updated: 2019/02/12 19:11:27 by qhetting         ###   ########.fr       */
+/*   Updated: 2019/02/16 19:18:45 by qhetting         ###   ########.fr       */
 /*                                                                            */
 #include "ft_ls.h"
 

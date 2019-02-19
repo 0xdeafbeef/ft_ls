@@ -88,4 +88,5 @@ add_executable(ft_ls
         list_operations.c
         path_operations.c
         read_a.c
-        utils.c)
+        utils.c
+        merge_sort.c)

@@ -6,7 +6,7 @@
 /*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/09 20:46:50 by qhetting          #+#    #+#             */
-/*   Updated: 2019/02/16 17:23:30 by qhetting         ###   ########.fr       */
+/*   Updated: 2019/02/16 19:18:44 by qhetting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "ft_ls.h"
@@ -45,7 +45,6 @@ t_files_attrib *create_tatr(char *name)
 		attrib->filename = ft_strdup(name);
 	return (attrib);
 }
-
 void print_all(t_files_attrib *attrib)
 {
 	while (attrib)

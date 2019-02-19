@@ -6,7 +6,7 @@
 /*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 19:39:35 by qhetting          #+#    #+#             */
-/*   Updated: 2019/02/19 20:01:46 by qhetting         ###   ########.fr       */
+/*   Updated: 2019/02/19 22:17:58 by qhetting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,40 +34,42 @@ void split_on_halves(t_files_attrib *source, t_files_attrib **front,
 	slow->next = NULL;
 }
 
-void ft_merge_sort(t_files_attrib **head_ref,t_bool
-( *comp)(t_files_attrib *a, t_files_attrib *b))
+t_files_attrib *sorted_merge(t_files_attrib *a, t_files_attrib *b, t_bool
+( *comp)(t_files_attrib *, t_files_attrib *))
+{
+	t_files_attrib *result;
+
+	if (! a)
+		return (b);
+	else if (! b)
+			return (a);
+	if (comp(a, b))
+	{
+		result = a;
+		result->next = sorted_merge(a->next, b, comp);
+	} else
+	{
+		result = b;
+		result->next = sorted_merge(a, b->next, comp);
+	}
+	return (result);
+}
+
+void ft_merge_sort(t_files_attrib **head_ref, t_bool
+( *comp)(t_files_attrib *ar, t_files_attrib *br))
 {
 	t_files_attrib *a;
 	t_files_attrib *b;
 	t_files_attrib *head;
 
 	head = *head_ref;
-	if (! head || (head)->next)
+	if ((head == NULL) || (head->next == NULL))
+	{
 		return;
-	split_on_halves(head, &a, &b);
-}
-
-t_files_attrib *sorted_merge(t_files_attrib *a, t_files_attrib *b, t_bool
-( *comp)(t_files_attrib *a, t_files_attrib *b))
-{
-	t_files_attrib *result;
-
-	if (! a)
-		return (b);
-	else
-		if (! b)
-			return (a);
-	if (comp(a, b))
-	{
-		result = a;
-		result->next = sorted_merge(a->next, b,comp);
-	} else
-	{
-		result = b;
-		result->next = sorted_merge(a, b->next,comp);
 	}
-	return (result);
+	split_on_halves(head, &a, &b);
+	ft_merge_sort(&a, comp);
+	ft_merge_sort(&b, comp);
+	*head_ref = sorted_merge(a, b, comp);
 }
-
-
 

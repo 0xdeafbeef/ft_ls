@@ -6,7 +6,7 @@
 /*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/09 20:46:56 by qhetting          #+#    #+#             */
-/*   Updated: 2019/02/19 20:11:40 by qhetting         ###   ########.fr       */
+/*   Updated: 2019/02/19 22:22:46 by qhetting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -85,10 +85,12 @@ void						ft_list_push_down(t_files_attrib *current,t_files_attrib *upper);
 t_files_attrib				*create_atr(char *name);
 void						ft_open_folder(char *fld_name, t_files_attrib *root_file);
 void print_all(t_files_attrib *attrib);
-void for_each_level_sort(t_files_attrib *attrib , t_bool
+void for_each_level_sort(t_files_attrib **attrib , t_bool
 ( *comp)(t_files_attrib *a, t_files_attrib *b));
 void ft_merge_sort(t_files_attrib **head_ref, t_bool( *comp)(t_files_attrib *a,
 		t_files_attrib *b));
-t_bool						comparator_lex(t_files_attrib *a, t_files_attrib *b);
+t_bool						comparator_lex_inv(t_files_attrib *a,
+												 t_files_attrib *b);
+t_bool comparator_lex(t_files_attrib *a,t_files_attrib *b);
 void						ft_list_sort_all(t_props *props);
 #endif

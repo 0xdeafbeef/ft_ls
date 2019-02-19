@@ -6,7 +6,7 @@
 /*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/09 20:47:13 by qhetting          #+#    #+#             */
-/*   Updated: 2019/02/19 20:12:25 by qhetting         ###   ########.fr       */
+/*   Updated: 2019/02/19 21:00:29 by qhetting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,6 @@ int main(int argc, char **argv)
 //		print_path_list(pat);
 //		pat = pat->next;
 //	}
-	ft_gc(&g_memaloced);
-	exit(0);
+//	ft_gc(&g_memaloced);
+	return 0;
 }

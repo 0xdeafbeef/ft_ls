@@ -22,7 +22,7 @@ void *ft_memalloc(size_t size)
 	ch = malloc(size);
 	ft_bzero(ch, size);
 	if (ch == NULL)
-		return (NULL);
+		exit(3);
 	ft_tgc_append(&g_memaloced, ch);
 	return (ch);
 }

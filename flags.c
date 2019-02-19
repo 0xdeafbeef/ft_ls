@@ -24,11 +24,11 @@ t_props *scan_flags_path(char **argv, int argc)
 	p_handler = NULL;
 	is_first_asign = true;
 	pat = NULL;
-	props = ft_memalloc(sizeof(props));
+	props = ft_memalloc(sizeof(t_props));
 
 	if (argc < 2)
 		return (props);
-	(*argv)++;
+	++(argv);
 	while (*argv)
 	{
 		if (*argv[0] == '-')
@@ -40,7 +40,7 @@ t_props *scan_flags_path(char **argv, int argc)
 				p_handler = pat;
 			is_first_asign = false;
 		}
-		(*argv)++;
+		++(argv);
 	}
 	props->path = p_handler;
 	return (props);

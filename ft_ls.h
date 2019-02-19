@@ -6,7 +6,7 @@
 /*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/09 20:46:56 by qhetting          #+#    #+#             */
-/*   Updated: 2019/02/19 20:06:57 by qhetting         ###   ########.fr       */
+/*   Updated: 2019/02/19 20:11:40 by qhetting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -19,6 +19,7 @@
 #include <sys/stat.h>
 
 #ifndef FT_LS_FT_LS_H
+ # define MALLOC_ERROR 3
 # define FT_LS_FT_LS_H
 # define NO_FLAGS 0
 # define L 0x01

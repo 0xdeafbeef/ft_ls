@@ -6,25 +6,15 @@
 /*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/09 20:46:40 by qhetting          #+#    #+#             */
-/*   Updated: 2019/02/19 17:58:54 by qhetting         ###   ########.fr       */
+/*   Updated: 2019/02/19 18:28:22 by qhetting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
-
-char comparator_ch(char *str1, char *str2)
+/* if  a->data <= b->data else */
+t_bool comparator_lex(t_files_attrib *a, t_files_attrib *b)
 {
-	char ret;
-	if (! str1 && str2)
-		return (1);
-	if (! str2 && str1)
-		return (- 1);
-	if (! str1 && ! str2)
-		return (0);
-	ret = 0;
-
-	ret = ft_strcmp(str1, str2) > 0 ? 1 : - 1;
-	return (ret);
+	return (ft_strcmp(a->filename, b->filename) <= 0 ? 1 : 0);
 }
 
 void split_on_halves(t_files_attrib *source, t_files_attrib **front,
@@ -61,15 +51,33 @@ void merge_sort(t_files_attrib **head_ref)
 	split_on_halves(head, &a, &b);
 }
 
-t_files_attrib *sorted_merge(t_files_attrib *a, t_files_attrib *b)
+t_files_attrib *sorted_merge(t_files_attrib *a, t_files_attrib *b, t_bool
+( *comp)(t_files_attrib *a, t_files_attrib *b))
 {
-	t_files_attrib *res;
+	t_files_attrib *result;
 
 	if (! a)
 		return (b);
 	else
 		if (! b)
 			return (a);
+
+	/* Base cases */
+
+/* Pick either a or b, and recur */
+	if (comp(a, b))
+	{
+
+		result = a;
+		result->next = sorted_merge(a->next, b);
+	} else
+	{
+		result = b;
+		result->next = sorted_merge(a, b->next);
+	}
+	return (result);
+}
+
 
 }
 

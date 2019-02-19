@@ -6,7 +6,7 @@
 /*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/09 20:46:56 by qhetting          #+#    #+#             */
-/*   Updated: 2019/02/19 19:08:31 by qhetting         ###   ########.fr       */
+/*   Updated: 2019/02/19 20:06:57 by qhetting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -79,12 +79,15 @@ void						print_bits(unsigned short int c, char bytes);
 void						print_path_list(t_path *path);
 void						print_error(char const *error_file, char const *msg, int error_num);
 int							is_dir(const char *path);
-void						ft_list_push_down(t_files_attrib *current,
-		t_files_attrib *upper);
+void						ft_list_push_down(t_files_attrib *current,t_files_attrib *upper);
 
-t_files_attrib				*create_tatr(char *name);
+t_files_attrib				*create_atr(char *name);
 void						ft_open_folder(char *fld_name, t_files_attrib *root_file);
 void print_all(t_files_attrib *attrib);
-void for_each_level(t_files_attrib *attrib, void (*fun)(t_files_attrib **));
-void ft_merge_sort(t_files_attrib **head_ref);
+void for_each_level_sort(t_files_attrib *attrib , t_bool
+( *comp)(t_files_attrib *a, t_files_attrib *b));
+void ft_merge_sort(t_files_attrib **head_ref, t_bool( *comp)(t_files_attrib *a,
+		t_files_attrib *b));
+t_bool						comparator_lex(t_files_attrib *a, t_files_attrib *b);
+void						ft_list_sort_all(t_props *props);
 #endif

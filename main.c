@@ -6,29 +6,26 @@
 /*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/09 20:47:13 by qhetting          #+#    #+#             */
-/*   Updated: 2019/02/16 19:18:44 by qhetting         ###   ########.fr       */
+/*   Updated: 2019/02/19 20:12:25 by qhetting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-int main(int argc, char **argv)
+void main_wrap(int argc, char **argv)
 {
 	t_props *props;
-	t_path *pat;
-//
-//	props = get_t_size_and_flags(argc, argv);
-//	get_path_list(props);
 
-	t_files_attrib *attrib;
-	char *p;
+	props = get_t_size_and_flags(argc, argv);
+	get_path_list(props);
+	ft_list_sort_all(props);
 
-	p = ft_strdup("/Users/qhetting");
-	//printf("%ld", sizeof( t_files_attrib ));
-	//free(attrib);
-	attrib = create_tatr(p);
-	ft_open_folder(p, attrib);
-	print_all(attrib);
+	print_all(props->path->attrib);
+}
+
+int main(int argc, char **argv)
+{
+	main_wrap(argc, argv);
 //	pat = props->path;
 //	while (pat)
 //	{

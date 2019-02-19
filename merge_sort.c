@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_merge_sort.c                                       :+:      :+:    :+:   */
+/*   merge_sort.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/02/09 20:46:40 by qhetting          #+#    #+#             */
-/*   Updated: 2019/02/19 18:33:41 by qhetting         ###   ########.fr       */
+/*   Created: 2019/02/19 19:39:35 by qhetting          #+#    #+#             */
+/*   Updated: 2019/02/19 19:40:50 by qhetting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ void split_on_halves(t_files_attrib *source, t_files_attrib **front,
 	slow->next = NULL;
 }
 
-void ft_merge_sort(t_files_attrib **head_ref)
+void ft_merge_sort(t_files_attrib **head_ref,t_bool
+( *comp)(t_files_attrib *a, t_files_attrib *b))
 {
 	t_files_attrib *a;
 	t_files_attrib *b;
@@ -57,19 +58,14 @@ t_files_attrib *sorted_merge(t_files_attrib *a, t_files_attrib *b, t_bool
 	else
 		if (! b)
 			return (a);
-
-	/* Base cases */
-
-/* Pick either a or b, and recur */
 	if (comp(a, b))
 	{
-
 		result = a;
-		result->next = sorted_merge(a->next, b);
+		result->next = sorted_merge(a->next, b,comp);
 	} else
 	{
 		result = b;
-		result->next = sorted_merge(a, b->next);
+		result->next = sorted_merge(a, b->next,comp);
 	}
 	return (result);
 }

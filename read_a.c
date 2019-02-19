@@ -37,20 +37,6 @@ t_files_attrib *get_attr_from_path(char *path, int need_to_exclude_system)
 	return (first);
 }
 
-void tree_traverse(t_path *root_node)
-{
-	DIR *dir;
-	struct dirent *direntp;
-	t_files_attrib *current_files_list;
-	t_files_attrib *tmp_pre;
-	t_files_attrib *first;
-	t_files_attrib *upper;
-
-	dir = opendir(root_node->path);
-
-
-}
-
 void get_path_list(t_props *curent)
 {
 	t_path *current_path;
@@ -58,11 +44,10 @@ void get_path_list(t_props *curent)
 	t_bool flag;
 	t_bool recurisive_traverse;
 
-	recurisive_traverse = curent->flag & R_BIG;
+	recurisive_traverse = curent->flag & (unsigned int) R_BIG;
 
-	if (recurisive_traverse)
 
-		flag = ! (curent->flag & A);
+	flag = ! (curent->flag & A);
 	if (! curent->path)
 		return;
 	current_path = curent->path;
@@ -70,7 +55,10 @@ void get_path_list(t_props *curent)
 	current_path->attrib = get_attr_from_path(current_path->path, flag);
 	while ((current_path = current_path->next))
 	{
-		current_path->attrib = get_attr_from_path(current_path->path, flag);
+		if (recurisive_traverse)
+			ft_open_folder(current_path->path, current_path->attrib);
+		else
+			current_path->attrib = get_attr_from_path(current_path->path, flag);
 	}
 	curent->path = holder;
 }
@@ -84,10 +72,9 @@ void ft_open_folder(char *fld_name, t_files_attrib *root_file)
 	if (! (dir = opendir(fld_name)))
 	{
 		if (errno)
-			print_error(errno);
-		return;
+//			print_error(errno);
+			return;
 	}
-
 	while ((dirp = readdir(dir)))
 	{
 		name[ft_strlen(dirp->d_name)] = 0;
@@ -96,10 +83,10 @@ void ft_open_folder(char *fld_name, t_files_attrib *root_file)
 										 ft_strequ(name, "..")))
 		{
 
-			root_file->next = create_tatr(name);
+			root_file->next = create_atr(name);
 			root_file->next->previous = root_file;
 			root_file = root_file->next;
-			root_file->leaf = create_tatr(".");
+			root_file->leaf = create_atr(".");
 			ft_open_folder(ft_strjoin(ft_strjoin(fld_name, "/"), name),
 						   root_file->leaf);
 		} else
@@ -108,6 +95,9 @@ void ft_open_folder(char *fld_name, t_files_attrib *root_file)
 				root_file->next = ft_list_create(name, NULL, root_file);
 				root_file->next->previous = root_file;
 				root_file = root_file->next;
+				root_file->next->root = root_file;
 			}
 	}
+	if (dir)
+		closedir(dir);
 }

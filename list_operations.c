@@ -6,7 +6,7 @@
 /*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/09 20:46:50 by qhetting          #+#    #+#             */
-/*   Updated: 2019/02/19 19:08:31 by qhetting         ###   ########.fr       */
+/*   Updated: 2019/02/19 19:47:47 by qhetting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "ft_ls.h"
@@ -23,28 +23,27 @@ t_files_attrib *ft_list_create(char *name, t_files_attrib *next,
 	return (list);
 }
 
-void ft_list_sort(t_path *path)
+void ft_list_sort_all(t_props *props)
 {
-	t_files_attrib *attrib;
+	t_path *path;
+
+	path = props->path;
 	while (path)
 	{
-		for_each_level(path->attrib,&ft_merge_sort())
-
+		if (props->flag==NO_FLAGS)
+			for_each_level_sort(path->attrib, &comparator_lex);
 		path = path->next;
 	}
 }
 
-void for_each_level(t_files_attrib *attrib, void (*fun)(t_files_attrib **))
+void for_each_level_sort(t_files_attrib *attrib, t_bool
+( *comp)(t_files_attrib *a, t_files_attrib *b))
 {
 	while (attrib)
 	{
-		if (! attrib->leaf)
-			fun(&attrib);
-		else
-		{
-			fun(&attrib);
-			for_each_level(attrib, fun);
-		}
+		ft_merge_sort(&attrib,comp);
+		if (attrib->leaf)
+			for_each_level_sort(attrib->leaf, comp);
 		attrib = attrib->next;
 	}
 }
@@ -57,7 +56,7 @@ t_files_attrib *ft_list_push(t_files_attrib *current, t_files_attrib *prev)
 	return (current);
 }
 
-t_files_attrib *create_tatr(char *name)
+t_files_attrib *create_atr(char *name)
 {
 	t_files_attrib *attrib;
 

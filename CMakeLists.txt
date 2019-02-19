@@ -89,4 +89,4 @@ add_executable(ft_ls
         path_operations.c
         read_a.c
         utils.c
-        merge_sort.c)
+        merge_sort.c comparators.c)

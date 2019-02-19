@@ -6,13 +6,13 @@
 /*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/09 20:46:50 by qhetting          #+#    #+#             */
-/*   Updated: 2019/02/16 19:18:44 by qhetting         ###   ########.fr       */
+/*   Updated: 2019/02/19 19:08:31 by qhetting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "ft_ls.h"
 
 t_files_attrib *ft_list_create(char *name, t_files_attrib *next,
-		t_files_attrib *prev)
+							   t_files_attrib *prev)
 {
 	t_files_attrib *list;
 
@@ -23,6 +23,31 @@ t_files_attrib *ft_list_create(char *name, t_files_attrib *next,
 	return (list);
 }
 
+void ft_list_sort(t_path *path)
+{
+	t_files_attrib *attrib;
+	while (path)
+	{
+		for_each_level(path->attrib,&ft_merge_sort())
+
+		path = path->next;
+	}
+}
+
+void for_each_level(t_files_attrib *attrib, void (*fun)(t_files_attrib **))
+{
+	while (attrib)
+	{
+		if (! attrib->leaf)
+			fun(&attrib);
+		else
+		{
+			fun(&attrib);
+			for_each_level(attrib, fun);
+		}
+		attrib = attrib->next;
+	}
+}
 
 t_files_attrib *ft_list_push(t_files_attrib *current, t_files_attrib *prev)
 {
@@ -45,6 +70,7 @@ t_files_attrib *create_tatr(char *name)
 		attrib->filename = ft_strdup(name);
 	return (attrib);
 }
+
 void print_all(t_files_attrib *attrib)
 {
 	while (attrib)

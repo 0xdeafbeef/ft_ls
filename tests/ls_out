@@ -1622,7 +1622,7 @@ link.txt
 list_operations.c.o
 main.c.o
 merge_ex.c.o
-merge_sort.c.o
+ft_merge_sort.c.o
 path_operations.c.o
 progress.make
 read_a.c.o

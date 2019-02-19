@@ -6,7 +6,7 @@
 /*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/09 20:46:56 by qhetting          #+#    #+#             */
-/*   Updated: 2019/02/16 19:18:45 by qhetting         ###   ########.fr       */
+/*   Updated: 2019/02/19 19:08:31 by qhetting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -85,4 +85,6 @@ void						ft_list_push_down(t_files_attrib *current,
 t_files_attrib				*create_tatr(char *name);
 void						ft_open_folder(char *fld_name, t_files_attrib *root_file);
 void print_all(t_files_attrib *attrib);
+void for_each_level(t_files_attrib *attrib, void (*fun)(t_files_attrib **));
+void ft_merge_sort(t_files_attrib **head_ref);
 #endif

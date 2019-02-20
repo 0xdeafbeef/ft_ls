@@ -96,13 +96,11 @@ void ft_open_folder(char *fld_name, t_files_attrib *root_file)
 		} else
 			if (! ft_strequ(name, "."))
 			{
-				root_file->next = ft_list_create(name, NULL, root_file);
+				root_file->next = create_atr(name);
 				root_file->next->previous = root_file;
 				if (root_file->root)
-				{
 					root_file->next->root = root_file->root;
-					root_file = root_file->next;
-				}
+				root_file = root_file->next;
 			}
 	}
 	if (dir)

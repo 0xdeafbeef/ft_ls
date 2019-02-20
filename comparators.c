@@ -25,7 +25,8 @@ t_bool comparator_lex_inv(t_files_attrib *a, t_files_attrib *b)
 	else
 		return (0);
 }
-t_bool comparator_lex(t_files_attrib *a,t_files_attrib *b)
+
+t_bool comparator_lex(t_files_attrib *a, t_files_attrib *b)
 {
 	return (! (comparator_lex_inv(a, b)));
 }

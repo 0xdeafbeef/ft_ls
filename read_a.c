@@ -84,13 +84,10 @@ void ft_open_folder(char *fld_name, t_files_attrib *root_file)
 										 ft_strequ(name, "..")))
 		{
 
-			root_file->next = create_atr(name);
-			root_file->next->previous = root_file;
+			root_file->next = create_atr(name);    //make next file
+			root_file->next->previous = root_file; //relink
 			if (root_file->root)
-			{
 				root_file->next->root = root_file->root;
-				root_file = root_file->next;
-			}
 			root_file = root_file->next;
 			root_file->leaf = create_atr(".");
 			root_file->leaf->root = root_file;

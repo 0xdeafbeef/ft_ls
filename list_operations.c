@@ -6,7 +6,7 @@
 /*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/09 20:46:50 by qhetting          #+#    #+#             */
-/*   Updated: 2019/02/19 22:27:17 by qhetting         ###   ########.fr       */
+/*   Updated: 2019/02/20 18:14:37 by qhetting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "ft_ls.h"
@@ -36,7 +36,7 @@ void ft_list_sort_all(t_props *props)
 }
 
 void for_each_level_sort(t_files_attrib **attr, t_bool
-( *comp)(t_files_attrib *a, t_files_attrib *b))
+( *comp)(t_files_attrib *, t_files_attrib *))
 {
 	t_bool is_sorted;
 	t_files_attrib *attrib;
@@ -45,15 +45,17 @@ void for_each_level_sort(t_files_attrib **attr, t_bool
 	is_sorted = false;
 	while (1)
 	{
-		if(!is_sorted)
+		if (! is_sorted)
 		{
 			ft_merge_sort(&attrib, comp);
 			is_sorted = true;
+			if (attrib->root)
+				attrib->root->leaf = attrib;
 			*attr = attrib;
 		}
 		if (attrib->leaf)
 			for_each_level_sort(&attrib->leaf, comp);
-		if (!attrib->next)
+		if (! attrib->next)
 			break;
 		attrib = attrib->next;
 	}

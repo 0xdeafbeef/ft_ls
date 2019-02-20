@@ -52,13 +52,14 @@ void get_path_list(t_props *curent)
 		return;
 	current_path = curent->path;
 	holder = current_path;
-	current_path->attrib = get_attr_from_path(current_path->path, flag);
-	while ((current_path = current_path->next))
+	while ((current_path))
 	{
+		current_path->attrib = create_atr(".");
 		if (recurisive_traverse)
 			ft_open_folder(current_path->path, current_path->attrib);
 		else
 			current_path->attrib = get_attr_from_path(current_path->path, flag);
+		current_path = current_path->next;
 	}
 	curent->path = holder;
 }
@@ -72,7 +73,7 @@ void ft_open_folder(char *fld_name, t_files_attrib *root_file)
 	if (! (dir = opendir(fld_name)))
 	{
 		if (errno)
-//			print_error(errno);
+//			print_error(errno); //todo add to error_list
 			return;
 	}
 	while ((dirp = readdir(dir)))
@@ -85,8 +86,14 @@ void ft_open_folder(char *fld_name, t_files_attrib *root_file)
 
 			root_file->next = create_atr(name);
 			root_file->next->previous = root_file;
+			if (root_file->root)
+			{
+				root_file->next->root = root_file->root;
+				root_file = root_file->next;
+			}
 			root_file = root_file->next;
 			root_file->leaf = create_atr(".");
+			root_file->leaf->root = root_file;
 			ft_open_folder(ft_strjoin(ft_strjoin(fld_name, "/"), name),
 						   root_file->leaf);
 		} else
@@ -94,8 +101,11 @@ void ft_open_folder(char *fld_name, t_files_attrib *root_file)
 			{
 				root_file->next = ft_list_create(name, NULL, root_file);
 				root_file->next->previous = root_file;
-				root_file = root_file->next;
-				root_file->next->root = root_file;
+				if (root_file->root)
+				{
+					root_file->next->root = root_file->root;
+					root_file = root_file->next;
+				}
 			}
 	}
 	if (dir)

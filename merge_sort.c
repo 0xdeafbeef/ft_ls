@@ -6,14 +6,14 @@
 /*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 19:39:35 by qhetting          #+#    #+#             */
-/*   Updated: 2019/02/19 22:17:58 by qhetting         ###   ########.fr       */
+/*   Updated: 2019/02/20 18:10:25 by qhetting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void split_on_halves(t_files_attrib *source, t_files_attrib **front,
-					 t_files_attrib **back)
+void split_on_halves(t_files_attrib *source,
+					 t_files_attrib **front, t_files_attrib **back)
 {
 	t_files_attrib *fast;
 	t_files_attrib *slow;
@@ -25,6 +25,7 @@ void split_on_halves(t_files_attrib *source, t_files_attrib **front,
 		fast = fast->next;
 		if (fast)
 		{
+			slow->next->previous = slow;
 			slow = slow->next;
 			fast = fast->next;
 		}
@@ -41,7 +42,8 @@ t_files_attrib *sorted_merge(t_files_attrib *a, t_files_attrib *b, t_bool
 
 	if (! a)
 		return (b);
-	else if (! b)
+	else
+		if (! b)
 			return (a);
 	if (comp(a, b))
 	{

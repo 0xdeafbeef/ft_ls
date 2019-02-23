@@ -69,7 +69,7 @@ t_files_attrib *ft_list_push(t_files_attrib *current, t_files_attrib *prev)
 	return (current);
 }
 
-t_files_attrib *create_atr(char *name)
+t_files_attrib *create_atr( const char *name)
 {
 	t_files_attrib *attrib;
 

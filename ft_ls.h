@@ -61,6 +61,8 @@ typedef struct				s_props
 	t_path					*path;
 }							t_props;
 
+void						get_long_format_props(t_files_attrib *, const
+char * path);
 void						get_path_list(t_props *curent);
 t_path						*ft_path_append_horizontal(t_path *node,
 														 char *dat);
@@ -82,7 +84,7 @@ void						print_error(char const *error_file, char const *msg, int error_num);
 int							is_dir(const char *path);
 void						ft_list_push_down(t_files_attrib *current,t_files_attrib *upper);
 
-t_files_attrib				*create_atr(char *name);
+t_files_attrib				*create_atr(const char *name);
 void						ft_open_folder(char *fld_name, t_files_attrib *root_file);
 void print_all(t_files_attrib *attrib);
 void for_each_level_sort(t_files_attrib **attrib , t_bool

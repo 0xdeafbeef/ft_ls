@@ -6,7 +6,7 @@
 /*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/09 20:46:56 by qhetting          #+#    #+#             */
-/*   Updated: 2019/02/20 18:07:02 by qhetting         ###   ########.fr       */
+/*   Updated: 2019/02/28 16:31:57 by qhetting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -38,11 +38,11 @@ typedef struct 				s_files_attrib
 	struct s_files_attrib	*leaf;
 	struct s_files_attrib	*root;
 	time_t					timestamp;
-	char					permissions;
+	char*					permissions;
 	char					*owner_name;
 	char					*group_name;
 	size_t					file_size;
-	size_t					link_count;
+	int					link_count;
 	unsigned int			filetype;
 	t_bool					is_soft_link;
 	char					*link_pointer;

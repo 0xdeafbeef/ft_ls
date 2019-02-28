@@ -1,5 +1,7 @@
 #include <sys/param.h>
 #include <libgen.h>
+#include <pwd.h>
+#include <grp.h>
 #include "ft_ls.h"
 
 unsigned short g_flag;
@@ -65,20 +67,77 @@ void get_path_list(t_props *curent)
 	}
 	curent->path = holder;
 }
-void						get_long_format_props(t_files_attrib *atr, const char *name)
+
+char *get_permissions(const char *file)
 {
-	
+	struct stat st;
+	char *modeval;
+
+	modeval = ft_memalloc(sizeof(char) * 9 + 1);
+	if (stat(file, &st) == 0)
+	{
+		mode_t perm = st.st_mode;
+		modeval[0] = (char) ((perm & S_IRUSR) ? 'r' : '-');
+		modeval[1] = (char) ((perm & S_IWUSR) ? 'w' : '-');
+		modeval[2] = (char) ((perm & S_IXUSR) ? 'x' : '-');
+		modeval[3] = (char) ((perm & S_IRGRP) ? 'r' : '-');
+		modeval[4] = (char) ((perm & S_IWGRP) ? 'w' : '-');
+		modeval[5] = (char) ((perm & S_IXGRP) ? 'x' : '-');
+		modeval[6] = (char) ((perm & S_IROTH) ? 'r' : '-');
+		modeval[7] = (char) ((perm & S_IWOTH) ? 'w' : '-');
+		modeval[8] = (char) ((perm & S_IXOTH) ? 'x' : '-');
+		modeval[9] = '\0';
+		return modeval;
+	} else
+	{
+		return strerror(errno);
+	}
 }
 
-static t_files_attrib *ft_relink(t_files_attrib *root_file, const char *name)
+void get_long_format_props(t_files_attrib *atr, const char *path)
+{
+	struct passwd *pasw;
+	struct stat structstat;
+	struct group *g;
+	size_t len;
+
+	if (stat(path, &structstat) == -1)
+	{
+		//todo add file to error list
+		return;
+	}
+	pasw = getpwuid(structstat.st_uid);
+	len = 1;
+	atr->owner_name = pasw->pw_name;
+	g = getgrgid(pasw->pw_gid);
+	atr->group_name = g->gr_name;
+	atr->permissions = get_permissions(path);
+	atr->link_count = structstat.st_nlink;
+	atr->file_size = (size_t) structstat.st_size;
+	atr->link_pointer = ft_strnew(len);
+	errno = 0;
+	while (1)
+	{
+		if (readlink(path, atr->link_pointer, 128) == -1 && errno != EINVAL)
+		{
+			free(atr->link_pointer);
+			len *= 2;
+			atr->link_pointer = ft_strnew(len);
+		} else
+			break;
+	}
+}
+
+
+static t_files_attrib *ft_relink(t_files_attrib *root_file, const char *name, char *f_name)
 {
 	root_file->next = create_atr(name);    //make next file
 	root_file->next->previous = root_file; //relink
 	if (root_file->root)
 		root_file->next->root = root_file->root;
 	root_file = root_file->next;
-	if (g_flag & L)
-		get_long_format_props(root_file, name);
+	if (g_flag & L && !(ft_strequ(name, ".") || ft_strequ(name, "..")))
+		get_long_format_props(root_file, f_name);
 
 	return root_file;
 }
@@ -88,6 +147,7 @@ void ft_open_folder(char *fld_name, t_files_attrib *root_file)
 	DIR *dir;
 	struct dirent *dirp;
 	char name[1024];
+	char *full_path;
 	errno = 0;
 	if (!(dir = opendir(fld_name)))
 	{
@@ -104,14 +164,16 @@ void ft_open_folder(char *fld_name, t_files_attrib *root_file)
 			if (dirp->d_type == DT_DIR && !(ft_strequ(name, ".") ||
 											ft_strequ(name, "..")))
 			{
-
-				root_file = ft_relink(root_file, name);
+				full_path = (ft_strjoin(ft_strjoin(fld_name, "/"), name));
+				root_file = ft_relink(root_file, name, full_path);
 				root_file->leaf = create_atr(".");
 				root_file->leaf->root = root_file;
-				ft_open_folder(ft_strjoin(ft_strjoin(fld_name, "/"), name),
-							   root_file->leaf);
+				ft_open_folder(full_path, root_file->leaf);
 			} else if (!ft_strequ(name, "."))
-				root_file = ft_relink(root_file, name);
+			{
+				full_path = (ft_strjoin(ft_strjoin(fld_name, "/"), name));
+				root_file = ft_relink(root_file, name, full_path);
+			}
 		}
 	}
 	if (dir)

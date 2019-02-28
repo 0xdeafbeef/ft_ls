@@ -6,7 +6,7 @@
 /*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/09 20:46:50 by qhetting          #+#    #+#             */
-/*   Updated: 2019/02/20 18:14:37 by qhetting         ###   ########.fr       */
+/*   Updated: 2019/02/28 16:59:09 by qhetting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "ft_ls.h"
@@ -82,19 +82,25 @@ t_files_attrib *create_atr( const char *name)
 		attrib->filename = ft_strdup(name);
 	return (attrib);
 }
+void print_wrapper(t_files_attrib *attrib)
+{
 
+	print_all(attrib);
+}
 void print_all(t_files_attrib *attrib)
 {
 	while (attrib)
 	{
-		if (! attrib->leaf)
+			ft_putstr(attrib->permissions);
+			ft_putchar('\t');
+			ft_putnbr(attrib->link_count);
+			ft_putnbr('\t');
+			ft_putstr(attrib->group_name);
+			ft_putnbr((int) attrib->file_size);
+			ft_putnbr('\t');
 			ft_putendl(attrib->filename);
-		else
-		{
-			ft_putchar('\n');
-			ft_putendl(attrib->filename);
+		 if (attrib->leaf)
 			print_all(attrib->leaf);
-		}
 		attrib = attrib->next;
 	}
 }

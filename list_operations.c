@@ -6,7 +6,7 @@
 /*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/09 20:46:50 by qhetting          #+#    #+#             */
-/*   Updated: 2019/02/28 16:59:09 by qhetting         ###   ########.fr       */
+/*   Updated: 2019/02/28 16:59:45 by qhetting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "ft_ls.h"
@@ -91,7 +91,7 @@ void print_all(t_files_attrib *attrib)
 {
 	while (attrib)
 	{
-			ft_putstr(attrib->permissions);
+			ft_putstr(attrib->st_mode_to_char);
 			ft_putchar('\t');
 			ft_putnbr(attrib->link_count);
 			ft_putnbr('\t');

@@ -68,30 +68,54 @@ void get_path_list(t_props *curent)
 	curent->path = holder;
 }
 
-char *get_permissions(const char *file)
+/*
+b     Block special file.
+c     Character special file.
+d     Directory.
+l     Symbolic link.
+s     Socket link.
+p     FIFO.
+-     Regular file.*/
+//define S_IFIFO 0x1000  /* fifo */
+//#define S_IFCHR 0x2000  /* character special */
+//#define S_IFDIR 0x4000  /* directory */
+//#define S_IFBLK 0x6000  /* block special */
+//#define S_IFREG 0x8000  /* regular */
+//#define S_IFLNK 0xA000  /* symbolic link  */
+//#define S_IFNAM 0x5000  /* special named file */
+void get_permissions(mode_t perm, t_files_attrib *attrib)
 {
 	struct stat st;
 	char *modeval;
 
-	modeval = ft_memalloc(sizeof(char) * 9 + 1);
-	if (stat(file, &st) == 0)
-	{
-		mode_t perm = st.st_mode;
-		modeval[0] = (char) ((perm & S_IRUSR) ? 'r' : '-');
-		modeval[1] = (char) ((perm & S_IWUSR) ? 'w' : '-');
-		modeval[2] = (char) ((perm & S_IXUSR) ? 'x' : '-');
-		modeval[3] = (char) ((perm & S_IRGRP) ? 'r' : '-');
-		modeval[4] = (char) ((perm & S_IWGRP) ? 'w' : '-');
-		modeval[5] = (char) ((perm & S_IXGRP) ? 'x' : '-');
-		modeval[6] = (char) ((perm & S_IROTH) ? 'r' : '-');
-		modeval[7] = (char) ((perm & S_IWOTH) ? 'w' : '-');
-		modeval[8] = (char) ((perm & S_IXOTH) ? 'x' : '-');
-		modeval[9] = '\0';
-		return modeval;
-	} else
-	{
-		return strerror(errno);
-	}
+
+	modeval = ft_memalloc(sizeof(char) * 9 + 2);
+
+	perm = st.st_mode;
+
+	if (S_ISREG(perm))
+		modeval[0] = '-';
+	if (S_ISBLK(perm))
+		modeval[0] = 'b';
+	if (S_ISCHR(perm))
+		modeval[0] = 'c';
+	if (S_ISFIFO(perm))
+		modeval[0] = 'p';
+	if (S_ISSOCK(perm))
+		modeval[0] = 's';
+	if (S_ISDIR(perm))
+		modeval[0] = 'd';
+	modeval[1] = (char) ((perm & S_IRUSR) ? 'r' : '-');
+	modeval[2] = (char) ((perm & S_IWUSR) ? 'w' : '-');
+	modeval[3] = (char) ((perm & S_IXUSR) ? 'x' : '-');
+	modeval[4] = (char) ((perm & S_IRGRP) ? 'r' : '-');
+	modeval[5] = (char) ((perm & S_IWGRP) ? 'w' : '-');
+	modeval[6] = (char) ((perm & S_IXGRP) ? 'x' : '-');
+	modeval[7] = (char) ((perm & S_IROTH) ? 'r' : '-');
+	modeval[8] = (char) ((perm & S_IWOTH) ? 'w' : '-');
+	modeval[9] = (char) ((perm & S_IXOTH) ? 'x' : '-');
+	modeval[10] = '\0';
+	attrib->st_mode_to_char = modeval;
 }
 
 void get_long_format_props(t_files_attrib *atr, const char *path)
@@ -107,25 +131,33 @@ void get_long_format_props(t_files_attrib *atr, const char *path)
 		return;
 	}
 	pasw = getpwuid(structstat.st_uid);
-	len = 1;
 	atr->owner_name = pasw->pw_name;
 	g = getgrgid(pasw->pw_gid);
 	atr->group_name = g->gr_name;
-	atr->permissions = get_permissions(path);
+	get_permissions(structstat.st_mode, atr);
 	atr->link_count = structstat.st_nlink;
 	atr->file_size = (size_t) structstat.st_size;
+	len = 2 << 2;
+	lstat(path, &structstat);
+	if (S_ISLNK(structstat.st_mode))
+	{
+		atr->is_link = true;
+		atr->st_mode_to_char[0] = 'l';
+	}
 	atr->link_pointer = ft_strnew(len);
 	errno = 0;
-	while (1)
-	{
-		if (readlink(path, atr->link_pointer, 128) == -1 && errno != EINVAL)
+
+	if (atr->is_link)
+		while (1)
 		{
-			free(atr->link_pointer);
-			len *= 2;
-			atr->link_pointer = ft_strnew(len);
-		} else
-			break;
-	}
+			if (readlink(path, atr->link_pointer, len) == -1 && errno != EINVAL)
+			{
+				free(atr->link_pointer);
+				len *= 2;
+				atr->link_pointer = ft_strnew(len);
+			} else
+				break;
+		}
 }
 
 

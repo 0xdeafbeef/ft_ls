@@ -137,8 +137,8 @@ void get_long_format_props(t_files_attrib *atr, const char *path)
 	get_permissions(structstat.st_mode, atr);
 	atr->link_count = structstat.st_nlink;
 	atr->file_size = (size_t) structstat.st_size;
-	len = 2 << 2;
 	lstat(path, &structstat);
+	len = (size_t) structstat.st_size + 1;
 	if (S_ISLNK(structstat.st_mode))
 	{
 		atr->is_link = true;
@@ -148,16 +148,10 @@ void get_long_format_props(t_files_attrib *atr, const char *path)
 	errno = 0;
 
 	if (atr->is_link)
-		while (1)
-		{
-			if (readlink(path, atr->link_pointer, len) == -1 && errno != EINVAL)
-			{
-				free(atr->link_pointer);
-				len *= 2;
-				atr->link_pointer = ft_strnew(len);
-			} else
-				break;
-		}
+	{
+		readlink(path, atr->link_pointer, len);
+		atr->link_pointer[len - 1] = 0;
+	}
 }
 
 

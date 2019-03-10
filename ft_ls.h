@@ -9,6 +9,12 @@
 /*   Updated: 2019/02/28 18:48:59 by qhetting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#ifndef FT_LS_FT_LS_H
+ # define MALLOC_ERROR 3
+# define FT_LS_FT_LS_H
+
+#include "structures.h"
 #include <stdio.h>
 #include <dirent.h>
 #include <sys/types.h>
@@ -18,9 +24,6 @@
 #include <errno.h>
 #include <sys/stat.h>
 
-#ifndef FT_LS_FT_LS_H
- # define MALLOC_ERROR 3
-# define FT_LS_FT_LS_H
 # define NO_FLAGS 0
 # define L 0x01
 # define R_BIG 0x02

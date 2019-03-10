@@ -45,7 +45,7 @@ void for_each_level_sort(t_files_attrib **attr, t_bool
 	is_sorted = false;
 	while (1)
 	{
-		if (! is_sorted)
+		if (!is_sorted)
 		{
 			ft_merge_sort(&attrib, comp);
 			is_sorted = true;
@@ -55,7 +55,7 @@ void for_each_level_sort(t_files_attrib **attr, t_bool
 		}
 		if (attrib->leaf)
 			for_each_level_sort(&attrib->leaf, comp);
-		if (! attrib->next)
+		if (!attrib->next)
 			break;
 		attrib = attrib->next;
 	}
@@ -69,7 +69,7 @@ t_files_attrib *ft_list_push(t_files_attrib *current, t_files_attrib *prev)
 	return (current);
 }
 
-t_files_attrib *create_atr( const char *name)
+t_files_attrib *create_atr(const char *name)
 {
 	t_files_attrib *attrib;
 
@@ -82,24 +82,87 @@ t_files_attrib *create_atr( const char *name)
 		attrib->filename = ft_strdup(name);
 	return (attrib);
 }
+
 void print_wrapper(t_files_attrib *attrib)
 {
 
 	print_all(attrib);
 }
+
+static unsigned short int intlen(int num)
+{
+	unsigned short int ret;
+
+	ret = 0;
+	while (num)
+	{
+		num /= 10;
+		++ret;
+	}
+	return (ret);
+}
+
+t_print* atribs_to_str(t_files_attrib *attrib)
+{
+	t_print  *print;
+
+	print = ft_memalloc(sizeof(t_print));
+	ft_bzero(print, sizeof(t_print));
+	if (!attrib)
+		return (NULL);
+	while (attrib->next)
+	{
+		++print->verical_len;
+		print->tmp = intlen(attrib->link_count);
+		if (print->links_max < print->tmp)
+			print->links_max = (unsigned short) print->tmp;
+		print->tmp = (unsigned int) ft_strlen(attrib->filename);
+		if (print->owner_len_max < print->tmp)
+			print->owner_len_max = print->tmp;
+		print->tmp = (unsigned int) ft_strlen(attrib->group_name);
+		if (print->group_name_max < print->tmp)
+			print->group_name_max = print->tmp;
+		print->tmp = (unsigned int) ft_strlen(attrib->filename);
+		if (print->max_name_len < print->tmp)
+			print->max_name_len = print->tmp;
+		attrib = attrib->next;
+	}
+	while (attrib->previous)
+		attrib = attrib->previous;
+	print->entry_size =
+			10 + 1 + print->links_max +1 + print->owner_len_max + 1 + print->group_name_max + 1 + print->max_name_len + 1;
+	print->result = ft_strnew(print->entry_size * print->verical_len);
+	while (attrib->next)
+	{
+		ft_strcat(print->result, attrib->st_mode_to_char);
+		ft_strcat(print->result, " ");
+		//todo and leading whitespaces
+		ft_strcat(print->result, ft_itoa(attrib->link_count));
+		ft_strcat(print->result, " ");
+		//todo and leading whitespaces [2]
+		ft_strcat(print->result, attrib->owner_name);
+		ft_strcat(print->result, " ");
+		ft_strcat(print->result, attrib->group_name);
+		ft_strcat(print->result, " ");
+		//todo add time
+		ft_strcat(print->result, attrib->filename);
+		ft_strcat(print->result, "\n");
+	}
+	print->write_size = ft_strlen(print->result);
+	return (print);
+}
+
 void print_all(t_files_attrib *attrib)
 {
+	t_print pr;
 	while (attrib)
 	{
-			ft_putstr(attrib->st_mode_to_char);
-			ft_putchar('\t');
-			ft_putnbr(attrib->link_count);
-			ft_putnbr('\t');
-			ft_putstr(attrib->group_name);
-			ft_putnbr((int) attrib->file_size);
-			ft_putnbr('\t');
-			ft_putendl(attrib->filename);
-		 if (attrib->leaf)
+		pr = *atribs_to_str(attrib);
+		write(1, pr.result, pr.write_size);
+		free(pr.result);
+		free(&pr);
+		//todo finalize this
+		if (attrib->leaf)
 			print_all(attrib->leaf);
 		attrib = attrib->next;
 	}

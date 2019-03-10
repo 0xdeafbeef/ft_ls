@@ -1,6 +1,5 @@
 #ifndef GC_FT_GC_H
 #include <stddef.h>
-#include <ntsid.h>
 #include <stdio.h>
 
 #include <stdlib.h>

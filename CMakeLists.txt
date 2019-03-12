@@ -4,7 +4,7 @@ project(ft_ls C)
 set(CMAKE_BUILD_TYPE Debug)
 
 set(CMAKE_C_STANDARD 99)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=address")
+#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=address")
 include_directories(.)
 include_directories(libft)
 

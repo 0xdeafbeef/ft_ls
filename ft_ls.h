@@ -13,7 +13,6 @@
 #ifndef FT_LS_FT_LS_H
  # define MALLOC_ERROR 3
 # define FT_LS_FT_LS_H
-
 #include "structures.h"
 #include <stdio.h>
 #include <dirent.h>
@@ -25,6 +24,7 @@
 #include <sys/stat.h>
 
 # define NO_FLAGS 0
+# define TIME_FORMAT_LEN 12
 # define L 0x01
 # define R_BIG 0x02
 # define A 0x04
@@ -40,7 +40,7 @@ typedef struct 				s_files_attrib
 	struct s_files_attrib 	*previous;
 	struct s_files_attrib	*leaf;
 	struct s_files_attrib	*root;
-	time_t					timestamp;
+	char *					timestamp;
 	char*					st_mode_to_char;
 	char					*owner_name;
 	char					*group_name;

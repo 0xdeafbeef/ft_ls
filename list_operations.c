@@ -108,10 +108,10 @@ void add_spaces(const t_print *print, int count, const char *concatenated)
 {
 	char *whitespaces;
 	int i;
-	
+
 	count = (int) (1 + (count - ft_strlen(concatenated)));
 	whitespaces = ft_strnew(count);
-	i =0;
+	i = 0;
 	while (count--)
 	{
 		whitespaces[i] = ' ';
@@ -150,18 +150,18 @@ t_print *atribs_to_str(t_files_attrib *attrib)
 		if (print->filename_max < print->tmp)
 			print->filename_max = print->tmp;
 		print->tmp = numlen(attrib->file_size);
-		if(print->file_size_max<print->tmp)
-			print->file_size_max=print->tmp;
+		if (print->file_size_max < print->tmp)
+			print->file_size_max = print->tmp;
 		attrib = attrib->next;
 	}
 	attrib = holder;
 	print->entry_size =
-			10 + 1 + print->links_max + 1 + print->owner_len_max + 1 + print->group_name_max + 1 + print->filename_max +
-			1;
-	print->result = ft_strnew(print->entry_size * print->vertical_length);
+			10 + 1 + print->links_max + 1 + print->owner_len_max + 1 + print->group_name_max + 1 +
+			print->file_size_max + 1 + 1 + TIME_FORMAT_LEN + 1 + print->filename_max +1;
+	print->result = ft_strnew(print->entry_size * (print->vertical_length + 1));
 	while (attrib)
 	{
- // todo .. managment
+		// todo .. managment
 		ft_strcat(print->result, attrib->st_mode_to_char);
 		itoa = ft_itoa(attrib->link_count);
 		add_spaces(print, print->links_max, itoa);
@@ -177,11 +177,12 @@ t_print *atribs_to_str(t_files_attrib *attrib)
 		ft_strcat(print->result, itoa);
 		free(itoa);
 		ft_strcat(print->result, " ");
+		ft_strcat(print->result, attrib->timestamp);
+		ft_strcat(print->result, " ");
 		ft_strcat(print->result, attrib->filename);
 		ft_strcat(print->result, "\n");
 		attrib = attrib->next;
 	}
-	attrib = holder;
 	print->write_size = ft_strlen(print->result);
 	return (print);
 }

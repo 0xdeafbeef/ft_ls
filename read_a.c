@@ -126,6 +126,7 @@ void get_long_format_props(t_files_attrib *atr, const char *path)
 		//todo add file to error list
 		return;
 	}
+	atr->timestamp = ft_strnew(TIME_FORMAT_LEN);
 	pasw = getpwuid(structstat.st_uid);
 	atr->owner_name = pasw->pw_name;
 	g = getgrgid(pasw->pw_gid);
@@ -133,6 +134,7 @@ void get_long_format_props(t_files_attrib *atr, const char *path)
 	get_permissions(structstat.st_mode, atr);
 	atr->link_count = structstat.st_nlink;
 	atr->file_size = (size_t) structstat.st_size;
+	strftime(atr->timestamp, TIME_FORMAT_LEN, "%b %d %R lil", gmtime(&(structstat.st_ctime)));
 	lstat(path, &structstat);
 	len = (size_t) structstat.st_size + 1;
 	if (S_ISLNK(structstat.st_mode))

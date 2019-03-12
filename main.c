@@ -32,6 +32,6 @@ int main(int argc, char **argv)
 //		print_path_list(pat);
 //		pat = pat->next;
 //	}
-	ft_gc(&g_memaloced);
+	//ft_gc(&g_memaloced);
 	return 0;
 }

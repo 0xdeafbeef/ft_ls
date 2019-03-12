@@ -102,9 +102,9 @@ static unsigned short int intlen(int num)
 	return (ret);
 }
 
-t_print* atribs_to_str(t_files_attrib *attrib)
+t_print *atribs_to_str(t_files_attrib *attrib)
 {
-	t_print  *print;
+	t_print *print;
 
 	print = ft_memalloc(sizeof(t_print));
 	ft_bzero(print, sizeof(t_print));
@@ -112,6 +112,11 @@ t_print* atribs_to_str(t_files_attrib *attrib)
 		return (NULL);
 	while (attrib->next)
 	{
+		if (ft_strequ(".", attrib->filename) || ft_strequ("..", attrib->filename))
+		{
+			attrib = attrib->next;
+			continue;
+		}
 		++print->verical_len;
 		print->tmp = intlen(attrib->link_count);
 		if (print->links_max < print->tmp)
@@ -130,10 +135,16 @@ t_print* atribs_to_str(t_files_attrib *attrib)
 	while (attrib->previous)
 		attrib = attrib->previous;
 	print->entry_size =
-			10 + 1 + print->links_max +1 + print->owner_len_max + 1 + print->group_name_max + 1 + print->max_name_len + 1;
+			10 + 1 + print->links_max + 1 + print->owner_len_max + 1 + print->group_name_max + 1 + print->max_name_len +
+			1;
 	print->result = ft_strnew(print->entry_size * print->verical_len);
 	while (attrib->next)
 	{
+		if (ft_strequ(".", attrib->filename) || ft_strequ("..", attrib->filename))
+		{
+			attrib = attrib->next;
+			continue;
+		}
 		ft_strcat(print->result, attrib->st_mode_to_char);
 		ft_strcat(print->result, " ");
 		//todo and leading whitespaces
@@ -155,12 +166,18 @@ t_print* atribs_to_str(t_files_attrib *attrib)
 void print_all(t_files_attrib *attrib)
 {
 	t_print pr;
+	t_bool isprined;
+
+	isprined = false;
 	while (attrib)
 	{
-		pr = *atribs_to_str(attrib);
-		write(1, pr.result, pr.write_size);
-		free(pr.result);
-		free(&pr);
+		if (!isprined)
+		{
+			pr = *atribs_to_str(attrib);
+			write(1, pr.result, pr.write_size);
+			free(pr.result);
+			isprined = true;
+		}
 		//todo finalize this
 		if (attrib->leaf)
 			print_all(attrib->leaf);

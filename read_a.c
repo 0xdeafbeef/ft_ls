@@ -126,6 +126,7 @@ void get_long_format_props(t_files_attrib *atr, const char *path)
 		//todo add file to error list
 		return;
 	}
+	atr->block_size = structstat.st_blocks;
 	atr->timestamp = ft_strnew(TIME_FORMAT_LEN);
 	pasw = getpwuid(structstat.st_uid);
 	atr->owner_name = pasw->pw_name;

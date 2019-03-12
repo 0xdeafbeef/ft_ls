@@ -47,6 +47,7 @@ typedef struct 				s_files_attrib
 	size_t					file_size;
 	int						link_count;
 	t_bool					is_link;
+	blkcnt_t				block_size;
 	char					*link_pointer;
 }							t_files_attrib;
 typedef struct				s_path

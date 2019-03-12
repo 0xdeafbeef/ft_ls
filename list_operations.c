@@ -126,7 +126,9 @@ t_print *atribs_to_str(t_files_attrib *attrib)
 	t_print *print;
 	char *itoa;
 	t_files_attrib *holder;
+	blkcnt_t size;
 
+	size =0;
 	print = ft_memalloc(sizeof(t_print));
 	ft_bzero(print, sizeof(t_print));
 	if (!attrib)
@@ -136,6 +138,7 @@ t_print *atribs_to_str(t_files_attrib *attrib)
 	while (attrib)
 	{
 //		todo .. managment
+		size+=attrib->block_size;
 		++print->vertical_length;
 		print->tmp = numlen(attrib->link_count);
 		if (print->links_max < print->tmp)
@@ -157,8 +160,14 @@ t_print *atribs_to_str(t_files_attrib *attrib)
 	attrib = holder;
 	print->entry_size =
 			10 + 1 + print->links_max + 1 + print->owner_len_max + 1 + print->group_name_max + 1 +
-			print->file_size_max + 1 + 1 + TIME_FORMAT_LEN + 1 + print->filename_max +1;
+			print->file_size_max + 1 + 1 + TIME_FORMAT_LEN + 1 + print->filename_max +1 +5 +numlen(
+					(unsigned long long int) size);
 	print->result = ft_strnew(print->entry_size * (print->vertical_length + 1));
+	ft_strcat(print->result, "total ");
+	itoa = ft_itoa_big((size_t) size);
+	ft_strcat(print->result, itoa);
+	ft_strcat(print->result, "\n");
+	free(itoa);
 	while (attrib)
 	{
 		// todo .. managment

@@ -19,6 +19,5 @@ typedef struct s_print
 	unsigned int file_size_max;
 	int entry_size;
 	char *result;
-
 } 				t_print;
 #endif //FT_LS_STRUCTURES_H

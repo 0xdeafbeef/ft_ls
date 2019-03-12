@@ -105,7 +105,7 @@ static unsigned short int intlen(int num)
 t_print *atribs_to_str(t_files_attrib *attrib)
 {
 	t_print *print;
-
+	char *itoa;
 	print = ft_memalloc(sizeof(t_print));
 	ft_bzero(print, sizeof(t_print));
 	if (!attrib)
@@ -148,7 +148,9 @@ t_print *atribs_to_str(t_files_attrib *attrib)
 		ft_strcat(print->result, attrib->st_mode_to_char);
 		ft_strcat(print->result, " ");
 		//todo and leading whitespaces
-		ft_strcat(print->result, ft_itoa(attrib->link_count));
+		itoa = ft_itoa(attrib->link_count);
+		ft_strcat(print->result, itoa);
+		free(itoa);
 		ft_strcat(print->result, " ");
 		//todo and leading whitespaces [2]
 		ft_strcat(print->result, attrib->owner_name);
@@ -158,6 +160,7 @@ t_print *atribs_to_str(t_files_attrib *attrib)
 		//todo add time
 		ft_strcat(print->result, attrib->filename);
 		ft_strcat(print->result, "\n");
+		attrib = attrib->next;
 	}
 	print->write_size = ft_strlen(print->result);
 	return (print);
@@ -180,7 +183,10 @@ void print_all(t_files_attrib *attrib)
 		}
 		//todo finalize this
 		if (attrib->leaf)
+		{
+			ft_putchar('\n');
 			print_all(attrib->leaf);
+		}
 		attrib = attrib->next;
 	}
 }

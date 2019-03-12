@@ -13,84 +13,37 @@
 #include <libft.h>
 #include <printf.h>
 
-static int		ft_intlen(int n)
-{
-	int i;
+#include <libft.h>
 
-	i = 0;
-	if (n == 0)
-		return (1);
-	while (n)
-	{
-		n /= 10;
+static size_t	get_str_len(int n)
+{
+	size_t		i;
+
+	i = 1;
+	while (n /= 10)
 		i++;
-	}
 	return (i);
-}
-
-static int		check_and_init(int *n, char **ret)
-{
-	int isnegative;
-
-	isnegative = 0;
-	if ((*n) > 0)
-	{
-		(*ret) = ft_strnew((size_t)ft_intlen((*n)));
-		isnegative = 0;
-	}
-	else if ((*n) < 0)
-	{
-		(*ret) = ft_strnew((size_t)ft_intlen((*n)) + 1);
-		if (!*ret)
-			*ret = NULL;
-		else
-		{
-			*(*ret) = '-';
-			(*n) *= -1;
-			isnegative = 1;
-		}
-	}
-	if (!*ret)
-		*ret = NULL;
-	return (isnegative);
-}
-
-static char		*getstring(int n)
-{
-	char *ret;
-
-	if (n == -2147483648)
-		ret = ft_strdup("-2147483648");
-	else
-		ret = ft_strdup("0");
-	return (ret);
 }
 
 char			*ft_itoa(int n)
 {
-	int		isnegative;
-	char	*ret;
+	char			*str;
+	size_t			str_len;
+	unsigned int	n_cpy;
 
-	if (n == -2147483648 || n == 0)
+	str_len = get_str_len(n);
+	n_cpy = n;
+	if (n < 0)
 	{
-		ret = getstring(n);
-		return (ret == NULL ? NULL : ret);
+		n_cpy = -n;
+		str_len++;
 	}
-	isnegative = check_and_init(&n, &ret);
-	if (ret)
-	{
-		ret += ft_intlen(n);
-		while (n)
-		{
-			*ret = (char)((n % 10) + '0');
-			n /= 10;
-			ret--;
-		}
-		if (isnegative)
-			return (ret);
-		else
-			return (++ret);
-	}
-	else
+	if (!(str = ft_strnew(str_len)))
 		return (NULL);
+	str[--str_len] = n_cpy % 10 + '0';
+	while (n_cpy /= 10)
+		str[--str_len] = n_cpy % 10 + '0';
+	if (n < 0)
+		*(str + 0) = '-';
+	return (str);
 }

@@ -90,9 +90,6 @@ void get_permissions(mode_t perm, t_files_attrib *attrib)
 
 
 	modeval = ft_memalloc(sizeof(char) * 9 + 2);
-
-	perm = st.st_mode;
-
 	if (S_ISREG(perm))
 		modeval[0] = '-';
 	if (S_ISBLK(perm))

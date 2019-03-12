@@ -40,27 +40,3 @@ void ft_free_chain(t_files_attrib *head)
 	}
 }
 
-void ft_free_path_chain(t_path *tail)
-{
-	t_path *nrxt;
-
-	while ((nrxt = tail->next))
-	{
-		ft_free_chain(tail->attrib);
-		free(tail);
-		tail = nrxt;
-	}
-}
-
-void for_each_path(t_path *pat, void (*fun)(t_files_attrib *))
-{
-	t_path *temp;
-	if (!fun | !pat)
-		return;
-	temp = pat;
-	while (temp)
-	{
-		fun(temp->attrib);
-		temp = temp->next;
-	}
-}

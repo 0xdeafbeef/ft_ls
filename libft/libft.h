@@ -95,5 +95,6 @@ char				*ft_strjoinch(char const *s1, char c);
 void				ft_swap(int *a, int *b);
 t_gc_vector 		*create_tgc_vector(size_t size);
 void *ft_realloc_gc(void **prev, size_t new_size);
+char				*ft_itoa_big(size_t n);
 
 #endif

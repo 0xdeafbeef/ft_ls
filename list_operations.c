@@ -89,10 +89,12 @@ void print_wrapper(t_files_attrib *attrib)
 	print_all(attrib);
 }
 
-static unsigned short int intlen(int num)
+static unsigned char numlen(unsigned long long int num)
 {
-	unsigned short int ret;
+	unsigned char ret;
 
+	if (!num)
+		return (1);
 	ret = 0;
 	while (num)
 	{
@@ -102,66 +104,84 @@ static unsigned short int intlen(int num)
 	return (ret);
 }
 
+void add_spaces(const t_print *print, int count, const char *concatenated)
+{
+	char *whitespaces;
+	int i;
+	
+	count = (int) (1 + (count - ft_strlen(concatenated)));
+	whitespaces = ft_strnew(count);
+	i =0;
+	while (count--)
+	{
+		whitespaces[i] = ' ';
+		i++;
+	}
+	ft_strcat(print->result, whitespaces);
+	free(whitespaces);
+}
+
 t_print *atribs_to_str(t_files_attrib *attrib)
 {
 	t_print *print;
 	char *itoa;
+	t_files_attrib *holder;
+
 	print = ft_memalloc(sizeof(t_print));
 	ft_bzero(print, sizeof(t_print));
 	if (!attrib)
 		return (NULL);
-	while (attrib->next)
+	//todo do not prints last but it must print
+	holder = attrib;
+	while (attrib)
 	{
-		if (ft_strequ(".", attrib->filename) || ft_strequ("..", attrib->filename))
-		{
-			attrib = attrib->next;
-			continue;
-		}
-		++print->verical_len;
-		print->tmp = intlen(attrib->link_count);
+//		todo .. managment
+		++print->vertical_length;
+		print->tmp = numlen(attrib->link_count);
 		if (print->links_max < print->tmp)
 			print->links_max = (unsigned short) print->tmp;
-		print->tmp = (unsigned int) ft_strlen(attrib->filename);
+		print->tmp = (unsigned int) ft_strlen(attrib->owner_name);
 		if (print->owner_len_max < print->tmp)
 			print->owner_len_max = print->tmp;
 		print->tmp = (unsigned int) ft_strlen(attrib->group_name);
 		if (print->group_name_max < print->tmp)
 			print->group_name_max = print->tmp;
 		print->tmp = (unsigned int) ft_strlen(attrib->filename);
-		if (print->max_name_len < print->tmp)
-			print->max_name_len = print->tmp;
+		if (print->filename_max < print->tmp)
+			print->filename_max = print->tmp;
+		print->tmp = numlen(attrib->file_size);
+		if(print->file_size_max<print->tmp)
+			print->file_size_max=print->tmp;
 		attrib = attrib->next;
 	}
-	while (attrib->previous)
-		attrib = attrib->previous;
+	attrib = holder;
 	print->entry_size =
-			10 + 1 + print->links_max + 1 + print->owner_len_max + 1 + print->group_name_max + 1 + print->max_name_len +
+			10 + 1 + print->links_max + 1 + print->owner_len_max + 1 + print->group_name_max + 1 + print->filename_max +
 			1;
-	print->result = ft_strnew(print->entry_size * print->verical_len);
-	while (attrib->next)
+	print->result = ft_strnew(print->entry_size * print->vertical_length);
+	while (attrib)
 	{
-		if (ft_strequ(".", attrib->filename) || ft_strequ("..", attrib->filename))
-		{
-			attrib = attrib->next;
-			continue;
-		}
+ // todo .. managment
 		ft_strcat(print->result, attrib->st_mode_to_char);
-		ft_strcat(print->result, " ");
-		//todo and leading whitespaces
 		itoa = ft_itoa(attrib->link_count);
+		add_spaces(print, print->links_max, itoa);
 		ft_strcat(print->result, itoa);
 		free(itoa);
 		ft_strcat(print->result, " ");
-		//todo and leading whitespaces [2]
 		ft_strcat(print->result, attrib->owner_name);
-		ft_strcat(print->result, " ");
+		add_spaces(print, print->owner_len_max, attrib->owner_name);
 		ft_strcat(print->result, attrib->group_name);
+		add_spaces(print, print->group_name_max, attrib->group_name);
+		itoa = ft_itoa_big(attrib->file_size);
+		add_spaces(print, print->file_size_max, itoa);
+		ft_strcat(print->result, itoa);
+		free(itoa);
 		ft_strcat(print->result, " ");
-		//todo add time
 		ft_strcat(print->result, attrib->filename);
 		ft_strcat(print->result, "\n");
 		attrib = attrib->next;
 	}
+	attrib = holder;
 	print->write_size = ft_strlen(print->result);
 	return (print);
 }

@@ -4,7 +4,7 @@ project(ft_ls C)
 set(CMAKE_BUILD_TYPE Debug)
 
 set(CMAKE_C_STANDARD 99)
-#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=address")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=address")
 include_directories(.)
 include_directories(libft)
 
@@ -91,4 +91,4 @@ add_executable(ft_ls
         path_operations.c
         read_a.c
         utils.c
-        merge_sort.c comparators.c libft/ft_isuppercase.c structures.h)
+        merge_sort.c comparators.c libft/ft_isuppercase.c structures.h libft/ft_itoa_size_t.c)

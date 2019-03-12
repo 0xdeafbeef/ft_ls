@@ -85,7 +85,6 @@ p     FIFO.
 //#define S_IFNAM 0x5000  /* special named file */
 void get_permissions(mode_t perm, t_files_attrib *attrib)
 {
-	struct stat st;
 	char *modeval;
 
 
@@ -159,7 +158,7 @@ static t_files_attrib *ft_relink(t_files_attrib *root_file, const char *name, ch
 	if (root_file->root)
 		root_file->next->root = root_file->root;
 	root_file = root_file->next;
-	if (g_flag & L && !(ft_strequ(name, ".") || ft_strequ(name, "..")))
+	if (g_flag & L && (g_flag & A)) //todo .. managment
 		get_long_format_props(root_file, f_name);
 
 	return root_file;
@@ -178,6 +177,8 @@ void ft_open_folder(char *fld_name, t_files_attrib *root_file)
 //			print_error(errno); //todo add to error_list
 			return;
 	}
+	if (g_flag & L && ft_strequ(".", root_file->filename))
+		get_long_format_props(root_file, (ft_strjoin(ft_strjoin(fld_name, "/"), name)));
 	while ((dirp = readdir(dir)))
 	{
 		name[ft_strlen(dirp->d_name)] = 0;

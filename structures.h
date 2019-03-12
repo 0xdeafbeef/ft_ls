@@ -10,13 +10,15 @@
 typedef struct s_print
 {
 	unsigned short int links_max;
-	int owner_len_max;
-	int group_name_max;
+	unsigned int owner_len_max;
+	unsigned int group_name_max;
 	unsigned int tmp;
 	size_t write_size;
-	int verical_len;
-	int max_name_len;
+	unsigned int vertical_length;
+	unsigned int filename_max;
+	unsigned int file_size_max;
 	int entry_size;
 	char *result;
+
 } 				t_print;
 #endif //FT_LS_STRUCTURES_H

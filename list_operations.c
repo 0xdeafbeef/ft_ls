@@ -128,7 +128,7 @@ t_print *atribs_to_str(t_files_attrib *attrib)
 	t_files_attrib *holder;
 	blkcnt_t size;
 
-	size =0;
+	size = 0;
 	print = ft_memalloc(sizeof(t_print));
 	ft_bzero(print, sizeof(t_print));
 	if (!attrib)
@@ -138,7 +138,7 @@ t_print *atribs_to_str(t_files_attrib *attrib)
 	while (attrib)
 	{
 //		todo .. managment
-		size+=attrib->block_size;
+		size += attrib->block_size;
 		++print->vertical_length;
 		print->tmp = numlen(attrib->link_count);
 		if (print->links_max < print->tmp)
@@ -159,8 +159,10 @@ t_print *atribs_to_str(t_files_attrib *attrib)
 	}
 	attrib = holder;
 	print->entry_size =
-			10 + 1 + print->links_max + 1 + print->owner_len_max + 1 + print->group_name_max + 1 +
-			print->file_size_max + 1 + 1 + TIME_FORMAT_LEN + 1 + print->filename_max +1 +5 +numlen(
+			10 + 1 + print->links_max + 1 + print->owner_len_max + 1 +
+			print->group_name_max + 1 +
+			print->file_size_max + 1 + 1 + TIME_FORMAT_LEN + 1 +
+			print->filename_max + 1 + 5 + numlen(
 					(unsigned long long int) size);
 	print->result = ft_strnew(print->entry_size * (print->vertical_length + 1));
 	ft_strcat(print->result, "total ");
@@ -171,6 +173,11 @@ t_print *atribs_to_str(t_files_attrib *attrib)
 	while (attrib)
 	{
 		// todo .. managment
+		if (attrib->error_mesage)
+		{
+			ft_strcat(print->result, attrib->error_mesage);
+			continue;
+		}
 		ft_strcat(print->result, attrib->st_mode_to_char);
 		itoa = ft_itoa(attrib->link_count);
 		add_spaces(print, print->links_max, itoa);
@@ -189,6 +196,11 @@ t_print *atribs_to_str(t_files_attrib *attrib)
 		ft_strcat(print->result, attrib->timestamp);
 		ft_strcat(print->result, " ");
 		ft_strcat(print->result, attrib->filename);
+		if (attrib->is_link)
+		{
+			ft_strcat(print->result, " -> ");
+			ft_strcat(print->result, attrib->link_pointer);
+		}
 		ft_strcat(print->result, "\n");
 		attrib = attrib->next;
 	}
@@ -199,24 +211,26 @@ t_print *atribs_to_str(t_files_attrib *attrib)
 void print_all(t_files_attrib *attrib)
 {
 	t_print pr;
-	t_bool isprined;
+	t_bool isprinted;
 
-	isprined = false;
+	isprinted = false;
+	if (!attrib->next)
+		return;
 	while (attrib)
 	{
-		if (!isprined)
+		if (!isprinted)
 		{
 			pr = *atribs_to_str(attrib);
 			write(1, pr.result, pr.write_size);
 			free(pr.result);
-			isprined = true;
+			isprinted = true;
 		}
-		//todo finalize this
 		if (attrib->leaf)
 		{
 			ft_putchar('\n');
 			print_all(attrib->leaf);
 		}
 		attrib = attrib->next;
+		//free(attrib->previous);
 	}
 }

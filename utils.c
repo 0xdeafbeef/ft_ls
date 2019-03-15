@@ -9,36 +9,14 @@ void print_bits(unsigned short int c, char bytes)
 		(c >> i) & 1 ? write(1, "1", 1) : write(1, "0", 1);
 }
 
-void print_error(char const *error_file, char const *msg, int error_num)
+void print_error(char const *error_file, int error_num,t_files_attrib *attr)
 {
-	char *buffer;
-	char *ptr;
+	char *error;
 
-	if (!msg || !error_file)
-		return;
-	buffer = ft_strnew(ft_strlen("ft_ls: ") + ft_strlen(strerror(error_num)) +
-					   ft_strlen(error_file) + ft_strlen(": ") +
-					   ft_strlen(msg));
-	ptr = buffer;
-	ft_memmove(buffer, "ft_ls: ", 7);
-	buffer += 7;
-	ft_memmove(buffer, msg, ft_strlen(msg));
-	buffer += ft_strlen(msg);
-	ft_memmove(buffer, ": ", 2);
-	buffer += 2;
-	ft_memmove(buffer, "'", 1);
-	buffer += 1;
-	ft_memmove(buffer, error_file, ft_strlen(error_file));
-	buffer += ft_strlen(error_file);
-	ft_memmove(buffer, "' ", 2);
-	buffer += 2;
-	ft_memmove(buffer, strerror(error_num), ft_strlen(strerror(error_num)));
-	ft_putendl_fd(ptr, 2);
-	free(ptr);
-}
-int is_dir(const char *path)
-{
-	struct stat path_stat;
-	stat(path, &path_stat);
-	return S_ISDIR(path_stat.st_mode);
+	error = ft_strnew(1024 * 1024);
+	ft_strcat(error, "ft_ls: ");
+	ft_strcat(error, (ft_strrchr(error_file, '/')) +1);
+	ft_strcat(error, ": ");
+	ft_strcat(error,strerror(error_num));
+	attr->error_mesage = error;
 }

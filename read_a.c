@@ -45,13 +45,8 @@ void get_path_list(t_props *curent)
 {
 	t_path *current_path;
 	t_path *holder;
-	t_bool flag;
-	t_bool recurisive_traverse;
 
-	recurisive_traverse = curent->flag & (unsigned int) R_BIG;
 	g_flag = curent->flag;
-
-	flag = !(curent->flag & A);
 	if (!curent->path)
 		return;
 	current_path = curent->path;
@@ -59,10 +54,7 @@ void get_path_list(t_props *curent)
 	while ((current_path))
 	{
 		current_path->attrib = create_atr(".");
-		if (recurisive_traverse)
 			ft_open_folder(current_path->path, current_path->attrib);
-		else
-			current_path->attrib = get_attr_from_path(current_path->path, flag);
 		current_path = current_path->next;
 	}
 	curent->path = holder;
@@ -121,9 +113,11 @@ void get_long_format_props(t_files_attrib *atr, const char *path)
 	struct group *g;
 	size_t len;
 
+	errno =0;
 	if (stat(path, &structstat) == -1)
 	{
-		//todo add file to error list
+		//if (errno)
+			//print_error(path, errno);
 		return;
 	}
 	atr->block_size = structstat.st_blocks;
@@ -173,13 +167,16 @@ void ft_open_folder(char *fld_name, t_files_attrib *root_file)
 	struct dirent *dirp;
 	char name[1024];
 	char *full_path;
+	t_files_attrib *holder;
+
 	errno = 0;
 	if (!(dir = opendir(fld_name)))
 	{
 		if (errno)
-//			print_error(errno); //todo add to error_list
-			return;
+			print_error(fld_name, errno, root_file);
+		return;
 	}
+	holder = root_file;
 	if (g_flag & L && ft_strequ(".", root_file->filename))
 		get_long_format_props(root_file, (ft_strjoin(ft_strjoin(fld_name, "/"), name)));
 	while ((dirp = readdir(dir)))
@@ -189,7 +186,7 @@ void ft_open_folder(char *fld_name, t_files_attrib *root_file)
 		if ((!(g_flag & A) && 0[name] != '.') || (g_flag & A))
 		{
 			if (dirp->d_type == DT_DIR && !(ft_strequ(name, ".") ||
-											ft_strequ(name, "..")))
+											ft_strequ(name, ".."))&&(g_flag&R_BIG))
 			{
 				full_path = (ft_strjoin(ft_strjoin(fld_name, "/"), name));
 				root_file = ft_relink(root_file, name, full_path);
@@ -203,6 +200,8 @@ void ft_open_folder(char *fld_name, t_files_attrib *root_file)
 			}
 		}
 	}
-	if (dir)
-		closedir(dir);
+	ft_merge_sort((&holder), comparator_lex);
+	print_all(holder);
+	//ft_free_chain(holder);
+	closedir(dir);
 }

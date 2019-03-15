@@ -18,9 +18,9 @@ void main_wrap(int argc, char **argv)
 
 	props = get_t_size_and_flags(argc, argv);
 	get_path_list(props);
-	ft_list_sort_all(props);
+	//ft_list_sort_all(props);
 
-	print_all(props->path->attrib);
+	//print_all(props->path->attrib);
 }
 
 int main(int argc, char **argv)

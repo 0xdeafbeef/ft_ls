@@ -23,7 +23,6 @@
 #include <errno.h>
 #include <sys/stat.h>
 
-# define NO_FLAGS 0
 # define TIME_FORMAT_LEN 12
 # define L 0x01
 # define R_BIG 0x02
@@ -40,6 +39,7 @@ typedef struct 				s_files_attrib
 	struct s_files_attrib 	*previous;
 	struct s_files_attrib	*leaf;
 	struct s_files_attrib	*root;
+	char 					*error_mesage;
 	char *					timestamp;
 	char*					st_mode_to_char;
 	char					*owner_name;
@@ -83,16 +83,16 @@ void						for_each_path(t_path *pat, void (*fun)(t_files_attrib *));
 void						ft_free_chain(t_files_attrib *head);
 void						print_bits(unsigned short int c, char bytes);
 void						print_path_list(t_path *path);
-void						print_error(char const *error_file, char const *msg, int error_num);
+void						print_error(char const *, int,t_files_attrib*);
 int							is_dir(const char *path);
 void						ft_list_push_down(t_files_attrib *current,t_files_attrib *upper);
 
 t_files_attrib				*create_atr(const char *name);
 void						ft_open_folder(char *fld_name, t_files_attrib *root_file);
-void print_all(t_files_attrib *attrib);
-void for_each_level_sort(t_files_attrib **attrib , t_bool
+void						print_all(t_files_attrib *attrib);
+void						for_each_level_sort(t_files_attrib **attrib , t_bool
 ( *comp)(t_files_attrib *a, t_files_attrib *b));
-void ft_merge_sort(t_files_attrib **head_ref, t_bool( *comp)(t_files_attrib *a,
+void						ft_merge_sort(t_files_attrib **head_ref, t_bool( *comp)(t_files_attrib *a,
 		t_files_attrib *b));
 t_bool						comparator_lex_inv(t_files_attrib *a,
 												 t_files_attrib *b);

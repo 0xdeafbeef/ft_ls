@@ -4,7 +4,9 @@ project(ft_ls C)
 set(CMAKE_BUILD_TYPE Debug)
 
 set(CMAKE_C_STANDARD 99)
+
 #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=address")
+#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -march=native -m64 -Ofast -flto -march=native -funroll-loops")
 include_directories(.)
 include_directories(libft)
 
@@ -83,7 +85,6 @@ add_executable(ft_ls
         libft/get_next_line.h
         libft/libft.h
         libft/strlen.h
-        attrib_operations.c
         flags.c
         ft_ls.h
         main.c

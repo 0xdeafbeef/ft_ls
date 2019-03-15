@@ -17,7 +17,7 @@
 #include <stdio.h>
 #include <dirent.h>
 #include <sys/types.h>
-#include "libft/libft.h"
+#include "libft.h"
 #include <sys/ioctl.h>
 #include <time.h>
 #include <errno.h>
@@ -34,6 +34,7 @@ typedef int					t_bool;
 enum { false, true };
 typedef struct 				s_files_attrib
 {
+	char					*full_path;
 	char					*filename;
 	struct s_files_attrib 	*next;
 	struct s_files_attrib 	*previous;
@@ -64,8 +65,7 @@ typedef struct				s_props
 	t_path					*path;
 }							t_props;
 
-void						get_long_format_props(t_files_attrib *, const
-char * path);
+void						get_long_format_props(t_files_attrib *);
 void						get_path_list(t_props *curent);
 t_path						*ft_path_append_horizontal(t_path *node,
 														 char *dat);
@@ -89,13 +89,10 @@ void						ft_list_push_down(t_files_attrib *current,t_files_attrib *upper);
 
 t_files_attrib				*create_atr(const char *name);
 void						ft_open_folder(char *fld_name, t_files_attrib *root_file);
-void						print_all(t_files_attrib *attrib);
-void						for_each_level_sort(t_files_attrib **attrib , t_bool
-( *comp)(t_files_attrib *a, t_files_attrib *b));
+void						print_all(t_files_attrib *attrib, unsigned int flag);
 void						ft_merge_sort(t_files_attrib **head_ref, t_bool( *comp)(t_files_attrib *a,
 		t_files_attrib *b));
 t_bool						comparator_lex_inv(t_files_attrib *a,
 												 t_files_attrib *b);
 t_bool comparator_lex(t_files_attrib *a,t_files_attrib *b);
-void						ft_list_sort_all(t_props *props);
 #endif

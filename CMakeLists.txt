@@ -1,16 +1,14 @@
 cmake_minimum_required(VERSION 3.13)
 project(ft_ls C)
 
-set(CMAKE_BUILD_TYPE Debug)
-
 set(CMAKE_C_STANDARD 99)
 
-#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=address")
-#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -march=native -m64 -Ofast -flto -march=native -funroll-loops")
-include_directories(.)
+include_directories(headers)
 include_directories(libft)
-
+#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address")
 add_executable(ft_ls
+        headers/ft_ls.h
+        headers/structures.h
         libft/ft_atoi.c
         libft/ft_bzero.c
         libft/ft_cpyuntil.c
@@ -23,7 +21,9 @@ add_executable(ft_ls
         libft/ft_isblank.c
         libft/ft_isdigit.c
         libft/ft_isprint.c
+        libft/ft_isuppercase.c
         libft/ft_itoa.c
+        libft/ft_itoa_size_t.c
         libft/ft_lstadd.c
         libft/ft_lstaddback.c
         libft/ft_lstdel.c
@@ -85,11 +85,11 @@ add_executable(ft_ls
         libft/get_next_line.h
         libft/libft.h
         libft/strlen.h
-        flags.c
-        ft_ls.h
-        main.c
+        parsing/merge_sort.c
+        parsing/read_l_R_a.c
+        user_input_management/flags.c
+        parsing/comparators.c
         list_operations.c
+        main.c
         path_operations.c
-        read_a.c
-        utils.c
-        merge_sort.c comparators.c libft/ft_isuppercase.c structures.h libft/ft_itoa_size_t.c)
+        utils.c listing_functions/print_functions.c)

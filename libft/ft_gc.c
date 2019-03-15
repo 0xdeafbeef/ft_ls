@@ -1,4 +1,4 @@
-#include "libft/libft.h"
+#include "libft.h"
 
 t_gc_vector *init_tgc_vector(ssize_t ssize)
 {

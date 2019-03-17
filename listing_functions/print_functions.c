@@ -143,12 +143,21 @@ void print_all(t_files_attrib *attrib, unsigned int flag)
 			free(pr.result);
 			isprinted = true;
 		}
-		if ((flag&R_BIG)&&attrib->leaf)
+		if ((flag & R_BIG) && attrib->leaf)
 		{
 			ft_putendl(attrib->full_path);
 			print_all(attrib->leaf, flag);
 		}
 		attrib = attrib->next;
-		//free(attrib->previous);
 	}
+}
+
+void print_level(t_files_attrib *attrib)
+{
+	t_print *pr;
+
+	pr = atribs_to_str(attrib);
+	write(1, pr->result, pr->write_size);
+	free(pr->result);
+	free(pr);
 }

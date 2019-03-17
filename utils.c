@@ -21,3 +21,10 @@ void print_error(char const *error_file, int error_num,t_files_attrib *attr)
 	ft_strcat(error,strerror(error_num));
 	attr->error_mesage = error;
 }
+int is_dir(const char *path) {
+	struct stat statbuf;
+
+	if (stat(path, &statbuf) != 0)
+		return 0;
+	return S_ISDIR(statbuf.st_mode);
+}

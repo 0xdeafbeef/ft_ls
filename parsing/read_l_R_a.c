@@ -53,8 +53,9 @@ void get_path_list(t_props *curent)
 	holder = current_path;
 	while ((current_path))
 	{
-		current_path->attrib = create_atr(".");
-		ft_open_folder(current_path->path, current_path->attrib);
+		current_path->attrib = create_atr(
+				"."); //todo restruct creating of . file
+		ft_open_folder(current_path->path);
 		current_path = current_path->next;
 	}
 	curent->path = holder;
@@ -131,7 +132,7 @@ void get_long_format_props(t_files_attrib *atr)
 	get_permissions(structstat.st_mode, atr);
 	atr->link_count = structstat.st_nlink;
 	atr->file_size = (size_t) structstat.st_size;
-	strftime(atr->timestamp, TIME_FORMAT_LEN, "%b %d %R lil",
+	strftime(atr->timestamp, TIME_FORMAT_LEN, "%b %d %R",
 			 gmtime(&(structstat.st_ctime)));
 	lstat(path, &structstat);
 	len = (size_t) structstat.st_size + 1;
@@ -152,71 +153,83 @@ void get_long_format_props(t_files_attrib *atr)
 
 
 static t_files_attrib *
-ft_relink(t_files_attrib *root_file, char *name)
+ft_relink(t_files_attrib *root_file, char *name, char *full)
 {
-	root_file->next = create_atr(name);    //make next file
-	root_file->next->previous = root_file; //relink
+	if (!root_file)
+		root_file = create_atr(name);
+	else
+	{
+		root_file->next = create_atr(name);    //make next file
+		root_file->next->previous = root_file;
+	} //relink
 	if (root_file->root)
 		root_file->next->root = root_file->root;
-	root_file = root_file->next;
+	if (root_file->next)
+		root_file = root_file->next;
+	root_file->full_path = full;
 	if (g_flag & L && (g_flag & A)) //todo .. managment
 		get_long_format_props(root_file);
 	return root_file;
 }
 
-char *get_full_path(char *fld_name, t_files_attrib *root_file,
-					char *name)
+char *get_full_path(char *fld_name, char *name)
 {
-	root_file->full_path = ft_strnew(ft_strlen(fld_name) + 1 + ft_strlen(name));
-	ft_strcat(root_file->full_path, fld_name);
-	ft_strcat(root_file->full_path, "/");
-	ft_strcat(root_file->full_path, name);
-	return root_file->full_path;
+	char *path;
+	path = ft_strnew(ft_strlen(fld_name) + 1 + ft_strlen(name));
+	ft_strcat(path, fld_name);
+	ft_strcat(path, "/");
+	ft_strcat(path, name);
+	return path;
 }
 
-void ft_open_folder(char *fld_name, t_files_attrib *root_file)
+void ft_open_folder(char *fld_name)
 {
 	DIR *dir;
 	struct dirent *dirp;
-	char name[1024];
-	char *full_path;
+	t_files_attrib *attrib;
 	t_files_attrib *holder;
+	t_bool first_asign;
 
+	first_asign = true;
+	attrib = NULL;
+	holder = NULL;
 	errno = 0;
 	if (!(dir = opendir(fld_name)))
 	{
-		if (errno)
-			print_error(fld_name, errno, root_file);
+		//if (errno)
+		//print_error(fld_name, errno, root_file);
 		return;
 	}
-	holder = root_file;
-	get_full_path(fld_name, root_file, ".");
-	if (g_flag & L && ft_strequ(".", root_file->filename))
-		get_long_format_props(root_file);
 	while ((dirp = readdir(dir)))
 	{
-		name[ft_strlen(dirp->d_name)] = 0;
-		ft_strcpy(name, dirp->d_name);
-		if (((!(g_flag & A) && name[0] != '.') || (g_flag & A)) &&
-			(!ft_strequ(name, ".")))
+		if (!(g_flag & A && dirp->d_name[0] != '.') || g_flag & A)
 		{
-			if (dirp->d_type == DT_DIR && !(ft_strequ(name, "..")) &&
-				(g_flag & R_BIG))
+			attrib = ft_relink(attrib, dirp->d_name,
+							   get_full_path(fld_name, dirp->d_name));
+			if (first_asign)
 			{
-				full_path = get_full_path(fld_name, root_file, name);
-				root_file = ft_relink(root_file, name);
-				root_file->leaf = create_atr(".");
-				root_file->leaf->root = root_file;
-				get_full_path(fld_name, root_file, name);
-				ft_open_folder(full_path, root_file->leaf);
-			} else
-			{
-				get_full_path(fld_name, root_file, name);
-				root_file = ft_relink(root_file, name);
+				holder = attrib;
+				first_asign = false;
 			}
 		}
 	}
+	attrib = holder;
+	print_level(attrib);
+	if (g_flag & R_BIG)
+	{
+		while (attrib->next)
+		{
+			if (is_dir(attrib->full_path) &&
+				!(ft_strequ(attrib->filename, ".") ||
+				  ft_strequ(attrib->filename, "..")))
+			{
+				ft_open_folder(attrib->full_path);
+			}
+			free(attrib->previous);
+			//todo make freeing great again
+			attrib = attrib->next;
+		}
+	}
 	closedir(dir);
-	ft_merge_sort((&holder), comparator_lex);
-	print_all(holder, g_flag);
+
 }

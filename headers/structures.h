@@ -12,9 +12,9 @@ typedef struct s_print
 	unsigned short int links_max;
 	unsigned int owner_len_max;
 	unsigned int group_name_max;
-	unsigned int tmp;
+	unsigned long int tmp;
 	size_t write_size;
-	unsigned int vertical_length;
+	unsigned int nodes_count;
 	unsigned int filename_max;
 	unsigned int file_size_max;
 	int entry_size;

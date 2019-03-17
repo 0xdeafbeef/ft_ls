@@ -182,6 +182,8 @@ char *get_full_path(char *fld_name, char *name)
 	return path;
 }
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCDFAInspection"
 void ft_open_folder(char *fld_name)
 {
 	DIR *dir;
@@ -190,14 +192,14 @@ void ft_open_folder(char *fld_name)
 	t_files_attrib *holder;
 	t_bool first_asign;
 
+	holder =NULL;
 	first_asign = true;
 	attrib = NULL;
-	holder = NULL;
 	errno = 0;
 	if (!(dir = opendir(fld_name)))
 	{
-		//if (errno)
-		//print_error(fld_name, errno, root_file);
+		if (errno)
+			print_error(fld_name, errno);
 		return;
 	}
 	while ((dirp = readdir(dir)))
@@ -213,23 +215,25 @@ void ft_open_folder(char *fld_name)
 			}
 		}
 	}
+	if (!holder)
+		return;
 	attrib = holder;
+	//ft_merge_sort(&attrib, comparator_lex);
 	print_level(attrib);
 	if (g_flag & R_BIG)
 	{
-		while (attrib->next)
-		{
-			if (is_dir(attrib->full_path) &&
-				!(ft_strequ(attrib->filename, ".") ||
-				  ft_strequ(attrib->filename, "..")))
+			while (attrib->next)
 			{
-				ft_open_folder(attrib->full_path);
+				if (is_dir(attrib->full_path) &&
+					!(ft_strequ(attrib->filename, ".")
+					  || ft_strequ(attrib->filename, "..")))
+					ft_open_folder(attrib->full_path);
+				//todo make freeing great again
+				attrib = attrib->next;
+				free(attrib->previous);
+				attrib->previous = NULL;
 			}
-			free(attrib->previous);
-			//todo make freeing great again
-			attrib = attrib->next;
 		}
-	}
 	closedir(dir);
-
 }
+#pragma clang diagnostic pop

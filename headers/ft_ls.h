@@ -83,7 +83,7 @@ void						for_each_path(t_path *pat, void (*fun)(t_files_attrib *));
 void						ft_free_chain(t_files_attrib *head);
 void						print_bits(unsigned short int c, char bytes);
 void						print_path_list(t_path *path);
-void						print_error(char const *, int,t_files_attrib*);
+void						print_error(char const *, int);
 int							is_dir(const char *path);
 void						ft_list_push_down(t_files_attrib *current,t_files_attrib *upper);
 

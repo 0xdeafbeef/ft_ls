@@ -5,7 +5,7 @@ set(CMAKE_C_STANDARD 99)
 
 include_directories(headers)
 include_directories(libft)
-#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address")
 add_executable(ft_ls
         headers/ft_ls.h
         headers/structures.h

@@ -28,7 +28,12 @@ int is_dir(const char *path)
 {
 	struct stat statbuf;
 
-	if (stat(path, &statbuf) != 0)
+	errno =0;
+	if (lstat(path, &statbuf) != 0)
+	{
+		print_error(path, errno);
 		return 0;
+	}
+
 	return S_ISDIR(statbuf.st_mode);
 }

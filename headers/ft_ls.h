@@ -23,6 +23,7 @@
 #include <errno.h>
 #include <sys/stat.h>
 
+# define IS_OK !(ft_strequ(attrib->filename,".")||ft_strequ(attrib->filename,".."))
 # define TIME_FORMAT_LEN 12
 # define L 0x01
 # define R_BIG 0x02
@@ -38,16 +39,13 @@ typedef struct 				s_files_attrib
 	char					*filename;
 	struct s_files_attrib 	*next;
 	struct s_files_attrib 	*previous;
-	struct s_files_attrib	*leaf;
 	struct s_files_attrib	*root;
-	char 					*error_mesage;
 	char *					timestamp;
 	char*					st_mode_to_char;
 	char					*owner_name;
 	char					*group_name;
 	size_t					file_size;
 	int						link_count;
-	t_bool					is_link;
 	blkcnt_t				block_size;
 	char					*link_pointer;
 }							t_files_attrib;
@@ -66,7 +64,7 @@ typedef struct				s_props
 }							t_props;
 
 void						get_long_format_props(t_files_attrib *);
-void						get_path_list(t_props *curent);
+void						get_path_list(t_props *current);
 t_path						*ft_path_append_horizontal(t_path *node,
 														 char *dat);
 t_props						*get_t_size_and_flags(int argc, char **argv);

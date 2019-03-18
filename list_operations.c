@@ -35,10 +35,6 @@ t_files_attrib *create_atr(const char *name)
 	t_files_attrib *attrib;
 
 	attrib = ft_memalloc(sizeof(t_files_attrib));
-	attrib->leaf = NULL;
-	attrib->next = NULL;
-	attrib->previous = NULL;
-	attrib->filename = NULL;
 	if (name)
 		attrib->filename = ft_strdup(name);
 	return (attrib);

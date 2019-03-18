@@ -41,24 +41,19 @@ t_files_attrib *get_attr_from_path(char *path, int need_to_exclude_system)
 	return (first);
 }
 
-void get_path_list(t_props *curent)
+void get_path_list(t_props *current)
 {
 	t_path *current_path;
-	t_path *holder;
 
-	g_flag = curent->flag;
-	if (!curent->path)
+	g_flag = current->flag;
+	if (!current->path)
 		return;
-	current_path = curent->path;
-	holder = current_path;
+	current_path = current->path;
 	while ((current_path))
 	{
-		current_path->attrib = create_atr(
-				"."); //todo restruct creating of . file
 		ft_open_folder(current_path->path);
 		current_path = current_path->next;
 	}
-	curent->path = holder;
 }
 
 /*
@@ -81,7 +76,7 @@ void get_permissions(mode_t perm, t_files_attrib *attrib)
 	char *modeval;
 
 
-	modeval = ft_memalloc(sizeof(char) * 9 + 2);
+	modeval = ft_strnew(10);
 	if (S_ISREG(perm))
 		modeval[0] = '-';
 	if (S_ISBLK(perm))
@@ -117,10 +112,10 @@ void get_long_format_props(t_files_attrib *atr)
 
 	path = atr->full_path;
 	errno = 0;
-	if (stat(path, &structstat) == -1)
+	if (lstat(path, &structstat) == -1)
 	{
-		//if (errno)
-		//print_error(path, errno);
+		if (errno)
+			print_error(path, errno);
 		return;
 	}
 	atr->block_size = structstat.st_blocks;
@@ -134,42 +129,36 @@ void get_long_format_props(t_files_attrib *atr)
 	atr->file_size = (size_t) structstat.st_size;
 	strftime(atr->timestamp, TIME_FORMAT_LEN, "%b %d %R",
 			 gmtime(&(structstat.st_ctime)));
-	lstat(path, &structstat);
 	len = (size_t) structstat.st_size + 1;
 	if (S_ISLNK(structstat.st_mode))
 	{
-		atr->is_link = true;
 		atr->st_mode_to_char[0] = 'l';
-	}
-	atr->link_pointer = ft_strnew(len);
-	errno = 0;
-
-	if (atr->is_link)
-	{
+		atr->link_pointer = ft_strnew(len);
+		errno = 0;
 		readlink(path, atr->link_pointer, len);
+		if (errno)
+			print_error(path, errno);
 		atr->link_pointer[len - 1] = 0;
 	}
 }
 
 
 static t_files_attrib *
-ft_relink(t_files_attrib *root_file, char *name, char *full)
+ft_relink(t_files_attrib *attr, char *name, char *full)
 {
-	if (!root_file)
-		root_file = create_atr(name);
+	if (!attr)
+		attr = create_atr(name);
 	else
 	{
-		root_file->next = create_atr(name);    //make next file
-		root_file->next->previous = root_file;
+		attr->next = create_atr(name);    //make next file
+		attr->next->previous = attr;
 	} //relink
-	if (root_file->root)
-		root_file->next->root = root_file->root;
-	if (root_file->next)
-		root_file = root_file->next;
-	root_file->full_path = full;
+	if (attr->next)
+		attr = attr->next;
+	attr->full_path = full;
 	if (g_flag & L && (g_flag & A)) //todo .. managment
-		get_long_format_props(root_file);
-	return root_file;
+		get_long_format_props(attr);
+	return attr;
 }
 
 char *get_full_path(char *fld_name, char *name)
@@ -184,6 +173,7 @@ char *get_full_path(char *fld_name, char *name)
 
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "OCDFAInspection"
+
 void ft_open_folder(char *fld_name)
 {
 	DIR *dir;
@@ -192,8 +182,8 @@ void ft_open_folder(char *fld_name)
 	t_files_attrib *holder;
 	t_bool first_asign;
 
-	holder =NULL;
 	first_asign = true;
+	holder = NULL;
 	attrib = NULL;
 	errno = 0;
 	if (!(dir = opendir(fld_name)))
@@ -215,25 +205,22 @@ void ft_open_folder(char *fld_name)
 			}
 		}
 	}
-	if (!holder)
-		return;
 	attrib = holder;
 	//ft_merge_sort(&attrib, comparator_lex);
 	print_level(attrib);
 	if (g_flag & R_BIG)
 	{
-			while (attrib->next)
-			{
-				if (is_dir(attrib->full_path) &&
-					!(ft_strequ(attrib->filename, ".")
-					  || ft_strequ(attrib->filename, "..")))
-					ft_open_folder(attrib->full_path);
-				//todo make freeing great again
-				attrib = attrib->next;
-				free(attrib->previous);
-				attrib->previous = NULL;
-			}
+		while (attrib)
+		{
+			if (IS_OK && is_dir(attrib->full_path))
+				ft_open_folder(attrib->full_path);
+			attrib = attrib->next;
+			//free(attrib->previous);
+			//todo free content
+			//attrib->previous = NULL;
 		}
+	}
 	closedir(dir);
 }
+
 #pragma clang diagnostic pop

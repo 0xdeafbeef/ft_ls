@@ -1,5 +1,5 @@
 #include <ft_ls.h>
-
+#define ft_strcat strcat
 static unsigned char numlen(unsigned long long int num)
 {
 	unsigned char ret;
@@ -32,12 +32,13 @@ void add_spaces(const t_print *print, int count, const char *concatenated)
 	free(whitespaces);
 }
 
-t_print *atribs_to_str(t_files_attrib *attrib)
+char *atribs_to_str(t_files_attrib *attrib)
 {
 	t_print *print;
 	char *itoa;
 	t_files_attrib *holder;
 	blkcnt_t size;
+	char *ret;
 
 	size = 0;
 	print = ft_memalloc(sizeof(t_print));
@@ -63,6 +64,8 @@ t_print *atribs_to_str(t_files_attrib *attrib)
 		print->tmp = numlen(attrib->file_size);
 		if (print->file_size_max < print->tmp)
 			print->file_size_max = (unsigned int) print->tmp;
+		if (attrib->link_pointer)
+			print->pointers_len += ft_strlen(attrib->link_pointer);
 		attrib = attrib->next;
 	}
 	attrib = holder;
@@ -71,7 +74,8 @@ t_print *atribs_to_str(t_files_attrib *attrib)
 			print->group_name_max + 1 +
 			print->file_size_max + 1 + TIME_FORMAT_LEN + 1 +
 			print->filename_max + 1 + 5 + numlen(size) + 1;
-	print->result = ft_strnew(print->entry_size * (print->nodes_count + 1));
+	print->result = ft_strnew(400+
+			print->entry_size * (print->nodes_count + 1) + print->pointers_len);
 	ft_strcat(print->result, "total ");
 	itoa = ft_itoa_big((size_t) size);
 	ft_strcat(print->result, itoa);
@@ -79,7 +83,6 @@ t_print *atribs_to_str(t_files_attrib *attrib)
 	free(itoa);
 	while (attrib)
 	{
-		// todo .. managment
 		ft_strcat(print->result, attrib->st_mode_to_char);
 		itoa = ft_itoa(attrib->link_count);
 		add_spaces(print, print->links_max, itoa);
@@ -98,7 +101,7 @@ t_print *atribs_to_str(t_files_attrib *attrib)
 		ft_strcat(print->result, attrib->timestamp);
 		ft_strcat(print->result, " ");
 		ft_strcat(print->result, attrib->filename);
-		if (attrib->is_link)
+		if (attrib->link_pointer)
 		{
 			ft_strcat(print->result, " -> ");
 			ft_strcat(print->result, attrib->link_pointer);
@@ -106,20 +109,20 @@ t_print *atribs_to_str(t_files_attrib *attrib)
 		ft_strcat(print->result, "\n");
 		attrib = attrib->next;
 	}
-	print->write_size = ft_strlen(print->result);
-	return (print);
+	ret = print->result;
+	free(print);
+	return (ret);
 }
 
 
 void print_level(t_files_attrib *attrib)
 {
-	t_print *pr;
+	char *pr;
 
 	if (!attrib)
 		return;
 	pr = atribs_to_str(attrib);
-	write(1, pr->result, pr->write_size);
-//	free(pr->result);
-//	free(pr);
+	write(1, pr, ft_strlen(pr));
+	free(pr);
 }
 

@@ -23,6 +23,7 @@
 #include <errno.h>
 #include <sys/stat.h>
 
+#define L2_CACHE_SIZE 2<<18
 # define IS_OK !(ft_strequ(attrib->filename,".")||ft_strequ(attrib->filename,".."))
 # define TIME_FORMAT_LEN 12
 # define L 0x01
@@ -85,7 +86,7 @@ void						print_error(char const *, int);
 int							is_dir(const char *path);
 void						ft_list_push_down(t_files_attrib *current,t_files_attrib *upper);
 
-t_files_attrib				*create_atr(const char *name);
+t_files_attrib				*create_atr(char *name);
 void 						ft_open_folder(char *fld_name);
 void						print_all(t_files_attrib *attrib, unsigned int flag);
 void						ft_merge_sort(t_files_attrib **head_ref, t_bool( *comp)(t_files_attrib *a,

@@ -1,5 +1,8 @@
 #include <ft_ls.h>
+
 #define ft_strcat strcat
+#define ft_strlen strlen
+
 static unsigned char numlen(unsigned long long int num)
 {
 	unsigned char ret;
@@ -15,36 +18,32 @@ static unsigned char numlen(unsigned long long int num)
 	return (ret);
 }
 
-void add_spaces(const t_print *print, int count, const char *concatenated)
+void flush_n_erase(char **buf)
 {
-	char *whitespaces;
-	int i;
-
-	count = (int) (1 + (count - ft_strlen(concatenated)));
-	whitespaces = ft_strnew((size_t) count);
-	i = 0;
-	while (count--)
-	{
-		whitespaces[i] = ' ';
-		i++;
-	}
-	ft_strcat(print->result, whitespaces);
-	free(whitespaces);
+	*buf -= ((L2_CACHE_SIZE) - 1);
+	write(1, *buf, L2_CACHE_SIZE);
+	//ft_bzero(buf, L2_CACHE_SIZE); //todo maybe no bzero needed
 }
 
-char *atribs_to_str(t_files_attrib *attrib)
+void add_spaces(char *print, int *i, int count, const char *concatenated)
 {
-	t_print *print;
-	char *itoa;
-	t_files_attrib *holder;
-	blkcnt_t size;
-	char *ret;
+	count = (int) (1 + (count - ft_strlen(concatenated)));
 
-	size = 0;
-	print = ft_memalloc(sizeof(t_print));
-	if (!attrib)
-		return (NULL);
-	holder = attrib;
+	while (count--)
+	{
+		*print = ' ';
+		++print;
+		++*i;
+		if (*i == L2_CACHE_SIZE)
+		{
+			*i = 0;
+			flush_n_erase(&print);
+		}
+	}
+}
+
+blkcnt_t get_print_props(t_files_attrib *attrib, t_print *print, blkcnt_t size)
+{
 	while (attrib)
 	{
 		size += attrib->block_size;
@@ -68,50 +67,115 @@ char *atribs_to_str(t_files_attrib *attrib)
 			print->pointers_len += ft_strlen(attrib->link_pointer);
 		attrib = attrib->next;
 	}
-	attrib = holder;
-	print->entry_size =
-			10 + 1 + print->links_max + 1 + print->owner_len_max + 1 +
-			print->group_name_max + 1 +
-			print->file_size_max + 1 + TIME_FORMAT_LEN + 1 +
-			print->filename_max + 1 + 5 + numlen(size) + 1;
-	print->result = ft_strnew(400+
-			print->entry_size * (print->nodes_count + 1) + print->pointers_len);
-	ft_strcat(print->result, "total ");
-	itoa = ft_itoa_big((size_t) size);
-	ft_strcat(print->result, itoa);
-	ft_strcat(print->result, "\n");
-	free(itoa);
+	return size;
+}
+
+void atribs_to_str(t_files_attrib *attrib)
+{
+	t_print *print;
+	char *itoa;
+	int i;
+	blkcnt_t size;
+	char *buf;
+
+
+	size = 0;
+	print = ft_memalloc(sizeof(t_print));
+	buf = ft_memalloc(L2_CACHE_SIZE);
+	if (!attrib)
+		return;
+	size = get_print_props(attrib, print, size);
+//	print->entry_size =
+//			10 + 1 + print->links_max + 1 + print->owner_len_max + 1 +
+//			print->group_name_max + 1 +
+//			print->file_size_max + 1 + TIME_FORMAT_LEN + 1 +
+//			print->filename_max + 1 + 5 + numlen(size) + 1;
+//	print->result = ft_strnew(400+
+//			print->entry_size * (print->nodes_count + 1) + print->pointers_len);
+//	ft_strcat(print->result, "total ");
+//	itoa = ft_itoa_big((size_t) size);
+//	ft_strcat(print->result, itoa);
+//	ft_strcat(print->result, "\n");
+//	free(itoa);
+//	while (attrib)
+//	{
+//		ft_strcat(print->result, attrib->st_mode_to_char);
+//		itoa = ft_itoa(attrib->link_count);
+//		add_spaces(print, print->links_max, itoa);
+//		ft_strcat(print->result, itoa);
+//		free(itoa);
+//		ft_strcat(print->result, " ");
+//		ft_strcat(print->result, attrib->owner_name);
+//		add_spaces(print, print->owner_len_max, attrib->owner_name);
+//		ft_strcat(print->result, attrib->group_name);
+//		add_spaces(print, print->group_name_max, attrib->group_name);
+//		itoa = ft_itoa_big(attrib->file_size);
+//		add_spaces(print, print->file_size_max, itoa);
+//		ft_strcat(print->result, itoa);
+//		free(itoa);
+//		ft_strcat(print->result, " ");
+//		ft_strcat(print->result, attrib->timestamp);
+//		ft_strcat(print->result, " ");
+//		ft_strcat(print->result, attrib->filename);
+//		if (attrib->link_pointer)
+//		{
+//			ft_strcat(print->result, " -> ");
+//			ft_strcat(print->result, attrib->link_pointer);
+//		}
+//		ft_strcat(print->result, "\n");
+//		attrib = attrib->next;
+//	}
+//	buf = print->result;
+//	free(print);
+
+	i = 0;
 	while (attrib)
 	{
-		ft_strcat(print->result, attrib->st_mode_to_char);
-		itoa = ft_itoa(attrib->link_count);
-		add_spaces(print, print->links_max, itoa);
-		ft_strcat(print->result, itoa);
-		free(itoa);
-		ft_strcat(print->result, " ");
-		ft_strcat(print->result, attrib->owner_name);
-		add_spaces(print, print->owner_len_max, attrib->owner_name);
-		ft_strcat(print->result, attrib->group_name);
-		add_spaces(print, print->group_name_max, attrib->group_name);
-		itoa = ft_itoa_big(attrib->file_size);
-		add_spaces(print, print->file_size_max, itoa);
-		ft_strcat(print->result, itoa);
-		free(itoa);
-		ft_strcat(print->result, " ");
-		ft_strcat(print->result, attrib->timestamp);
-		ft_strcat(print->result, " ");
-		ft_strcat(print->result, attrib->filename);
-		if (attrib->link_pointer)
+		while (*attrib->st_mode_to_char)
 		{
-			ft_strcat(print->result, " -> ");
-			ft_strcat(print->result, attrib->link_pointer);
+			*buf = *attrib->st_mode_to_char;
+			++attrib->st_mode_to_char;
+			++print->entry_size;
+			++i;
+			++buf;
+			if (i == L2_CACHE_SIZE)
+			{
+				i = 0;
+				flush_n_erase(&buf);
+			}
 		}
-		ft_strcat(print->result, "\n");
+		free(attrib->st_mode_to_char - print->entry_size);
+		print->entry_size = 0;
+		if (i == L2_CACHE_SIZE)
+		{
+			i =0;
+			flush_n_erase(&buf);
+		}
+		itoa = ft_itoa(attrib->link_count);
+		add_spaces(buf, &i, print->links_max, itoa);
+		while (*itoa)
+		{
+			*buf = *itoa;
+			++itoa;
+			++buf;
+			++i;
+			if (i == L2_CACHE_SIZE)
+			{
+				i = 0;
+				flush_n_erase(&buf);
+			}
+		}
+		*buf = '\n';
+		++i;
+		if (i == L2_CACHE_SIZE)
+		{
+			i =0;
+			flush_n_erase(&buf);
+		}
 		attrib = attrib->next;
 	}
-	ret = print->result;
-	free(print);
-	return (ret);
+
+	write(1, (buf -i +1), i);
 }
 
 
@@ -121,8 +185,5 @@ void print_level(t_files_attrib *attrib)
 
 	if (!attrib)
 		return;
-	pr = atribs_to_str(attrib);
-	write(1, pr, ft_strlen(pr));
-	free(pr);
+	atribs_to_str(attrib);
 }
-

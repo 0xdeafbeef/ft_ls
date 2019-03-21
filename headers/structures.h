@@ -17,7 +17,6 @@ typedef struct s_print
 	unsigned int filename_max;
 	unsigned int file_size_max;
 	unsigned int pointers_len;
-	int entry_size;
-	char *result;
+	char *ptr;
 } 				t_print;
 #endif //FT_LS_STRUCTURES_H

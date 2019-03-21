@@ -2,7 +2,8 @@
 
 #define ft_strcat strcat
 #define ft_strlen strlen
-int g_cache_state;
+char *g_buf_start;
+char *g_buf_end;
 
 static unsigned char numlen(unsigned long long int num)
 {
@@ -19,11 +20,10 @@ static unsigned char numlen(unsigned long long int num)
 	return (ret);
 }
 
-void flush_buf(char **buf)
+void flush_buf(char **buf_ptr)
 {
-	g_cache_state = 0;
-	*buf = (*buf - (L2_CACHE_SIZE));
-	write(1, *buf, L2_CACHE_SIZE);
+	*buf_ptr = g_buf_start;
+	write(1, g_buf_start, L2_CACHE_SIZE);
 }
 
 void add_spaces(char *print, int count, const char *concatenated)
@@ -34,8 +34,7 @@ void add_spaces(char *print, int count, const char *concatenated)
 	{
 		*print = ' ';
 		++print;
-		++g_cache_state;
-		if (g_cache_state == L2_CACHE_SIZE)
+		if (print == g_buf_end)
 			flush_buf(&print);
 	}
 }
@@ -75,56 +74,16 @@ void atribs_to_str(t_files_attrib *attrib)
 	blkcnt_t size;
 	char *buf;
 
-	g_cache_state = 0;
+
 	size = 0;
-	print = ft_memalloc(sizeof(t_print));
-	buf = ft_memalloc(L2_CACHE_SIZE);
 	if (!attrib)
 		return;
-	size = get_print_props(attrib, print, size);
-//	print->entry_size =
-//			10 + 1 + print->links_max + 1 + print->owner_len_max + 1 +
-//			print->group_name_max + 1 +
-//			print->file_size_max + 1 + TIME_FORMAT_LEN + 1 +
-//			print->filename_max + 1 + 5 + numlen(size) + 1;
-//	print->result = ft_strnew(400+
-//			print->entry_size * (print->nodes_count + 1) + print->pointers_len);
-//	ft_strcat(print->result, "total ");
-//	itoa = ft_itoa_big((size_t) size);
-//	ft_strcat(print->result, itoa);
-//	ft_strcat(print->result, "\n");
-//	free(itoa);
-//	while (attrib)
-//	{
-//		ft_strcat(print->result, attrib->st_mode_to_char);
-//		itoa = ft_itoa(attrib->link_count);
-//		add_spaces(print, print->links_max, itoa);
-//		ft_strcat(print->result, itoa);
-//		free(itoa);
-//		ft_strcat(print->result, " ");
-//		ft_strcat(print->result, attrib->owner_name);
-//		add_spaces(print, print->owner_len_max, attrib->owner_name);
-//		ft_strcat(print->result, attrib->group_name);
-//		add_spaces(print, print->group_name_max, attrib->group_name);
-//		itoa = ft_itoa_big(attrib->file_size);
-//		add_spaces(print, print->file_size_max, itoa);
-//		ft_strcat(print->result, itoa);
-//		free(itoa);
-//		ft_strcat(print->result, " ");
-//		ft_strcat(print->result, attrib->timestamp);
-//		ft_strcat(print->result, " ");
-//		ft_strcat(print->result, attrib->filename);
-//		if (attrib->link_pointer)
-//		{
-//			ft_strcat(print->result, " -> ");
-//			ft_strcat(print->result, attrib->link_pointer);
-//		}
-//		ft_strcat(print->result, "\n");
-//		attrib = attrib->next;
-//	}
-//	buf = print->result;
-//	free(print);
 
+	print = ft_memalloc(sizeof(t_print));
+	buf = ft_memalloc(L2_CACHE_SIZE);
+	g_buf_start = buf;
+	g_buf_end += (L2_CACHE_SIZE) - 1;
+	size = get_print_props(attrib, print, size);
 	while (attrib)
 	{
 		print->ptr = attrib->st_mode_to_char;
@@ -132,28 +91,18 @@ void atribs_to_str(t_files_attrib *attrib)
 		{
 			*buf = *attrib->st_mode_to_char;
 			++attrib->st_mode_to_char;
-			++g_cache_state;
 			++buf;
-			if (g_cache_state == L2_CACHE_SIZE)
+			if (buf == g_buf_end)
 				flush_buf(&buf);
 		}
 		//links
 		free(print->ptr);
 		itoa = ft_itoa(attrib->link_count);
 		add_spaces(buf, print->links_max, itoa);
-		while (*itoa)
-		{
-			*buf = *itoa;
-			++itoa;
-			++buf;
-			++g_cache_state;
-			if (g_cache_state == L2_CACHE_SIZE)
-				flush_buf(&buf);
-		}
+		free(itoa);
 		*buf = ' ';
 		++buf;
-		++g_cache_state;
-		if (g_cache_state == L2_CACHE_SIZE)
+		if (buf == g_buf_end)
 			flush_buf(&buf);
 		print->ptr = attrib->owner_name;
 		while (*attrib->owner_name) //owner_name
@@ -161,18 +110,18 @@ void atribs_to_str(t_files_attrib *attrib)
 			*buf = *attrib->owner_name;
 			++buf;
 			++attrib->owner_name;
-			++g_cache_state;
-			if (g_cache_state)
+			if (buf == g_buf_end)
 				flush_buf(&buf);
 		}
+		free(print->ptr);
 		add_spaces(buf, print->owner_len_max, attrib->group_name); //gr_name
+		free(attrib->group_name);
 		itoa = ft_itoa_big((size_t) attrib->block_size);
 		add_spaces(buf, print->file_size_max, itoa);
 		free(itoa);
 		*buf = ' ';
 		++buf;
-		++g_cache_state;
-		if (g_cache_state == L2_CACHE_SIZE)
+		if (buf == g_buf_end)
 			flush_buf(&buf);
 		print->ptr = attrib->timestamp;
 		while (*attrib->timestamp)
@@ -180,36 +129,32 @@ void atribs_to_str(t_files_attrib *attrib)
 			*buf = *attrib->timestamp;
 			++buf;
 			++attrib;
-			++g_cache_state;
-			if (g_cache_state == L2_CACHE_SIZE)
+			if (buf == g_buf_end)
 				flush_buf(&buf);
 		}
 		free(print->ptr);
-		* buf = ' ';
+		*buf = ' ';
 		++buf;
-		++g_cache_state;
-		if (g_cache_state == L2_CACHE_SIZE)
+		if (buf == g_buf_end)
 			flush_buf(&buf);
-		print->ptr= attrib->filename;
+		print->ptr = attrib->filename;
 		while (*attrib->filename)
 		{
 			*buf = *attrib->filename;
 			++buf;
 			++attrib->filename;
-			++g_cache_state;
-			if (g_cache_state == L2_CACHE_SIZE)
+			if (buf == g_buf_end)
 				flush_buf(&buf);
 		}
-		free(print->ptr);
-		* buf = '\n';
+		attrib->filename = print->ptr;
+		*buf = '\n';
 		++buf;
-		++g_cache_state;
-		if (g_cache_state == L2_CACHE_SIZE)
+		if (buf == g_buf_end)
 			flush_buf(&buf);
 		attrib = attrib->next;
 	}
-
-	write(1, (buf - g_cache_state), g_cache_state);
+	*buf = '\0';
+	write(1, g_buf_start, ft_strlen(g_buf_start));
 }
 
 

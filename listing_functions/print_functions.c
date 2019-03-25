@@ -113,9 +113,9 @@ void atribs_to_str(t_files_attrib *attrib)
 			if (buf == g_buf_end)
 				flush_buf(&buf);
 		}
-		free(print->ptr);
+		//free(print->ptr);
 		add_spaces(buf, print->owner_len_max, attrib->group_name); //gr_name
-		free(attrib->group_name);
+//		free(attrib->group_name);
 		itoa = ft_itoa_big((size_t) attrib->block_size);
 		add_spaces(buf, print->file_size_max, itoa);
 		free(itoa);
@@ -128,7 +128,7 @@ void atribs_to_str(t_files_attrib *attrib)
 		{
 			*buf = *attrib->timestamp;
 			++buf;
-			++attrib;
+			++attrib->timestamp;
 			if (buf == g_buf_end)
 				flush_buf(&buf);
 		}

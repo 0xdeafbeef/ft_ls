@@ -74,13 +74,25 @@ blkcnt_t get_print_props(t_files_attrib *attrib, t_print *print, blkcnt_t size)
 	return size;
 }
 
-void atribs_to_str(t_files_attrib *attrib)
+void ft_cat(char *copied, char **buf)
+{
+	while (*copied)
+	{
+		**buf = *copied;
+		++*buf;
+		++copied;
+		if (*buf == g_buf_end)
+			flush_buf(buf);
+
+	}
+}
+
+void attribs_to_str(t_files_attrib *attrib)
 {
 	t_print *print;
 	char *itoa;
 	blkcnt_t size;
 	char *buf;
-
 
 	size = 0;
 	if (!attrib)
@@ -91,80 +103,51 @@ void atribs_to_str(t_files_attrib *attrib)
 	g_buf_start = buf;
 	g_buf_end += ((L2_CACHE_SIZE) - 1);
 	size = get_print_props(attrib, print, size);
+	itoa = ft_strrchr(attrib->full_path, '/');
+	while (attrib->full_path != itoa)
+	{
+		*buf = *attrib->full_path;
+		++buf;
+		++attrib->full_path;
+	}
+	ft_cat("\n", &buf);
+	ft_cat("total ", &buf);
+	itoa = ft_itoa_big(size);
+	ft_cat(itoa, &buf);
+	free(itoa);
+	ft_cat("\n", &buf);
 	while (attrib)
 	{
 		print->ptr = attrib->st_mode_to_char;
-		while (*attrib->st_mode_to_char) //rights
-		{
-			*buf = *attrib->st_mode_to_char;
-			++attrib->st_mode_to_char;
-			++buf;
-			if (buf == g_buf_end)
-				flush_buf(&buf);
-		} //links
+		ft_cat(attrib->st_mode_to_char, &buf);//links
 		free(print->ptr);
 		itoa = ft_itoa(attrib->link_count);
-		if (buf == g_buf_end)
-			flush_buf(&buf);
 		add_spaces(buf, print->links_max, itoa);
 		free(itoa);
-		*buf = ' ';
-		++buf;
+		ft_cat(" ", &buf);
 		if (buf == g_buf_end)
 			flush_buf(&buf);
 		print->ptr = attrib->owner_name;
-		while (*attrib->owner_name) //owner_name
-		{
-			*buf = *attrib->owner_name;
-			++buf;
-			++attrib->owner_name;
-			if (buf == g_buf_end)
-				flush_buf(&buf);
-		}
+		ft_cat(attrib->owner_name, &buf);
 		if (buf == g_buf_end)
 			flush_buf(&buf);
 		add_spaces(buf, print->group_name_max, attrib->group_name); //gr_name
 		itoa = ft_itoa_big((size_t) attrib->block_size);
-		if (buf == g_buf_end)
-			flush_buf(&buf);
 		add_spaces(buf, print->file_size_max, itoa);
 		free(itoa);
-		*buf = ' ';
-		++buf;
-		if (buf == g_buf_end)
-			flush_buf(&buf);
+		ft_cat(" ", &buf);
 		print->ptr = attrib->timestamp;
-		while (*attrib->timestamp)
-		{
-			*buf = *attrib->timestamp;
-			++buf;
-			++attrib->timestamp;
-			if (buf == g_buf_end)
-				flush_buf(&buf);
-		}
+		ft_cat(attrib->timestamp, &buf);
 		free(print->ptr);
-		*buf = ' ';
-		++buf;
-		if (buf == g_buf_end)
-			flush_buf(&buf);
-		print->ptr = attrib->filename;
-		while (*attrib->filename)
-		{
-			*buf = *attrib->filename;
-			++buf;
-			++attrib->filename;
-			if (buf == g_buf_end)
-				flush_buf(&buf);
-		}
-		attrib->filename = print->ptr;
-		*buf = '\n';
-		++buf;
-		if (buf == g_buf_end)
-			flush_buf(&buf);
+		ft_cat(" ", &buf);
+		ft_cat(attrib->filename, &buf);
+		ft_cat("\n", &buf);
 		attrib = attrib->next;
 	}
+	ft_cat("\n", &buf);
 	*buf = '\0';
 	write(1, g_buf_start, ft_strlen(g_buf_start));
+	free(g_buf_start);
 }
 
 
@@ -172,5 +155,5 @@ void print_level(t_files_attrib *attrib)
 {
 	if (!attrib)
 		return;
-	atribs_to_str(attrib);
+	attribs_to_str(attrib);
 }

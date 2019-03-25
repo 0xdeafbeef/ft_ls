@@ -54,6 +54,8 @@ t_props *scan_flags_path(char **argv, int argc)
 		++(argv);
 	}
 	props->path = p_handler;
+	if (!props->path)
+		props->path = ft_path_append_horizontal(pat, ".");
 	return (props);
 }
 

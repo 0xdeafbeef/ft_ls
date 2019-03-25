@@ -30,6 +30,13 @@ void add_spaces(char *print, int count, const char *concatenated)
 {
 	count = (int) (1 + (count - ft_strlen(concatenated)));
 
+//	if (count < 0)
+//	{
+//		if (print == g_buf_end)
+//			flush_buf(&print);
+//		return;
+//	}
+
 	while (count--)
 	{
 		*print = ' ';
@@ -82,7 +89,7 @@ void atribs_to_str(t_files_attrib *attrib)
 	print = ft_memalloc(sizeof(t_print));
 	buf = ft_memalloc(L2_CACHE_SIZE);
 	g_buf_start = buf;
-	g_buf_end += (L2_CACHE_SIZE) - 1;
+	g_buf_end += ((L2_CACHE_SIZE) - 1);
 	size = get_print_props(attrib, print, size);
 	while (attrib)
 	{
@@ -94,10 +101,11 @@ void atribs_to_str(t_files_attrib *attrib)
 			++buf;
 			if (buf == g_buf_end)
 				flush_buf(&buf);
-		}
-		//links
+		} //links
 		free(print->ptr);
 		itoa = ft_itoa(attrib->link_count);
+		if (buf == g_buf_end)
+			flush_buf(&buf);
 		add_spaces(buf, print->links_max, itoa);
 		free(itoa);
 		*buf = ' ';
@@ -113,10 +121,12 @@ void atribs_to_str(t_files_attrib *attrib)
 			if (buf == g_buf_end)
 				flush_buf(&buf);
 		}
-		//free(print->ptr);
-		add_spaces(buf, print->owner_len_max, attrib->group_name); //gr_name
-//		free(attrib->group_name);
+		if (buf == g_buf_end)
+			flush_buf(&buf);
+		add_spaces(buf, print->group_name_max, attrib->group_name); //gr_name
 		itoa = ft_itoa_big((size_t) attrib->block_size);
+		if (buf == g_buf_end)
+			flush_buf(&buf);
 		add_spaces(buf, print->file_size_max, itoa);
 		free(itoa);
 		*buf = ' ';
@@ -160,8 +170,6 @@ void atribs_to_str(t_files_attrib *attrib)
 
 void print_level(t_files_attrib *attrib)
 {
-	char *pr;
-
 	if (!attrib)
 		return;
 	atribs_to_str(attrib);

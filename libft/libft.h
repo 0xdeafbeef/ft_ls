@@ -18,7 +18,6 @@
 # include <stdlib.h>
 #include "fcntl.h"
 #include "ft_gc.h"
-
 typedef	struct		s_list
 {
 	void			*content;

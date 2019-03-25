@@ -22,8 +22,9 @@
 #include <time.h>
 #include <errno.h>
 #include <sys/stat.h>
+//#define ft_memalloc malloc
 
-#define L2_CACHE_SIZE 2<<18
+#define L2_CACHE_SIZE 262142
 # define IS_OK !(ft_strequ(attrib->filename,".")||ft_strequ(attrib->filename,".."))
 # define TIME_FORMAT_LEN 12
 # define L 0x01

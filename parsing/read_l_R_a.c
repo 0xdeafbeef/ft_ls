@@ -172,7 +172,7 @@ void ft_open_folder(char *fld_name)
 		}
 	}
 	attrib = holder;
-	//ft_merge_sort(&attrib, comparator_lex);
+	ft_merge_sort(&attrib, comparator_lex);
 	print_level(attrib);
 	if (g_flag & R_BIG)
 	{
@@ -181,9 +181,7 @@ void ft_open_folder(char *fld_name)
 			if (IS_OK && is_dir(attrib->full_path))
 				ft_open_folder(attrib->full_path);
 			attrib = attrib->next;
-			//free(attrib->previous);
-			//todo free content
-			//attrib->previous = NULL;
+			//todo free this
 		}
 	}
 	closedir(dir);

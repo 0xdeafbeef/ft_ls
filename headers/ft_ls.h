@@ -41,7 +41,6 @@ typedef struct 				s_files_attrib
 	char					*filename;
 	struct s_files_attrib 	*next;
 	struct s_files_attrib 	*previous;
-	struct s_files_attrib	*root;
 	char *					timestamp;
 	char*					st_mode_to_char;
 	char					*owner_name;
@@ -50,8 +49,8 @@ typedef struct 				s_files_attrib
 	int						link_count;
 	blkcnt_t				block_size;
 	char					*link_pointer;
-	int major;
-	int minor;
+	int						major;
+	int						minor;
 }							t_files_attrib;
 typedef struct				s_path
 {

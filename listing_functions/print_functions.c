@@ -133,6 +133,8 @@ void attribs_to_str(t_files_attrib *attrib)
 			flush_buf(&buf);
 		add_spaces(buf, print->group_name_max, attrib->group_name); //gr_name
 		itoa = ft_itoa_big((size_t) attrib->block_size);
+//		if(attrib->minor||attrib->major)
+//			//todo implement this
 		add_spaces(buf, print->file_size_max, itoa);
 		free(itoa);
 		ft_cat(" ", &buf);
@@ -148,6 +150,7 @@ void attribs_to_str(t_files_attrib *attrib)
 	*buf = '\0';
 	write(1, g_buf_start, ft_strlen(g_buf_start));
 	free(g_buf_start);
+	free(print);
 }
 
 

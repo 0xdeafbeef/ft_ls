@@ -50,6 +50,8 @@ typedef struct 				s_files_attrib
 	int						link_count;
 	blkcnt_t				block_size;
 	char					*link_pointer;
+	int major;
+	int minor;
 }							t_files_attrib;
 typedef struct				s_path
 {

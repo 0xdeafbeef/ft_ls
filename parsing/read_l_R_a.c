@@ -84,7 +84,12 @@ void get_long_format_props(t_files_attrib *atr)
 			print_error(path, errno);
 		return;
 	}
-	atr->block_size = structstat.st_blocks;
+	if (S_ISCHR(structstat.st_mode))
+	{
+		atr->major = major(structstat.st_rdev);
+		atr->minor = minor(structstat.st_rdev);
+	} else
+		atr->block_size = structstat.st_blocks;
 	atr->timestamp = ft_strnew(TIME_FORMAT_LEN);
 	pasw = getpwuid(structstat.st_uid);
 	atr->owner_name = pasw->pw_name;

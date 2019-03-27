@@ -10,7 +10,6 @@ t_bool comparator_lex_inv(t_files_attrib *a, t_files_attrib *b)
 
 	s1 = a->filename;
 	s2 = b->filename;
-
 	while (*s1 && *s2 && (*s1 == *s2))
 	{
 		++s1;

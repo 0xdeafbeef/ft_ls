@@ -1,7 +1,6 @@
 #include <ft_ls.h>
 
-#define ft_strcat strcat
-#define ft_strlen strlen
+
 char *g_buf_start;
 char *g_buf_end;
 
@@ -26,24 +25,24 @@ void flush_buf(char **buf_ptr)
 	write(1, g_buf_start, L2_CACHE_SIZE);
 }
 
-void add_spaces(char *print, int count, const char *concatenated)
+void ft_cat(char *copied, char **buf)
 {
-	count = (int) (1 + (count - ft_strlen(concatenated)));
+	while (*copied)
+	{
+		**buf = *copied;
+		++copied;
+		++*buf;
+		if (*buf == g_buf_end)
+			flush_buf(buf);
+	}
+}
 
-//	if (count < 0)
-//	{
-//		if (print == g_buf_end)
-//			flush_buf(&print);
-//		return;
-//	}
+void add_spaces(char **print, int count, const char *concatenated)
+{
+	count = (int) ((count - ft_strlen(concatenated)));
 
 	while (count--)
-	{
-		*print = ' ';
-		++print;
-		if (print == g_buf_end)
-			flush_buf(&print);
-	}
+		ft_cat(" ", print);
 }
 
 blkcnt_t get_print_props(t_files_attrib *attrib, t_print *print, blkcnt_t size)
@@ -67,6 +66,15 @@ blkcnt_t get_print_props(t_files_attrib *attrib, t_print *print, blkcnt_t size)
 		print->tmp = numlen(attrib->file_size);
 		if (print->file_size_max < print->tmp)
 			print->file_size_max = (unsigned int) print->tmp;
+		print->tmp = numlen((unsigned long long int) attrib->minor);
+		if (print->tmp > print->file_size_max)
+			print->file_size_max = (unsigned int) print->tmp;
+		if (attrib->major||attrib->minor)
+		{
+			print->tmp = numlen((unsigned long long int) attrib->major);
+			if (print->tmp > print->major_size)
+				print->major_size = (unsigned int) print->tmp;
+		}
 		if (attrib->link_pointer)
 			print->pointers_len += ft_strlen(attrib->link_pointer);
 		attrib = attrib->next;
@@ -74,18 +82,6 @@ blkcnt_t get_print_props(t_files_attrib *attrib, t_print *print, blkcnt_t size)
 	return size;
 }
 
-void ft_cat(char *copied, char **buf)
-{
-	while (*copied)
-	{
-		**buf = *copied;
-		++*buf;
-		++copied;
-		if (*buf == g_buf_end)
-			flush_buf(buf);
-
-	}
-}
 
 void attribs_to_str(t_files_attrib *attrib)
 {
@@ -112,7 +108,7 @@ void attribs_to_str(t_files_attrib *attrib)
 	}
 	ft_cat("\n", &buf);
 	ft_cat("total ", &buf);
-	itoa = ft_itoa_big(size);
+	itoa = ft_itoa_big((size_t) size);
 	ft_cat(itoa, &buf);
 	free(itoa);
 	ft_cat("\n", &buf);
@@ -120,23 +116,38 @@ void attribs_to_str(t_files_attrib *attrib)
 	{
 		print->ptr = attrib->st_mode_to_char;
 		ft_cat(attrib->st_mode_to_char, &buf);//links
+		ft_cat(" ", &buf);
 		free(print->ptr);
 		itoa = ft_itoa(attrib->link_count);
-		add_spaces(buf, print->links_max, itoa);
+		add_spaces(&buf, print->links_max, itoa);
+		ft_cat(itoa, &buf);
 		free(itoa);
 		ft_cat(" ", &buf);
-		if (buf == g_buf_end)
-			flush_buf(&buf);
-		print->ptr = attrib->owner_name;
 		ft_cat(attrib->owner_name, &buf);
-		if (buf == g_buf_end)
-			flush_buf(&buf);
-		add_spaces(buf, print->group_name_max, attrib->group_name); //gr_name
-		itoa = ft_itoa_big((size_t) attrib->block_size);
-//		if(attrib->minor||attrib->major)
-//			//todo implement this
-		add_spaces(buf, print->file_size_max, itoa);
-		free(itoa);
+		add_spaces(&buf, print->owner_len_max, attrib->owner_name);
+		ft_cat(" ", &buf);
+		ft_cat(attrib->group_name, &buf);
+		add_spaces(&buf, print->group_name_max, attrib->group_name); //gr_name
+		if (attrib->major)
+		{
+			itoa = ft_itoa(attrib->major);
+			add_spaces(&buf, print->major_size, itoa);
+			ft_cat(itoa, &buf);
+			ft_cat(",", &buf);
+			free(itoa);
+			itoa = ft_itoa(attrib->minor);
+			add_spaces(&buf, print->file_size_max, itoa);
+			ft_cat(itoa, &buf);
+			free(itoa);
+		} else
+		{
+			itoa = ft_itoa_big(attrib->file_size);
+			add_spaces(&buf, print->major_size, "\0");
+			ft_cat(" ", &buf);
+			add_spaces(&buf, print->file_size_max, itoa);
+			ft_cat(itoa, &buf);
+			free(itoa);
+		}
 		ft_cat(" ", &buf);
 		print->ptr = attrib->timestamp;
 		ft_cat(attrib->timestamp, &buf);

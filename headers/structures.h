@@ -5,8 +5,6 @@
 #ifndef FT_LS_STRUCTURES_H
 #define FT_LS_STRUCTURES_H
 
-#include "stdlib.h"
-
 typedef struct s_print
 {
 	unsigned short int links_max;
@@ -17,6 +15,7 @@ typedef struct s_print
 	unsigned int filename_max;
 	unsigned int file_size_max;
 	unsigned int pointers_len;
+	unsigned int major_size;
 	char *ptr;
 } 				t_print;
 #endif //FT_LS_STRUCTURES_H

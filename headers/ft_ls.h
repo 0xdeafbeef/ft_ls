@@ -85,4 +85,6 @@ t_bool						comparator_lex_inv(t_files_attrib *a,
 												 t_files_attrib *b);
 t_bool comparator_lex(t_files_attrib *a,t_files_attrib *b);
 void print_level(t_files_attrib *attrib, unsigned int);
+
+void ft_merge_sort_wrapper(unsigned short int flag, t_files_attrib **head_ref);
 #endif

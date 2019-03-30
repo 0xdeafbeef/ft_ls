@@ -40,11 +40,10 @@ t_files_attrib *sorted_merge(t_files_attrib *a, t_files_attrib *b, t_bool
 {
 	t_files_attrib *result;
 
-	if (! a)
+	if (!a)
 		return (b);
-	else
-		if (! b)
-			return (a);
+	else if (!b)
+		return (a);
 	if (comp(a, b))
 	{
 		result = a;
@@ -74,4 +73,11 @@ void ft_merge_sort(t_files_attrib **head_ref, t_bool
 	ft_merge_sort(&b, comp);
 	*head_ref = sorted_merge(a, b, comp);
 }
-
+void ft_merge_sort_wrapper(unsigned short int flag, t_files_attrib **head_ref)
+{
+	if (flag & R_SMALL)
+	{
+		ft_merge_sort(head_ref, comparator_lex_inv);
+	} else
+		ft_merge_sort(head_ref, comparator_lex);
+}

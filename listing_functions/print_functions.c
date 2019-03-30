@@ -121,12 +121,11 @@ void long_listing(t_files_attrib *attrib, unsigned int flag)
 	ft_cat(itoa, &buf);
 	free(itoa);
 	ft_cat("\n", &buf);
-
 	while (attrib)
 	{
 		if (attrib->error_message)
 		{
-			write(1, buf, buf - g_buf_start);
+			write(1, g_buf_start, buf - g_buf_start);
 			write(1, attrib->error_message, ft_strlen(attrib->error_message));
 			free(attrib->error_message);
 			attrib = attrib->next;
@@ -149,6 +148,7 @@ void long_listing(t_files_attrib *attrib, unsigned int flag)
 		{
 			itoa = ft_itoa(attrib->major);
 			add_spaces(&buf, print->major_size, itoa);
+			ft_cat(" ", &buf);
 			ft_cat(itoa, &buf);
 			ft_cat(",", &buf);
 			free(itoa);

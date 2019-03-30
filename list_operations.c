@@ -11,16 +11,6 @@
 /* ************************************************************************** */
 #include "ft_ls.h"
 
-
-void rm_attr(t_files_attrib *atr)
-{
-	if (atr->previous)
-		atr->previous->next = atr->next;
-	if (atr->next)
-		atr->next->previous = atr->previous;
-	free(atr);
-}
-
 t_files_attrib *create_atr(char *name)
 {
 	t_files_attrib *attrib;

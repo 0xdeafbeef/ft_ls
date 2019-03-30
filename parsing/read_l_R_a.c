@@ -3,6 +3,9 @@
 #include <pwd.h>
 #include <grp.h>
 #include <ft_ls.h>
+#include <sys/types.h>
+#include <sys/acl.h>
+#include <sys/xattr.h>
 
 unsigned short g_flag;
 
@@ -40,9 +43,30 @@ p     FIFO.
 void get_permissions(mode_t perm, t_files_attrib *attrib)
 {
 	char *modeval;
+	acl_t acl;
+	acl_entry_t dummy;
+	ssize_t xattr;
+	char chr;
 
+	acl = NULL;
+	xattr = 0;
+	acl = acl_get_link_np(attrib->full_path, ACL_TYPE_EXTENDED);
+	if (acl && acl_get_entry(acl, ACL_FIRST_ENTRY, &dummy) == -1)
+	{
+		acl_free(acl);
+		acl = NULL;
+	}
+	xattr = listxattr(attrib->full_path, NULL, 0, XATTR_NOFOLLOW);
+	if (xattr < 0)
+		xattr = 0;
+	if (xattr > 0)
+		chr = '@';
+	else if (acl != NULL)
+		chr = '+';
+	else
+		chr = ' ';
 
-	modeval = ft_strnew(10);
+	modeval = ft_strnew(11);
 	if (S_ISREG(perm))
 		modeval[0] = '-';
 	if (S_ISBLK(perm))
@@ -64,7 +88,8 @@ void get_permissions(mode_t perm, t_files_attrib *attrib)
 	modeval[7] = (char) ((perm & S_IROTH) ? 'r' : '-');
 	modeval[8] = (char) ((perm & S_IWOTH) ? 'w' : '-');
 	modeval[9] = (char) ((perm & S_IXOTH) ? 'x' : '-');
-	modeval[10] = '\0';
+	modeval[10] = chr;
+	modeval[11] = '\0';
 	attrib->st_mode_to_char = modeval;
 }
 
@@ -152,20 +177,28 @@ void ft_open_folder(char *fld_name)
 	t_files_attrib *attrib;
 	t_files_attrib *holder;
 	t_bool first_asign;
+	struct stat structstat;
 
 	first_asign = true;
 	holder = NULL;
 	attrib = NULL;
 	errno = 0;
+
 	if (!(dir = opendir(fld_name)))
 	{
+		if (lstat(fld_name, &structstat) == 0)
+		{
+			attrib = ft_relink(attrib, fld_name, fld_name);
+			if (errno)
+				print_level(attrib, g_flag - R_BIG);
+			return;
+		}
 		if (errno)
 		{
 			print_error(fld_name, errno, NULL);
 		}
 		return;
 	}
-	errno = 0;
 	while ((dirp = readdir(dir)))
 	{
 		if (!(g_flag & A && dirp->d_name[0] != '.') || g_flag & A)
@@ -178,15 +211,9 @@ void ft_open_folder(char *fld_name)
 				first_asign = false;
 			}
 		}
-		if (errno)
-		{
-			print_error(fld_name, errno, attrib);
-			errno = 0;
-			continue;
-		}
 	}
 	attrib = holder;
-	ft_merge_sort(&attrib, comparator_lex);
+	ft_merge_sort_wrapper(g_flag, &attrib);
 	print_level(attrib, g_flag);
 	if (g_flag & R_BIG)
 	{

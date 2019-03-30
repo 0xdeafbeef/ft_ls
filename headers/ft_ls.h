@@ -24,7 +24,7 @@
 #include <sys/stat.h>
 //#define ft_memalloc malloc
 
-#define L2_CACHE_SIZE 262142
+#define L_2_CACHE_SIZE 262144 - 1
 # define IS_OK !(ft_strequ(attrib->filename,".")||ft_strequ(attrib->filename,".."))
 # define TIME_FORMAT_LEN 12
 # define L 0x01

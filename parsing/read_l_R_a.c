@@ -135,15 +135,15 @@ ft_relink(t_files_attrib *attr, char *name, char *full)
 char *get_full_path(char *fld_name, char *name)
 {
 	char *path;
+	if (ft_strequ(fld_name, "/"))
+		return (ft_strjoin(fld_name, name));
+
 	path = ft_strnew(ft_strlen(fld_name) + 1 + ft_strlen(name));
 	ft_strcat(path, fld_name);
 	ft_strcat(path, "/");
 	ft_strcat(path, name);
 	return path;
 }
-
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "OCDFAInspection"
 
 void ft_open_folder(char *fld_name)
 {
@@ -192,4 +192,3 @@ void ft_open_folder(char *fld_name)
 	closedir(dir);
 }
 
-#pragma clang diagnostic pop

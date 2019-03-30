@@ -20,7 +20,7 @@ size_t		ft_strlen(const char *str)
 	while (*str)
 	{
 		result += 1;
-		str++;
+		++str;
 	}
 	return (result);
 }

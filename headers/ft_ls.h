@@ -37,6 +37,7 @@ typedef int					t_bool;
 enum { false, true };
 typedef struct 				s_files_attrib
 {
+	char 					*error_message;
 	char					*full_path;
 	char					*filename;
 	struct s_files_attrib 	*next;
@@ -71,31 +72,17 @@ void						get_path_list(t_props *current);
 t_path						*ft_path_append_horizontal(t_path *node,
 														 char *dat);
 t_props						*get_t_size_and_flags(int argc, char **argv);
-void						ft_free_path_chain(t_path *tail);
-t_files_attrib				*get_attr_from_path(char *path,
-												  int need_to_exclude_system);
-t_files_attrib				*ft_list_create(char *name, t_files_attrib *next,
-		t_files_attrib *prev);
-t_files_attrib				*ft_list_add_head(t_files_attrib *current,
-		t_files_attrib *next);
-t_files_attrib				*ft_list_push(t_files_attrib *current,
-											t_files_attrib *prev);
-void						for_each_path(t_path *pat, void (*fun)(t_files_attrib *));
-void						ft_free_chain(t_files_attrib *head);
 void						print_bits(unsigned short int c, char bytes);
-void						print_path_list(t_path *path);
-void						print_error(char const *, int);
+void						print_error(char const *, int, t_files_attrib*);
 int							is_dir(const char *path);
 void						ft_list_push_down(t_files_attrib *current,t_files_attrib *upper);
 
 t_files_attrib				*create_atr(char *name);
 void 						ft_open_folder(char *fld_name);
-void						print_all(t_files_attrib *attrib, unsigned int flag);
 void						ft_merge_sort(t_files_attrib **head_ref, t_bool( *comp)(t_files_attrib *a,
 		t_files_attrib *b));
 t_bool						comparator_lex_inv(t_files_attrib *a,
 												 t_files_attrib *b);
 t_bool comparator_lex(t_files_attrib *a,t_files_attrib *b);
-void print_level(t_files_attrib *attrib);
-void rm_attr(t_files_attrib * atr);
+void print_level(t_files_attrib *attrib, unsigned int);
 #endif

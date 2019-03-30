@@ -76,16 +76,12 @@ void get_long_format_props(t_files_attrib **attr)
 	size_t len;
 	t_files_attrib *atr;
 
-
-
-	atr =*attr;
+	atr = *attr;
 	errno = 0;
 	if (lstat(atr->full_path, &structstat) == -1)
 	{
-		rm_attr(atr);
-		*attr = NULL;
 		if (errno)
-			print_error(atr->full_path, errno);
+			print_error(atr->full_path, errno, atr);
 		return;
 	}
 	if (S_ISCHR(structstat.st_mode))
@@ -112,7 +108,7 @@ void get_long_format_props(t_files_attrib **attr)
 		errno = 0;
 		readlink(atr->full_path, atr->link_pointer, len);
 		if (errno)
-			print_error(atr->full_path, errno);
+			print_error(atr->full_path, errno, atr);
 		atr->link_pointer[len - 1] = 0;
 	}
 }
@@ -121,9 +117,6 @@ void get_long_format_props(t_files_attrib **attr)
 static t_files_attrib *
 ft_relink(t_files_attrib *attr, char *name, char *full)
 {
-	t_files_attrib *holder;
-
-	holder = attr;
 	if (!attr)
 		attr = create_atr(name);
 	else
@@ -134,10 +127,8 @@ ft_relink(t_files_attrib *attr, char *name, char *full)
 	if (attr->next)
 		attr = attr->next;
 	attr->full_path = full;
-	if (g_flag & L && (g_flag & A))
+	if (g_flag & L)
 		get_long_format_props(&attr);
-	if(!attr)
-		return (holder);
 	return attr;
 }
 
@@ -169,30 +160,39 @@ void ft_open_folder(char *fld_name)
 	if (!(dir = opendir(fld_name)))
 	{
 		if (errno)
-			print_error(fld_name, errno);
+		{
+			print_error(fld_name, errno, NULL);
+		}
 		return;
 	}
+	errno = 0;
 	while ((dirp = readdir(dir)))
 	{
 		if (!(g_flag & A && dirp->d_name[0] != '.') || g_flag & A)
 		{
 			attrib = ft_relink(attrib, dirp->d_name,
 							   get_full_path(fld_name, dirp->d_name));
-			if (first_asign && attrib)
+			if (first_asign)
 			{
 				holder = attrib;
 				first_asign = false;
 			}
 		}
+		if (errno)
+		{
+			print_error(fld_name, errno, attrib);
+			errno = 0;
+			continue;
+		}
 	}
 	attrib = holder;
 	ft_merge_sort(&attrib, comparator_lex);
-	print_level(attrib);
+	print_level(attrib, g_flag);
 	if (g_flag & R_BIG)
 	{
 		while (attrib)
 		{
-			if (IS_OK && is_dir(attrib->full_path))
+			if (IS_OK && is_dir(attrib->full_path) && !attrib->error_message)
 				ft_open_folder(attrib->full_path);
 			attrib = attrib->next;
 		}

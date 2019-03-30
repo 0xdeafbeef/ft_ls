@@ -23,6 +23,7 @@ void flush_buf(char **buf_ptr)
 {
 	*buf_ptr = g_buf_start;
 	write(1, g_buf_start, L_2_CACHE_SIZE - 1);
+	fflush(stdout);
 }
 
 void ft_cat(char *copied, char **buf)
@@ -49,6 +50,11 @@ blkcnt_t get_print_props(t_files_attrib *attrib, t_print *print, blkcnt_t size)
 {
 	while (attrib)
 	{
+		if (attrib->error_message)
+		{
+			attrib = attrib->next;
+			continue;
+		}
 		size += attrib->block_size;
 		++print->nodes_count;
 		print->tmp = numlen((unsigned long long int) attrib->link_count);
@@ -83,33 +89,31 @@ blkcnt_t get_print_props(t_files_attrib *attrib, t_print *print, blkcnt_t size)
 }
 
 
-void attribs_to_str(t_files_attrib *attrib)
+void long_listing(t_files_attrib *attrib, unsigned int flag)
 {
 	t_print *print;
 	char *itoa;
 	blkcnt_t size;
 	char *buf;
 
-
 	size = 0;
-	if (!attrib)
-		return;
-
 	print = ft_memalloc(sizeof(t_print));
 	buf = malloc(L_2_CACHE_SIZE);
 	g_buf_start = buf;
 	g_buf_end = g_buf_start + ((L_2_CACHE_SIZE) - 1);
 	size = get_print_props(attrib, print, size);
-
-	if (!(itoa = ft_strrchr(attrib->full_path, '/')))
-		itoa += ft_strlen(attrib->full_path);
-	while (attrib->full_path != itoa)
+	if (flag & R_BIG)
 	{
-		if (buf == g_buf_end)
-			flush_buf(&buf);
-		*buf = *attrib->full_path;
-		++buf;
-		++attrib->full_path;
+		if (!(itoa = ft_strrchr(attrib->full_path, '/')))
+			itoa += ft_strlen(attrib->full_path);
+		while (attrib->full_path != itoa)
+		{
+			if (buf == g_buf_end)
+				flush_buf(&buf);
+			*buf = *attrib->full_path;
+			++buf;
+			++attrib->full_path;
+		}
 	}
 	ft_cat("\n", &buf);
 	ft_cat("total ", &buf);
@@ -117,8 +121,17 @@ void attribs_to_str(t_files_attrib *attrib)
 	ft_cat(itoa, &buf);
 	free(itoa);
 	ft_cat("\n", &buf);
+
 	while (attrib)
 	{
+		if (attrib->error_message)
+		{
+			write(1, buf, buf - g_buf_start);
+			write(1, attrib->error_message, ft_strlen(attrib->error_message));
+			free(attrib->error_message);
+			attrib = attrib->next;
+			continue;
+		}
 		ft_cat(attrib->st_mode_to_char, &buf);//links
 		ft_cat(" ", &buf);
 		free(attrib->st_mode_to_char);
@@ -168,9 +181,11 @@ void attribs_to_str(t_files_attrib *attrib)
 }
 
 
-void print_level(t_files_attrib *attrib)
+void print_level(t_files_attrib *attrib, unsigned int flag)
 {
 	if (!attrib)
 		return;
-	attribs_to_str(attrib);
+	if (flag & L)
+		long_listing(attrib, flag);
+
 }

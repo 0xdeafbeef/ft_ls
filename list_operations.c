@@ -22,6 +22,7 @@ t_files_attrib *ft_list_create(char *name, t_files_attrib *next,
 	list->previous = prev;
 	return (list);
 }
+
 t_files_attrib *ft_list_push(t_files_attrib *current, t_files_attrib *prev)
 {
 	current->next = NULL;
@@ -30,7 +31,16 @@ t_files_attrib *ft_list_push(t_files_attrib *current, t_files_attrib *prev)
 	return (current);
 }
 
-t_files_attrib *create_atr( char *name)
+void rm_attr(t_files_attrib *atr)
+{
+	if (atr->previous)
+		atr->previous->next = atr->next;
+	if (atr->next)
+		atr->next->previous = atr->previous;
+	free(atr);
+}
+
+t_files_attrib *create_atr(char *name)
 {
 	t_files_attrib *attrib;
 

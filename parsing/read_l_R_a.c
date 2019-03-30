@@ -68,20 +68,24 @@ void get_permissions(mode_t perm, t_files_attrib *attrib)
 	attrib->st_mode_to_char = modeval;
 }
 
-void get_long_format_props(t_files_attrib *atr)
+void get_long_format_props(t_files_attrib **attr)
 {
 	struct passwd *pasw;
 	struct stat structstat;
 	struct group *g;
 	size_t len;
-	char *path;
+	t_files_attrib *atr;
 
-	path = atr->full_path;
+
+
+	atr =*attr;
 	errno = 0;
-	if (lstat(path, &structstat) == -1)
+	if (lstat(atr->full_path, &structstat) == -1)
 	{
+		rm_attr(atr);
+		*attr = NULL;
 		if (errno)
-			print_error(path, errno);
+			print_error(atr->full_path, errno);
 		return;
 	}
 	if (S_ISCHR(structstat.st_mode))
@@ -106,9 +110,9 @@ void get_long_format_props(t_files_attrib *atr)
 		atr->st_mode_to_char[0] = 'l';
 		atr->link_pointer = ft_strnew(len);
 		errno = 0;
-		readlink(path, atr->link_pointer, len);
+		readlink(atr->full_path, atr->link_pointer, len);
 		if (errno)
-			print_error(path, errno);
+			print_error(atr->full_path, errno);
 		atr->link_pointer[len - 1] = 0;
 	}
 }
@@ -117,6 +121,9 @@ void get_long_format_props(t_files_attrib *atr)
 static t_files_attrib *
 ft_relink(t_files_attrib *attr, char *name, char *full)
 {
+	t_files_attrib *holder;
+
+	holder = attr;
 	if (!attr)
 		attr = create_atr(name);
 	else
@@ -128,7 +135,9 @@ ft_relink(t_files_attrib *attr, char *name, char *full)
 		attr = attr->next;
 	attr->full_path = full;
 	if (g_flag & L && (g_flag & A))
-		get_long_format_props(attr);
+		get_long_format_props(&attr);
+	if(!attr)
+		return (holder);
 	return attr;
 }
 
@@ -169,7 +178,7 @@ void ft_open_folder(char *fld_name)
 		{
 			attrib = ft_relink(attrib, dirp->d_name,
 							   get_full_path(fld_name, dirp->d_name));
-			if (first_asign)
+			if (first_asign && attrib)
 			{
 				holder = attrib;
 				first_asign = false;
@@ -186,7 +195,6 @@ void ft_open_folder(char *fld_name)
 			if (IS_OK && is_dir(attrib->full_path))
 				ft_open_folder(attrib->full_path);
 			attrib = attrib->next;
-			//todo free this
 		}
 	}
 	closedir(dir);

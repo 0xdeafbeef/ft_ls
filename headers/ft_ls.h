@@ -66,7 +66,7 @@ typedef struct				s_props
 	t_path					*path;
 }							t_props;
 
-void						get_long_format_props(t_files_attrib *);
+void						get_long_format_props(t_files_attrib **);
 void						get_path_list(t_props *current);
 t_path						*ft_path_append_horizontal(t_path *node,
 														 char *dat);
@@ -97,4 +97,5 @@ t_bool						comparator_lex_inv(t_files_attrib *a,
 												 t_files_attrib *b);
 t_bool comparator_lex(t_files_attrib *a,t_files_attrib *b);
 void print_level(t_files_attrib *attrib);
+void rm_attr(t_files_attrib * atr);
 #endif

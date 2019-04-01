@@ -93,6 +93,15 @@ void get_permissions(mode_t perm, t_files_attrib *attrib)
 	attrib->st_mode_to_char = modeval;
 }
 
+char *parse_time(const char *time)
+{
+	char *ret;
+
+	ret = ft_strnew(TIME_FORMAT_LEN);
+	ft_strncpy(ret,time + 4, TIME_FORMAT_LEN);
+	return (ret);
+}
+
 void get_long_format_props(t_files_attrib **attr, unsigned int flag)
 {
 	struct passwd *pasw;
@@ -112,9 +121,8 @@ void get_long_format_props(t_files_attrib **attr, unsigned int flag)
 	atr->time = structstat.st_ctime;
 	if (flag & T)
 		return;
-	atr->timestamp = ft_strnew(TIME_FORMAT_LEN);
-	strftime(atr->timestamp, TIME_FORMAT_LEN, "%b %d %R",
-			 gmtime(&(structstat.st_ctime)));
+	atr->timestamp = parse_time(ctime(&structstat.st_ctime));
+
 	if (S_ISCHR(structstat.st_mode))
 	{
 		atr->major = major(structstat.st_rdev);
@@ -187,7 +195,6 @@ void ft_open_folder(char *fld_name)
 	holder = NULL;
 	attrib = NULL;
 	errno = 0;
-
 	if (!(dir = opendir(fld_name)))
 	{
 		errno = 0;

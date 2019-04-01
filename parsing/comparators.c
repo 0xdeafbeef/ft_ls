@@ -26,7 +26,16 @@ t_bool comparator_lex(t_files_attrib *a, t_files_attrib *b)
 {
 	return (!(comparator_lex_inv(a, b)));
 }
-//t_bool comparator_time(t_files_attrib *a, t_files_attrib *b)
-//{
-//	if()
-//}
+t_bool comparator_time(t_files_attrib *a, t_files_attrib *b)
+{
+	if (a->time==b->time)
+		return (comparator_lex(a, b));
+	if(a->time>b->time)
+		return true;
+	else
+		return false;
+}
+t_bool comparator_time_inv(t_files_attrib *a, t_files_attrib *b)
+{
+	return (!comparator_time(a, b));
+}

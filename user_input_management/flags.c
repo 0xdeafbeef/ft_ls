@@ -66,6 +66,7 @@ t_props *get_t_size_and_flags(int argc, char **argv)
 	t_props *props;
 
 	props = scan_flags_path(argv, argc);
+//todo	sort_path(&props->path);
 	props->isterm = (char) (isatty(fileno(stdin)) ? 1 : 0);
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
 	props->win_size = w.ws_row;

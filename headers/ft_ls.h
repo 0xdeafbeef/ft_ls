@@ -42,6 +42,7 @@ typedef struct 				s_files_attrib
 	char					*filename;
 	struct s_files_attrib 	*next;
 	struct s_files_attrib 	*previous;
+	time_t 					time;
 	char *					timestamp;
 	char*					st_mode_to_char;
 	char					*owner_name;
@@ -67,7 +68,7 @@ typedef struct				s_props
 	t_path					*path;
 }							t_props;
 
-void						get_long_format_props(t_files_attrib **);
+void						get_long_format_props(t_files_attrib **, unsigned int);
 void						get_path_list(t_props *current);
 t_path						*ft_path_append_horizontal(t_path *node,
 														 char *dat);
@@ -87,4 +88,7 @@ t_bool comparator_lex(t_files_attrib *a,t_files_attrib *b);
 void print_level(t_files_attrib *attrib, unsigned int);
 
 void ft_merge_sort_wrapper(unsigned short int flag, t_files_attrib **head_ref);
+void sort_path(t_path **path);
+t_bool comparator_time(t_files_attrib *a, t_files_attrib *b);
+t_bool comparator_time_inv(t_files_attrib *a, t_files_attrib *b);
 #endif

@@ -37,9 +37,7 @@ int is_dir(const char *path)
 
 	errno = 0;
 	if (lstat(path, &statbuf) != 0)
-	{
-		print_error(path, errno, NULL);
 		return 0;
-	}
+
 	return S_ISDIR(statbuf.st_mode);
 }

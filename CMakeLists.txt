@@ -3,7 +3,9 @@ project(ft_ls C)
 
 set(CMAKE_C_STANDARD 99)
 
-include_directories(headers)
+
+set(HEADERS ./headers )
+include_directories(${HEADERS})
 include_directories(libft)
 #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address")
 #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64 -Ofast -flto -march=native -funroll-loops")

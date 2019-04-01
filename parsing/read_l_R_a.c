@@ -93,7 +93,7 @@ void get_permissions(mode_t perm, t_files_attrib *attrib)
 	attrib->st_mode_to_char = modeval;
 }
 
-void get_long_format_props(t_files_attrib **attr)
+void get_long_format_props(t_files_attrib **attr, unsigned int flag)
 {
 	struct passwd *pasw;
 	struct stat structstat;
@@ -109,13 +109,18 @@ void get_long_format_props(t_files_attrib **attr)
 			print_error(atr->full_path, errno, atr);
 		return;
 	}
+	atr->time = structstat.st_ctime;
+	if (flag & T)
+		return;
+	atr->timestamp = ft_strnew(TIME_FORMAT_LEN);
+	strftime(atr->timestamp, TIME_FORMAT_LEN, "%b %d %R",
+			 gmtime(&(structstat.st_ctime)));
 	if (S_ISCHR(structstat.st_mode))
 	{
 		atr->major = major(structstat.st_rdev);
 		atr->minor = minor(structstat.st_rdev);
 	} else
 		atr->block_size = structstat.st_blocks;
-	atr->timestamp = ft_strnew(TIME_FORMAT_LEN);
 	pasw = getpwuid(structstat.st_uid);
 	atr->owner_name = pasw->pw_name;
 	g = getgrgid(pasw->pw_gid);
@@ -123,8 +128,6 @@ void get_long_format_props(t_files_attrib **attr)
 	get_permissions(structstat.st_mode, atr);
 	atr->link_count = structstat.st_nlink;
 	atr->file_size = (size_t) structstat.st_size;
-	strftime(atr->timestamp, TIME_FORMAT_LEN, "%b %d %R",
-			 gmtime(&(structstat.st_ctime)));
 	len = (size_t) structstat.st_size + 1;
 	if (S_ISLNK(structstat.st_mode))
 	{
@@ -152,20 +155,21 @@ ft_relink(t_files_attrib *attr, char *name, char *full)
 	if (attr->next)
 		attr = attr->next;
 	attr->full_path = full;
-	if (g_flag & L)
-		get_long_format_props(&attr);
+	if (g_flag & L || g_flag & T)
+		get_long_format_props(&attr, g_flag);
 	return attr;
 }
 
 char *get_full_path(char *fld_name, char *name)
 {
 	char *path;
-	if (ft_strequ(fld_name, "/"))
-		return (ft_strjoin(fld_name, name));
+	int len;
 
-	path = ft_strnew(ft_strlen(fld_name) + 1 + ft_strlen(name));
+	len = ft_strlen(fld_name);
+	path = ft_strnew(len + 1 + ft_strlen(name));
 	ft_strcat(path, fld_name);
-	ft_strcat(path, "/");
+	if (fld_name[len - 1] != '/')
+		ft_strcat(path, "/");
 	ft_strcat(path, name);
 	return path;
 }
@@ -186,16 +190,12 @@ void ft_open_folder(char *fld_name)
 
 	if (!(dir = opendir(fld_name)))
 	{
+		errno = 0;
 		if (lstat(fld_name, &structstat) == 0)
 		{
 			attrib = ft_relink(attrib, fld_name, fld_name);
 			if (errno)
-				print_level(attrib, g_flag - R_BIG);
-			return;
-		}
-		if (errno)
-		{
-			print_error(fld_name, errno, NULL);
+				print_level(attrib, g_flag - (g_flag & R_BIG));
 		}
 		return;
 	}

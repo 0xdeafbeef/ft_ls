@@ -26,17 +26,26 @@ t_path *ft_path_append_horizontal(t_path *node, char *dat)
 	return (nt);
 }
 
-void ft_free_chain(t_files_attrib *head)
+void sort_path(t_path **path)
 {
-	t_files_attrib *nrxt;
-	if ((nrxt = head->next))
+	t_path *a;
+	t_path *b;
+	t_path *next;
+
+	if(!path)
+		return;
+	a = *path;
+	if(a->next)
+		return;
+	while (a)
 	{
-		while ((nrxt = nrxt->next))
+		b = a->next;
+		while (b)
 		{
-			free(nrxt->previous);
-			free(nrxt->previous->filename);
+
 		}
-		free(head);
 	}
 }
+
+
 

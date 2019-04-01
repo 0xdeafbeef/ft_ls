@@ -12,23 +12,11 @@
 
 #include "ft_ls.h"
 
-void main_wrap(int argc, char **argv)
+int main(int argc, char **argv)
 {
 	t_props *props;
 
 	props = get_t_size_and_flags(argc, argv);
 	get_path_list(props);
-}
-
-int main(int argc, char **argv)
-{
-	main_wrap(argc, argv);
-//	pat = props->path;
-//	while (pat)
-//	{
-//		print_path_list(pat);
-//		pat = pat->next;
-//	}
-	//ft_gc(&g_memaloced);
 	return 0;
 }

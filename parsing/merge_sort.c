@@ -73,11 +73,21 @@ void ft_merge_sort(t_files_attrib **head_ref, t_bool
 	ft_merge_sort(&b, comp);
 	*head_ref = sorted_merge(a, b, comp);
 }
+
 void ft_merge_sort_wrapper(unsigned short int flag, t_files_attrib **head_ref)
 {
 	if (flag & R_SMALL)
 	{
+		if (flag & T)
+		{
+			ft_merge_sort(head_ref, comparator_time);
+			return;
+		}
 		ft_merge_sort(head_ref, comparator_lex_inv);
-	} else
-		ft_merge_sort(head_ref, comparator_lex);
+	} else if (flag & T)
+	{
+		ft_merge_sort(head_ref, comparator_time_inv);
+		return;
+	}
+	ft_merge_sort(head_ref, comparator_lex);
 }

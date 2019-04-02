@@ -17,12 +17,12 @@ void *ft_memalloc(size_t size)
 {
 	void *ch;
 	ch = NULL;
-//	if(!g_memaloced)
-//		g_memaloced = init_tgc_vector(sizeof(size_t *));
+	if(!g_memaloced)
+		g_memaloced = init_tgc_vector(sizeof(size_t *));
 	ch = malloc(size);
 	ft_bzero(ch, size);
 	if (ch == NULL)
 		exit(3);
-//	ft_tgc_append(&g_memaloced, ch);
+	ft_tgc_append(&g_memaloced, ch);
 	return (ch);
 }

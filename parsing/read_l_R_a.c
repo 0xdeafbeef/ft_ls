@@ -126,7 +126,7 @@ void get_long_format_props(t_files_attrib **attr, unsigned int flag)
 		return;
 	}
 	atr->time = structstat.st_ctime;
-	if (flag & T)
+	if (flag & T && !(flag & L))
 		return;
 	atr->timestamp = parse_time(ctime(&structstat.st_ctime));
 	if (S_ISCHR(structstat.st_mode))

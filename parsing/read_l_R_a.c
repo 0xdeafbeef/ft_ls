@@ -212,12 +212,14 @@ void ft_open_folder(char *fld_name, char rec_cal)
 				return;
 			}
 			print_level(attrib, g_flag & (~R_BIG));
+			free(attrib->filename);
+			free(attrib);
 		}
 		return;
 	}
 	while ((dirp = readdir(dir)))
 	{
-		if (!(g_flag & A && dirp->d_name[0] != '.') || g_flag & A)
+		if (!(!(g_flag & A) && dirp->d_name[0] == '.') || g_flag & A)
 		{
 			attrib = ft_relink(attrib, dirp->d_name,
 							   get_full_path(fld_name, dirp->d_name));

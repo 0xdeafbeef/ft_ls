@@ -20,7 +20,14 @@ void get_path_list(t_props *current)
 	current_path = current->path;
 	while ((current_path))
 	{
-		ft_open_folder(current_path->path);
+		errno = 0;
+		if (-1 == access(current_path->path, F_OK))
+		{
+			print_error(current_path->path, errno, NULL);
+			current_path = current_path->next;
+			continue;
+		}
+		ft_open_folder(current_path->path, 0);
 		current_path = current_path->next;
 	}
 }
@@ -65,7 +72,7 @@ void get_permissions(mode_t perm, t_files_attrib *attrib)
 		chr = '+';
 	else
 		chr = ' ';
-
+	acl_free(acl);
 	modeval = ft_strnew(11);
 	if (S_ISREG(perm))
 		modeval[0] = '-';
@@ -98,7 +105,7 @@ char *parse_time(const char *time)
 	char *ret;
 
 	ret = ft_strnew(TIME_FORMAT_LEN);
-	ft_strncpy(ret,time + 4, TIME_FORMAT_LEN);
+	ft_strncpy(ret, time + 4, TIME_FORMAT_LEN);
 	return (ret);
 }
 
@@ -122,7 +129,6 @@ void get_long_format_props(t_files_attrib **attr, unsigned int flag)
 	if (flag & T)
 		return;
 	atr->timestamp = parse_time(ctime(&structstat.st_ctime));
-
 	if (S_ISCHR(structstat.st_mode))
 	{
 		atr->major = major(structstat.st_rdev);
@@ -182,27 +188,30 @@ char *get_full_path(char *fld_name, char *name)
 	return path;
 }
 
-void ft_open_folder(char *fld_name)
+void ft_open_folder(char *fld_name, char rec_cal)
 {
 	DIR *dir;
 	struct dirent *dirp;
 	t_files_attrib *attrib;
 	t_files_attrib *holder;
-	t_bool first_asign;
+	char first_asign;
 	struct stat structstat;
 
-	first_asign = true;
-	holder = NULL;
+	first_asign = 1;
 	attrib = NULL;
+	holder = attrib;
 	errno = 0;
 	if (!(dir = opendir(fld_name)))
 	{
-		errno = 0;
 		if (lstat(fld_name, &structstat) == 0)
 		{
 			attrib = ft_relink(attrib, fld_name, fld_name);
-			if (errno)
-				print_level(attrib, g_flag - (g_flag & R_BIG));
+			if (errno && rec_cal)
+			{
+				print_error(fld_name, errno, NULL);
+				return;
+			}
+			print_level(attrib, g_flag & (~R_BIG));
 		}
 		return;
 	}
@@ -215,7 +224,7 @@ void ft_open_folder(char *fld_name)
 			if (first_asign)
 			{
 				holder = attrib;
-				first_asign = false;
+				first_asign = 0;
 			}
 		}
 	}
@@ -227,7 +236,9 @@ void ft_open_folder(char *fld_name)
 		while (attrib)
 		{
 			if (IS_OK && is_dir(attrib->full_path) && !attrib->error_message)
-				ft_open_folder(attrib->full_path);
+			{
+				ft_open_folder(attrib->full_path, 1);
+			}
 			attrib = attrib->next;
 		}
 	}

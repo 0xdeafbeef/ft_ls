@@ -55,6 +55,7 @@ blkcnt_t get_print_props(t_files_attrib *attrib, t_print *print, blkcnt_t size)
 			attrib = attrib->next;
 			continue;
 		}
+		++print->count;
 		size += attrib->block_size;
 		++print->nodes_count;
 		print->tmp = numlen((unsigned long long int) attrib->link_count);
@@ -103,6 +104,7 @@ char *concat_full_path(t_files_attrib *attrib, char **buf)
 		++(*buf);
 		++attrib->full_path;
 	}
+	ft_cat("\n", buf);
 	return (*buf);
 }
 
@@ -121,20 +123,20 @@ void long_listing(t_files_attrib *attrib, unsigned int flag)
 	size = get_print_props(attrib, print, size);
 	if (flag & R_BIG)
 		buf = concat_full_path(attrib, &buf);
-
-	ft_cat("\n", &buf);
-	ft_cat("total ", &buf);
-	itoa = ft_itoa_big((size_t) size);
-	ft_cat(itoa, &buf);
-	free(itoa);
-	ft_cat("\n", &buf);
+	if (!print->count)
+	{
+		ft_cat("total ", &buf);
+		itoa = ft_itoa_big((size_t) size);
+		ft_cat(itoa, &buf);
+		free(itoa);
+		ft_cat("\n", &buf);
+	}
 	while (attrib)
 	{
 		if (attrib->error_message)
 		{
 			write(1, g_buf_start, buf - g_buf_start);
 			write(1, attrib->error_message, ft_strlen(attrib->error_message));
-			free(attrib->error_message);
 			attrib = attrib->next;
 			continue;
 		}

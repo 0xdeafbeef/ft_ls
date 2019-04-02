@@ -18,5 +18,6 @@ typedef struct s_print
 	unsigned int major_size;
 	char has_major;
 	char *ptr;
+	int count;
 } 				t_print;
 #endif //FT_LS_STRUCTURES_H

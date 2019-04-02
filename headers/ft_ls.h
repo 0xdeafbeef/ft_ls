@@ -79,7 +79,7 @@ int							is_dir(const char *path);
 void						ft_list_push_down(t_files_attrib *current,t_files_attrib *upper);
 
 t_files_attrib				*create_atr(char *name);
-void 						ft_open_folder(char *fld_name);
+void 						ft_open_folder(char *fld_name, char);
 void						ft_merge_sort(t_files_attrib **head_ref, t_bool( *comp)(t_files_attrib *a,
 		t_files_attrib *b));
 t_bool						comparator_lex_inv(t_files_attrib *a,

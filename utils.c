@@ -12,11 +12,12 @@ void print_bits(unsigned short int c, char bytes)
 void print_error(char const *error_file, int error_num, t_files_attrib *attrib)
 {
 	char *error;
+	char error_m[1024];
 
-
+	strerror_r(error_num, error_m, 1023);
 	error = ft_strnew((ft_strlen(error_file) + 1) +
 					  ft_strlen("ft_ls: : ") +
-					  ft_strlen(strerror(error_num) + 1));
+					  ft_strlen(error_m));
 	ft_strcat(error, "ft_ls: ");
 	ft_strcat(error, (error_file));
 	ft_strcat(error, ": ");

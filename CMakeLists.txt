@@ -96,4 +96,4 @@ add_executable(ft_ls
         list_operations.c
         main.c
         path_operations.c
-        utils.c listing_functions/print_functions.c)
+        utils.c listing_functions/print_functions.c listing_functions/column_listing.c)

@@ -24,7 +24,8 @@
 #include <sys/stat.h>
 //#define ft_memalloc malloc
 
-#define L_2_CACHE_SIZE 262144 - 1
+//#define L_2_CACHE_SIZE 262144 - 1
+#define L_2_CACHE_SIZE 1024
 # define IS_OK !(ft_strequ(attrib->filename,".")||ft_strequ(attrib->filename,".."))
 # define TIME_FORMAT_LEN 12
 # define L 0x01
@@ -85,8 +86,8 @@ void						ft_merge_sort(t_files_attrib **head_ref, t_bool( *comp)(t_files_attrib
 t_bool						comparator_lex_inv(t_files_attrib *a,
 												 t_files_attrib *b);
 t_bool comparator_lex(t_files_attrib *a,t_files_attrib *b);
-void print_level(t_files_attrib *attrib, unsigned int);
-
+void print_level(t_files_attrib *attrib, unsigned int, int);
+void normal_listing(t_files_attrib *attrib, int rec_call);
 void ft_merge_sort_wrapper(unsigned short int flag, t_files_attrib **head_ref);
 void sort_path(t_path **path);
 t_bool comparator_time(t_files_attrib *a, t_files_attrib *b);

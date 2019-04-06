@@ -4,7 +4,6 @@
 
 t_bool comparator_lex_inv(t_files_attrib *a, t_files_attrib *b)
 {
-
 	char *s1;
 	char *s2;
 

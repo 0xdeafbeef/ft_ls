@@ -108,7 +108,7 @@ char *concat_full_path(t_files_attrib *attrib, char **buf)
 	return (*buf);
 }
 
-void long_listing(t_files_attrib *attrib, unsigned int flag)
+void long_listing(t_files_attrib *attrib, int rec_call)
 {
 	t_print *print;
 	char *itoa;
@@ -121,9 +121,9 @@ void long_listing(t_files_attrib *attrib, unsigned int flag)
 	g_buf_start = buf;
 	g_buf_end = g_buf_start + ((L_2_CACHE_SIZE) - 1);
 	size = get_print_props(attrib, print, size);
-	if (flag & R_BIG)
+	if (rec_call)
 		buf = concat_full_path(attrib, &buf);
-	if (!print->count)
+	if (print->count > 1)
 	{
 		ft_cat("total ", &buf);
 		itoa = ft_itoa_big((size_t) size);
@@ -190,14 +190,14 @@ void long_listing(t_files_attrib *attrib, unsigned int flag)
 	free(g_buf_start);
 }
 
-void normal_listing(t_files_attrib *attrib, unsigned int flag)
+void normal_listing(t_files_attrib *attrib, int rec_call)
 {
 	char *buf;
 	buf = malloc(L_2_CACHE_SIZE);
 	g_buf_start = buf;
 	g_buf_end = g_buf_start + ((L_2_CACHE_SIZE) - 1);
 
-	if (flag & R_BIG)
+	if (rec_call)
 		concat_full_path(attrib, &buf);
 	while (attrib)
 	{
@@ -209,13 +209,13 @@ void normal_listing(t_files_attrib *attrib, unsigned int flag)
 	free(g_buf_start);
 }
 
-void print_level(t_files_attrib *attrib, unsigned int flag)
+void print_level(t_files_attrib *attrib, unsigned int flag, int rec_call)
 {
 	if (!attrib)
 		return;
 	if (flag & L)
-		long_listing(attrib, flag);
+		long_listing(attrib, rec_call);
 	else
-		normal_listing(attrib, flag);
+		normal_listing(attrib, rec_call);
 
 }

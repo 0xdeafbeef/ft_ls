@@ -13,7 +13,9 @@ unsigned short g_flag;
 void get_path_list(t_props *current)
 {
 	t_path *current_path;
+	t_bool assigment;
 
+	assigment =0;
 	g_flag = current->flag;
 	if (!current->path)
 		return;
@@ -21,6 +23,11 @@ void get_path_list(t_props *current)
 	while ((current_path))
 	{
 		errno = 0;
+		if(assigment)
+		{
+			ft_putstr(current_path->path);
+			ft_putendl(":");
+		}
 		if (-1 == access(current_path->path, F_OK))
 		{
 			print_error(current_path->path, errno, NULL);
@@ -29,6 +36,7 @@ void get_path_list(t_props *current)
 		}
 		ft_open_folder(current_path->path, 0);
 		current_path = current_path->next;
+		++assigment;
 	}
 }
 
@@ -211,7 +219,7 @@ void ft_open_folder(char *fld_name, char rec_cal)
 				print_error(fld_name, errno, NULL);
 				return;
 			}
-			print_level(attrib, g_flag & (~R_BIG));
+			print_level(attrib,g_flag, rec_cal);
 			free(attrib->filename);
 			free(attrib);
 		}
@@ -232,7 +240,7 @@ void ft_open_folder(char *fld_name, char rec_cal)
 	}
 	attrib = holder;
 	ft_merge_sort_wrapper(g_flag, &attrib);
-	print_level(attrib, g_flag);
+	print_level(attrib, g_flag, rec_cal);
 	if (g_flag & R_BIG)
 	{
 		while (attrib)

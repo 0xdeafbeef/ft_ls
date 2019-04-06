@@ -50,9 +50,8 @@ t_files_attrib				*create_atr(char *name);
 void 						ft_open_folder(char *fld_name, char, t_props*);
 void						ft_merge_sort(t_files_attrib **head_ref, t_bool( *comp)(t_files_attrib *a,
 		t_files_attrib *b));
-t_bool						comparator_lex_inv(t_files_attrib *a,
-												 t_files_attrib *b);
-t_bool comparator_lex(t_files_attrib *a,t_files_attrib *b);
+t_bool						comparator_lex_inv(char *a, char *b);
+t_bool comparator_lex(char *a, char *b);
 void print_level(t_files_attrib *attrib, unsigned int, int, t_props*);
 void normal_listing(t_files_attrib *attrib, int rec_call);
 void ft_merge_sort_wrapper(unsigned short int flag, t_files_attrib **head_ref);
@@ -65,4 +64,7 @@ void add_spaces(char **buf, int count, const char *concatenated);
 void print_columns(t_props *property, t_files_attrib *attr, int rec_call);
 extern char *g_buf_start;
 extern char *g_buf_end;
+void swap_path(t_path *path, t_path *path_2);
+void insertAtTheBegin(t_path **path, char *pa);
+
 #endif

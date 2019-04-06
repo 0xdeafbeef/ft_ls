@@ -69,9 +69,8 @@ t_props *get_t_size_and_flags(int argc, char **argv)
 	t_props *props;
 
 	props = scan_flags_path(argv, argc);
-//todo	sort_path(&props->path);
+	sort_path(&props->path);
 	props->isterm =  (isatty(fileno(stdout)) ? 1 : 0);
-//	printf("\n---->%i\n", props->isterm);
 	if(props->isterm)
 	{
 		ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);

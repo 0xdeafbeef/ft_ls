@@ -12,6 +12,7 @@
 
 #include "ft_ls.h"
 
+
 t_path *ft_path_append_horizontal(t_path *node, char *dat)
 {
 	t_path *nt;
@@ -26,25 +27,62 @@ t_path *ft_path_append_horizontal(t_path *node, char *dat)
 	return (nt);
 }
 
-void sort_path(t_path **path)
+
+void insertAtTheBegin(t_path **path, char *pa)
 {
-	t_path *a;
-	t_path *b;
-	t_path *next;
+	t_path *t_path1 = ft_memalloc(sizeof(path));
+	t_path1->path = pa;
+	t_path1->next = *path;
+	*path = t_path1;
+}
 
-	if(!path)
+void bubbleSort(t_path *start)
+{
+	int swapped;
+	t_path *ptr1;
+	t_path *lptr;
+
+	lptr = NULL;
+	if (start == NULL)
 		return;
-	a = *path;
-	if(a->next)
-		return;
-	while (a)
+	swapped = 0;
+	ptr1 = start;
+	while (ptr1->next != lptr)
 	{
-		b = a->next;
-		while (b)
+		if (comparator_lex(ptr1->path, ptr1->next->path))
 		{
-
+			swap_path(ptr1, ptr1->next);
+			swapped = 1;
 		}
+		ptr1 = ptr1->next;
 	}
+	lptr = ptr1;
+	while (swapped)
+	{
+		swapped = 0;
+		ptr1 = start;
+
+		while (ptr1->next != lptr)
+		{
+			if (comparator_lex(ptr1->path, ptr1->next->path))
+			{
+				swap_path(ptr1, ptr1->next);
+				swapped = 1;
+			}
+			ptr1 = ptr1->next;
+		}
+		lptr = ptr1;
+	}
+}
+
+/* function to swap_path data of two nodes a and b*/
+void swap_path(t_path *path, t_path *path_2)
+{
+	char *temp;
+
+	temp = path->path;
+	path->path = path_2->path;
+	path_2->path = temp;
 }
 
 

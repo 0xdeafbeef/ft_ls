@@ -34,7 +34,7 @@ void get_path_list(t_props *current)
 			current_path = current_path->next;
 			continue;
 		}
-		ft_open_folder(current_path->path, 0);
+		ft_open_folder(current_path->path, 0, current);
 		current_path = current_path->next;
 		++assigment;
 	}
@@ -196,7 +196,7 @@ char *get_full_path(char *fld_name, char *name)
 	return path;
 }
 
-void ft_open_folder(char *fld_name, char rec_cal)
+void ft_open_folder(char *fld_name, char rec_cal, t_props *props)
 {
 	DIR *dir;
 	struct dirent *dirp;
@@ -219,7 +219,7 @@ void ft_open_folder(char *fld_name, char rec_cal)
 				print_error(fld_name, errno, NULL);
 				return;
 			}
-			print_level(attrib,g_flag, rec_cal);
+			print_level(attrib,g_flag, rec_cal, props);
 			free(attrib->filename);
 			free(attrib);
 		}
@@ -240,14 +240,14 @@ void ft_open_folder(char *fld_name, char rec_cal)
 	}
 	attrib = holder;
 	ft_merge_sort_wrapper(g_flag, &attrib);
-	print_level(attrib, g_flag, rec_cal);
+	print_level(attrib, g_flag, rec_cal, props);
 	if (g_flag & R_BIG)
 	{
 		while (attrib)
 		{
 			if (IS_OK && is_dir(attrib->full_path) && !attrib->error_message)
 			{
-				ft_open_folder(attrib->full_path, 1);
+				ft_open_folder(attrib->full_path, 1, props);
 			}
 			attrib = attrib->next;
 		}

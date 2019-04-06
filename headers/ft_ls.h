@@ -33,41 +33,8 @@
 # define A 0x04
 # define R_SMALL 0x08
 # define T 0x10
-# define IS_TERM 0x20
 typedef int					t_bool;
 enum { false, true };
-typedef struct 				s_files_attrib
-{
-	char 					*error_message;
-	char					*full_path;
-	char					*filename;
-	struct s_files_attrib 	*next;
-	struct s_files_attrib 	*previous;
-	time_t 					time;
-	char *					timestamp;
-	char*					st_mode_to_char;
-	char					*owner_name;
-	char					*group_name;
-	size_t					file_size;
-	int						link_count;
-	blkcnt_t				block_size;
-	char					*link_pointer;
-	int						major;
-	int						minor;
-}							t_files_attrib;
-typedef struct				s_path
-{
-	struct s_path			*next;
-	char					*path;
-	t_files_attrib			*attrib;
-	}						t_path;
-typedef struct				s_props
-{
-	int						win_size; //todo implement this
-	t_bool 					isterm;
-	unsigned short int		flag;
-	t_path					*path;
-}							t_props;
 
 void						get_long_format_props(t_files_attrib **, unsigned int);
 void						get_path_list(t_props *current);
@@ -80,16 +47,22 @@ int							is_dir(const char *path);
 void						ft_list_push_down(t_files_attrib *current,t_files_attrib *upper);
 
 t_files_attrib				*create_atr(char *name);
-void 						ft_open_folder(char *fld_name, char);
+void 						ft_open_folder(char *fld_name, char, t_props*);
 void						ft_merge_sort(t_files_attrib **head_ref, t_bool( *comp)(t_files_attrib *a,
 		t_files_attrib *b));
 t_bool						comparator_lex_inv(t_files_attrib *a,
 												 t_files_attrib *b);
 t_bool comparator_lex(t_files_attrib *a,t_files_attrib *b);
-void print_level(t_files_attrib *attrib, unsigned int, int);
+void print_level(t_files_attrib *attrib, unsigned int, int, t_props*);
 void normal_listing(t_files_attrib *attrib, int rec_call);
 void ft_merge_sort_wrapper(unsigned short int flag, t_files_attrib **head_ref);
 void sort_path(t_path **path);
 t_bool comparator_time(t_files_attrib *a, t_files_attrib *b);
 t_bool comparator_time_inv(t_files_attrib *a, t_files_attrib *b);
+void ft_cat(char *copied, char **buf);
+void flush_buf(char **buf_ptr);
+void add_spaces(char **buf, int count, const char *concatenated);
+void print_columns(t_props *property, t_files_attrib *attr, int rec_call);
+extern char *g_buf_start;
+extern char *g_buf_end;
 #endif

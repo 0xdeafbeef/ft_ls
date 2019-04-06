@@ -38,12 +38,12 @@ void ft_cat(char *copied, char **buf)
 	}
 }
 
-void add_spaces(char **print, int count, const char *concatenated)
+void add_spaces(char **buf, int count, const char *concatenated)
 {
 	count = (int) ((count - ft_strlen(concatenated)));
 
 	while (count--)
-		ft_cat(" ", print);
+		ft_cat(" ", buf);
 }
 
 blkcnt_t get_print_props(t_files_attrib *attrib, t_print *print, blkcnt_t size)
@@ -209,13 +209,12 @@ void normal_listing(t_files_attrib *attrib, int rec_call)
 	free(g_buf_start);
 }
 
-void print_level(t_files_attrib *attrib, unsigned int flag, int rec_call)
+void print_level(t_files_attrib *attrib, unsigned int flag, int rec_call, t_props *props)
 {
 	if (!attrib)
 		return;
 	if (flag & L)
 		long_listing(attrib, rec_call);
 	else
-		normal_listing(attrib, rec_call);
-
+		print_columns(props,attrib, rec_call);
 }

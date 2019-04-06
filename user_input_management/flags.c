@@ -38,7 +38,10 @@ t_props *scan_flags_path(char **argv, int argc)
 	props = ft_memalloc(sizeof(t_props));
 
 	if (argc < 2)
+	{
+		props->path = ft_path_append_horizontal(pat, ".");
 		return (props);
+	}
 	++(argv);
 	while (*argv)
 	{
@@ -67,8 +70,12 @@ t_props *get_t_size_and_flags(int argc, char **argv)
 
 	props = scan_flags_path(argv, argc);
 //todo	sort_path(&props->path);
-	props->isterm = (char) (isatty(fileno(stdin)) ? 1 : 0);
-	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-	props->win_size = w.ws_row;
+	props->isterm =  (isatty(fileno(stdout)) ? 1 : 0);
+//	printf("\n---->%i\n", props->isterm);
+	if(props->isterm)
+	{
+		ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+		props->win_size = w.ws_col;
+	}
 	return (props);
 }

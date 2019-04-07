@@ -34,7 +34,7 @@ typedef struct				s_path
 }						t_path;
 typedef struct				s_props
 {
-	int						win_size; //todo implement this
+	int						win_size;
 	char 					isterm;
 	unsigned short int		flag;
 	t_path					*path;

@@ -22,10 +22,15 @@
 #include <time.h>
 #include <errno.h>
 #include <sys/stat.h>
-//#define ft_memalloc malloc
-
-//#define L_2_CACHE_SIZE 262144 - 1
-#define L_2_CACHE_SIZE 1024
+#include <sys/param.h>
+#include <libgen.h>
+#include <pwd.h>
+#include <grp.h>
+#include <ft_ls.h>
+#include <sys/types.h>
+#include <sys/acl.h>
+#include <sys/xattr.h>
+#define L_2_CACHE_SIZE 262144 - 1
 # define IS_OK !(ft_strequ(attrib->filename,".")||ft_strequ(attrib->filename,".."))
 # define TIME_FORMAT_LEN 12
 # define L 0x01
@@ -50,12 +55,12 @@ t_files_attrib				*create_atr(char *name);
 void 						ft_open_folder(char *fld_name, char, t_props*);
 void						ft_merge_sort(t_files_attrib **head_ref, t_bool( *comp)(t_files_attrib *a,
 		t_files_attrib *b));
-t_bool						comparator_lex_inv(char *a, char *b);
-t_bool comparator_lex(char *a, char *b);
+t_bool						comparator_lex_inv_ch(char *a, char *b);
+t_bool comparator_lex_ch(char *a, char *b);
 void print_level(t_files_attrib *attrib, unsigned int, int, t_props*);
 void normal_listing(t_files_attrib *attrib, int rec_call);
 void ft_merge_sort_wrapper(unsigned short int flag, t_files_attrib **head_ref);
-void sort_path(t_path **path);
+void sort_path(t_path *path);
 t_bool comparator_time(t_files_attrib *a, t_files_attrib *b);
 t_bool comparator_time_inv(t_files_attrib *a, t_files_attrib *b);
 void ft_cat(char *copied, char **buf);
@@ -64,7 +69,19 @@ void add_spaces(char **buf, int count, const char *concatenated);
 void print_columns(t_props *property, t_files_attrib *attr, int rec_call);
 extern char *g_buf_start;
 extern char *g_buf_end;
+extern unsigned short g_flag;
 void swap_path(t_path *path, t_path *path_2);
-void insertAtTheBegin(t_path **path, char *pa);
-
+char *parse_time(const char *time);
+t_bool comparator_lex(t_files_attrib *a, t_files_attrib *b);
+t_bool comparator_lex_inv(t_files_attrib *a, t_files_attrib *b);
+void permissions_to_char(mode_t perm, char *modeval, char chr);
+void permisions_look_up(mode_t perm, char *modeval);
+size_t					get_long_props_inner_getter(struct passwd *pasw, struct stat *structstat, struct group *g, t_files_attrib *atr);
+void					get_permissions(mode_t perm, t_files_attrib *attrib);
+void link_parse(size_t len, t_files_attrib *atr);
+void majors_and_size_parse(struct stat *structstat, t_files_attrib *atr);
+void					ft_open_folder_recurision(t_props *props, DIR *dir,
+												  t_files_attrib *attrib);
+char					*get_full_path(char *fld_name, char *name);
+char *concat_full_path(t_files_attrib *attrib, char **buf);
 #endif

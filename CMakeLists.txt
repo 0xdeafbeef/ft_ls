@@ -8,7 +8,7 @@ set(HEADERS ./headers )
 include_directories(${HEADERS})
 include_directories(libft)
 #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address")
-#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64 -Ofast -flto -march=native -funroll-loops")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64 -Ofast -flto -march=native -funroll-loops")
 
 add_executable(ft_ls
         headers/ft_ls.h
@@ -90,10 +90,12 @@ add_executable(ft_ls
         libft/libft.h
         libft/strlen.h
         parsing/merge_sort.c
-        parsing/read_l_R_a.c
+        parsing/read_l_r_big_a.c
         user_input_management/flags.c
         parsing/comparators.c
         list_operations.c
         main.c
         path_operations.c
-        utils.c listing_functions/print_functions.c listing_functions/column_listing.c)
+        utils.c listing_functions/print_functions.c listing_functions/column_listing.c
+        parsing/pars_long_format.c parsing/comparators_add.c
+        parsing/read_path.c parsing/pars_long_format_additional.c)

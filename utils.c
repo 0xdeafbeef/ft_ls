@@ -42,3 +42,16 @@ int is_dir(const char *path)
 
 	return S_ISDIR(statbuf.st_mode);
 }
+char					*get_full_path(char *fld_name, char *name)
+{
+	char				*path;
+	int					len;
+
+	len = ft_strlen(fld_name);
+	path = ft_strnew(len + 1 + ft_strlen(name));
+	ft_strcat(path, fld_name);
+	if (fld_name[len - 1] != '/')
+		ft_strcat(path, "/");
+	ft_strcat(path, name);
+	return path;
+}

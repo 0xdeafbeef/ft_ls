@@ -6,17 +6,17 @@
 /*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 19:39:35 by qhetting          #+#    #+#             */
-/*   Updated: 2019/02/28 16:14:49 by qhetting         ###   ########.fr       */
+/*   Updated: 2019/04/07 16:33:32 by qhetting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void split_on_halves(t_files_attrib *source,
-					 t_files_attrib **front, t_files_attrib **back)
+void						split_on_halves(t_files_attrib *source,
+					t_files_attrib **front, t_files_attrib **back)
 {
-	t_files_attrib *fast;
-	t_files_attrib *slow;
+	t_files_attrib			*fast;
+	t_files_attrib			*slow;
 
 	slow = source;
 	fast = source->next;
@@ -35,10 +35,10 @@ void split_on_halves(t_files_attrib *source,
 	slow->next = NULL;
 }
 
-t_files_attrib *sorted_merge(t_files_attrib *a, t_files_attrib *b, t_bool
-( *comp)(t_files_attrib *, t_files_attrib *))
+t_files_attrib				*sorted_merge(t_files_attrib *a, t_files_attrib *b,
+							t_bool (*comp)(t_files_attrib *, t_files_attrib *))
 {
-	t_files_attrib *result;
+	t_files_attrib			*result;
 
 	if (!a)
 		return (b);
@@ -48,7 +48,8 @@ t_files_attrib *sorted_merge(t_files_attrib *a, t_files_attrib *b, t_bool
 	{
 		result = a;
 		result->next = sorted_merge(a->next, b, comp);
-	} else
+	}
+	else
 	{
 		result = b;
 		result->next = sorted_merge(a, b->next, comp);
@@ -56,17 +57,17 @@ t_files_attrib *sorted_merge(t_files_attrib *a, t_files_attrib *b, t_bool
 	return (result);
 }
 
-void ft_merge_sort(t_files_attrib **head_ref, t_bool
-( *comp)(t_files_attrib *ar, t_files_attrib *br))
+void						ft_merge_sort(t_files_attrib **head_ref,
+						t_bool (*comp)(t_files_attrib *ar, t_files_attrib *br))
 {
-	t_files_attrib *a;
-	t_files_attrib *b;
-	t_files_attrib *head;
+	t_files_attrib			*a;
+	t_files_attrib			*b;
+	t_files_attrib			*head;
 
 	head = *head_ref;
 	if ((head == NULL) || (head->next == NULL))
 	{
-		return;
+		return ;
 	}
 	split_on_halves(head, &a, &b);
 	ft_merge_sort(&a, comp);
@@ -74,20 +75,22 @@ void ft_merge_sort(t_files_attrib **head_ref, t_bool
 	*head_ref = sorted_merge(a, b, comp);
 }
 
-void ft_merge_sort_wrapper(unsigned short int flag, t_files_attrib **head_ref)
+void						ft_merge_sort_wrapper(unsigned short int flag,
+							t_files_attrib **head_ref)
 {
 	if (flag & R_SMALL)
 	{
 		if (flag & T)
 		{
 			ft_merge_sort(head_ref, comparator_time);
-			return;
+			return ;
 		}
 		ft_merge_sort(head_ref, comparator_lex_inv);
-	} else if (flag & T)
+	}
+	else if (flag & T)
 	{
 		ft_merge_sort(head_ref, comparator_time_inv);
-		return;
+		return ;
 	}
 	ft_merge_sort(head_ref, comparator_lex);
 }

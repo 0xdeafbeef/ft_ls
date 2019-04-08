@@ -190,7 +190,7 @@ void long_listing(t_files_attrib *attrib, int rec_call)
 	free(g_buf_start);
 }
 
-void normal_listing(t_files_attrib *attrib, int rec_call)
+int *normal_listing(t_files_attrib *attrib, int rec_call)
 {
 	char *buf;
 	buf = malloc(L_2_CACHE_SIZE);
@@ -207,6 +207,7 @@ void normal_listing(t_files_attrib *attrib, int rec_call)
 	}
 	write(1, g_buf_start, buf - g_buf_start);
 	free(g_buf_start);
+	return (NULL);
 }
 
 void print_level(t_files_attrib *attrib, unsigned int flag, int rec_call, t_props *props)

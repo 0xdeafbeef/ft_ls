@@ -6,7 +6,7 @@
 /*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/07 18:27:31 by qhetting          #+#    #+#             */
-/*   Updated: 2019/04/07 18:27:35 by qhetting         ###   ########.fr       */
+/*   Updated: 2019/04/08 23:56:46 by qhetting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,21 +32,8 @@ int				*get_longest_word(t_files_attrib *atr)
 	return (prop);
 }
 
-
-int *calc_column_props(const t_props *property, const t_files_attrib *attr,
-					   int *prop, t_column *col)
-{
-	prop = get_longest_word(attr);
-	col->vertical_height_for_each = prop[0] + 1;
-	col->width = prop[1] + 1;
-	col->columns_num = property->win_size / col->width;
-	col->columns_num = col->columns_num == 0 ? 1 : col->columns_num;
-	col->attr_half = ft_memalloc(sizeof(attr) * (col->columns_num + 10));
-	return prop;
-}
-
 t_column		*column_listing_props(t_props *property, t_files_attrib *attr,
-									  int rec_call)
+				int rec_call)
 {
 	int			*prop;
 	int			i;
@@ -55,16 +42,12 @@ t_column		*column_listing_props(t_props *property, t_files_attrib *attr,
 	int			itter;
 
 	if (!(property->isterm))
-	{
-		normal_listing(attr, rec_call);
-		return NULL;
-	}
-	col = ft_memalloc(sizeof(t_column));
-	prop = calc_column_props(property, attr, prop, col);
+		return ((t_column *)normal_listing(attr, rec_call));
 	i = 0;
 	j = 0;
-	itter = !(col->vertical_height_for_each / col->columns_num) ? 1 :
-			col->vertical_height_for_each / col->columns_num;
+	col = ft_memalloc(sizeof(t_column));
+	prop = calc_column_props(property, attr, prop, col);
+	itter = !(col->vh / col->cn) ? 1 : col->vh / col->cn;
 	while (i < prop[0])
 	{
 		if (i == itter * j)
@@ -75,15 +58,11 @@ t_column		*column_listing_props(t_props *property, t_files_attrib *attr,
 		++i;
 		attr = attr->next;
 	}
-	col->vertical_height_for_each =
-			col->vertical_height_for_each / col->columns_num;
-	if (!col->vertical_height_for_each)
-		col->vertical_height_for_each = 1;
-	free(prop);
+	calc_vertical_height(prop, col);
 	return (col);
 }
 
-void print_columns_init( t_files_attrib *attr, int *i, char **buf)
+void			print_columns_init(t_files_attrib *attr, int *i, char **buf)
 {
 	(*buf) = malloc(L_2_CACHE_SIZE);
 	g_buf_start = (*buf);
@@ -93,7 +72,7 @@ void print_columns_init( t_files_attrib *attr, int *i, char **buf)
 		concat_full_path(attr, buf);
 }
 
-void print_colums_on_exit(t_column *props, char **buf)
+void			print_colums_on_exit(t_column *props, char **buf)
 {
 	ft_cat("\n", buf);
 	write(1, g_buf_start, (*buf) - g_buf_start);
@@ -102,7 +81,7 @@ void print_colums_on_exit(t_column *props, char **buf)
 }
 
 void			print_columns(t_props *property, t_files_attrib *attr,
-							  int rec_call)
+				int rec_call)
 {
 	t_column	*props;
 	int			i;
@@ -112,10 +91,10 @@ void			print_columns(t_props *property, t_files_attrib *attr,
 	if (!(props = column_listing_props(property, attr, rec_call)))
 		exit(0);
 	print_columns_init(attr, &i, &buf);
-	while (i < props->vertical_height_for_each)
+	while (i < props->vh)
 	{
 		j = 0;
-		while (j < props->columns_num)
+		while (j < props->cn)
 		{
 			if (props->attr_half[j])
 			{

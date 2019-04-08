@@ -65,6 +65,7 @@ t_files_attrib			*read_inner_loop(char *fld_name, DIR *dir,
 	char				first_assign;
 
 	holder = NULL;
+	dirp = NULL;
 	first_assign = 1;
 	while ((dirp = readdir(dir)))
 	{
@@ -83,17 +84,17 @@ t_files_attrib			*read_inner_loop(char *fld_name, DIR *dir,
 }
 
 void					ft_open_folder_recurision(t_props *props, DIR *dir,
-						t_files_attrib *attrib)
+						t_files_attrib *atr)
 {
 	if (g_flag & R_BIG)
 	{
-		while (attrib)
+		while (atr)
 		{
-			if (IS_OK && is_dir(attrib->full_path) && !attrib->error_message)
+			if (IS_OK && is_dir(atr->full_path) && !atr->error_message)
 			{
-				ft_open_folder(attrib->full_path, 1, props);
+				ft_open_folder(atr->full_path, 1, props);
 			}
-			attrib = attrib->next;
+			atr = atr->next;
 		}
 	}
 	closedir(dir);

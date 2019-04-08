@@ -1,5 +1,0 @@
-CMakeLists.txt		list_operations.c	path_operations.c
-cmake-build-debug	listing_functions	tests
-hash_functions.c	ls.ls			user_input_management
-headers			main.c			utils.c
-libft			parsing			wid.py

@@ -9,11 +9,12 @@
 /*   Updated: 2019/02/28 16:59:45 by qhetting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "ft_ls.h"
 
-t_files_attrib *create_atr(char *name)
+t_files_attrib	*create_atr(char *name)
 {
-	t_files_attrib *attrib;
+	t_files_attrib	*attrib;
 
 	attrib = ft_memalloc(sizeof(t_files_attrib));
 	if (name)

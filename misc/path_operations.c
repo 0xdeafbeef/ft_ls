@@ -12,9 +12,9 @@
 
 #include "ft_ls.h"
 
-t_path *ft_path_append_horizontal(t_path *node, char *dat)
+t_path			*ft_path_append_horizontal(t_path *node, char *dat)
 {
-	t_path *nt;
+	t_path	*nt;
 
 	nt = ft_memalloc(sizeof(t_path));
 	if (dat)
@@ -26,32 +26,37 @@ t_path *ft_path_append_horizontal(t_path *node, char *dat)
 	return (nt);
 }
 
-void sort_path(t_path *start)
+void			sort_do_fck_norm_path(t_path *start, const t_path *lptr,
+				int *swapped, t_path **ptr1)
 {
-	int swapped;
-	t_path *ptr1;
-	t_path *lptr;
+	(*swapped) = 0;
+	(*ptr1) = start;
+	while ((*ptr1)->next != lptr)
+	{
+		if (comparator_lex_ch((*ptr1)->path, (*ptr1)->next->path))
+		{
+			swap_path((*ptr1), (*ptr1)->next);
+			(*swapped) = 1;
+		}
+		(*ptr1) = (*ptr1)->next;
+	}
+}
+
+void			sort_path(t_path *start)
+{
+	int			swapped;
+	t_path		*ptr1;
+	t_path		*lptr;
 
 	lptr = NULL;
 	if (start == NULL)
-		return;
-	swapped = 0;
-	ptr1 = start;
-	while (ptr1->next != lptr)
-	{
-		if (comparator_lex_ch(ptr1->path, ptr1->next->path))
-		{
-			swap_path(ptr1, ptr1->next);
-			swapped = 1;
-		}
-		ptr1 = ptr1->next;
-	}
+		return ;
+	sort_do_fck_norm_path(start, lptr, &swapped, &ptr1);
 	lptr = ptr1;
 	while (swapped)
 	{
 		swapped = 0;
 		ptr1 = start;
-
 		while (ptr1->next != lptr)
 		{
 			if (comparator_lex_ch(ptr1->path, ptr1->next->path))
@@ -65,15 +70,11 @@ void sort_path(t_path *start)
 	}
 }
 
-/* function to swap_path data of two nodes a and b*/
-void swap_path(t_path *path, t_path *path_2)
+void			swap_path(t_path *path, t_path *path_2)
 {
-	char *temp;
+	char	*temp;
 
 	temp = path->path;
 	path->path = path_2->path;
 	path_2->path = temp;
 }
-
-
-

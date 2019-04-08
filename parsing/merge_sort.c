@@ -86,6 +86,7 @@ void						ft_merge_sort_wrapper(unsigned short int flag,
 			return ;
 		}
 		ft_merge_sort(head_ref, comparator_lex_inv);
+		return ;
 	}
 	else if (flag & T)
 	{

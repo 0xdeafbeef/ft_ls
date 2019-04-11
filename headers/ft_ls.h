@@ -31,7 +31,7 @@
 # include <sys/acl.h>
 # include <sys/xattr.h>
 
-# define L_2_CACHE_SIZE 262144 - 1
+# define L_2_CACHE_SIZE 2048
 # define IS_OK !(ft_strequ(atr->filename,".")||ft_strequ(atr->filename,".."))
 # define TIME_FORMAT_LEN 12
 # define L 0x01
@@ -50,10 +50,10 @@ void					get_long_format_props(t_files_attrib **a,
 void					get_path_list(t_props *current);
 t_path					*ft_path_append_horizontal(t_path *node, char *dat);
 t_props					*get_t_size_and_flags(int argc, char **argv);
-void					print_error(char const *l, int r, t_files_attrib *l);
+void					print_error(char const *z, int r, t_files_attrib *zl);
 int						is_dir(const char *path);
 t_files_attrib			*create_atr(char *name);
-void					ft_open_folder(char *fld_name, char l, t_props *l);
+void					ft_open_folder(char *fld_name, char ll, t_props *lz);
 void					ft_merge_sort(t_files_attrib **head_ref,
 						t_bool(*comp)(t_files_attrib *a, t_files_attrib *b));
 t_bool					comparator_lex_inv_ch(char *a, char *b);
@@ -78,8 +78,7 @@ extern char				*g_buf_end;
 extern unsigned short	g_flag;
 void					swap_path(t_path *path, t_path *path_2);
 char					*parse_time(const char *time);
-t_bool					comparator_lex(t_files_attrib *a, t_files_attrib
-						*b);
+t_bool					comparator_lex(t_files_attrib *a, t_files_attrib *b);
 t_bool					comparator_lex_inv(t_files_attrib *a, t_files_attrib
 						*b);
 void					permissions_to_char(mode_t perm, char *modeval,
@@ -92,12 +91,11 @@ void					get_permissions(mode_t perm, t_files_attrib *attrib);
 void					link_parse(size_t len, t_files_attrib *atr);
 void					majors_and_size_parse(struct stat *structstat,
 						t_files_attrib *atr);
-void					ft_open_folder_recurision(t_props *props, DIR *dir,
+void					ft_open_folder_recurision(t_props *props,
 						t_files_attrib *atr);
 char					*get_full_path(char *fld_name, char *name);
 void					assign_all(t_props **props, t_path **pat,
-						t_path **p_handler,
-						t_bool *is_first_asign);
+						t_path **p_handler,	t_bool *is_first_asign);
 char					*concat_full_path(t_files_attrib *attrib, char **buf);
 int						*calc_column_props(t_props *property,
 						t_files_attrib *attr, int *prop, t_column *col);

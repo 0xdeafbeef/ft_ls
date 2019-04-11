@@ -65,9 +65,9 @@ size_t					get_long_props_inner_getter(struct passwd *pasw,
 	size_t len;
 
 	pasw = getpwuid((*structstat).st_uid);
-	atr->owner_name = pasw->pw_name;
+	atr->owner_name = ft_strdup(pasw->pw_name);
 	g = getgrgid(pasw->pw_gid);
-	atr->group_name = g->gr_name;
+	atr->group_name = ft_strdup(g->gr_name);
 	get_permissions((*structstat).st_mode, atr);
 	atr->link_count = (*structstat).st_nlink;
 	atr->file_size = (size_t)(*structstat).st_size;

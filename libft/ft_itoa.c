@@ -5,13 +5,10 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/09/28 02:04:57 by qhetting           #+#    #+#             */
-/*   Updated: 2019/02/28 16:14:49 by qhetting         ###   ########.fr       */
+/*   Created: 2016/09/28 02:04:57 by jrameau           #+#    #+#             */
+/*   Updated: 2019/02/26 21:47:55 by qhetting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include <libft.h>
-#include <printf.h>
 
 #include <libft.h>
 

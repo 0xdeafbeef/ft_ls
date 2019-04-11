@@ -19,7 +19,6 @@ add_executable(ft_ls
         libft/ft_cpyuntil.c
         libft/ft_gc.c
         libft/ft_gc.h
-        libft/ft_is_null_ptr.c
         libft/ft_isalnum.c
         libft/ft_isalpha.c
         libft/ft_isascii.c
@@ -57,7 +56,6 @@ add_executable(ft_ls
         libft/ft_strchr.c
         libft/ft_strclr.c
         libft/ft_strcmp.c
-        libft/ft_strcopy_untill.c
         libft/ft_strcpy.c
         libft/ft_strdel.c
         libft/ft_strdup.c
@@ -66,7 +64,6 @@ add_executable(ft_ls
         libft/ft_striteri.c
         libft/ft_strjoin.c
         libft/ft_strjoinch.c
-        libft/ft_strjoinf.c
         libft/ft_strlcat.c
         libft/ft_strlen.c
         libft/ft_strmap.c

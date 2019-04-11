@@ -6,7 +6,7 @@
 /*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/02 17:28:07 by qhetting          #+#    #+#             */
-/*   Updated: 2019/02/28 16:14:49 by qhetting         ###   ########.fr       */
+/*   Updated: 2019/02/26 21:47:55 by qhetting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ size_t		ft_strlen(const char *str)
 	while (*str)
 	{
 		result += 1;
-		++str;
+		str++;
 	}
 	return (result);
 }

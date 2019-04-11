@@ -74,7 +74,7 @@ void			print_columns_init(t_files_attrib *attr, int *i, char **buf)
 
 void			print_colums_on_exit(t_column *props, char **buf)
 {
-	ft_cat("\n", buf);
+//	ft_cat("\n", buf);
 	write(1, g_buf_start, (*buf) - g_buf_start);
 	free(g_buf_start);
 	free(props);

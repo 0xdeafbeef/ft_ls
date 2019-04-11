@@ -56,9 +56,11 @@ void	long_listing_parser(t_print *print, t_files_attrib **attrib,
 	ft_cat(" ", buf);
 	ft_cat((*attrib)->owner_name, buf);
 	add_spaces(buf, print->owner_len_max, (*attrib)->owner_name);
+	free((*attrib)->owner_name);
 	ft_cat(" ", buf);
 	ft_cat((*attrib)->group_name, buf);
 	add_spaces(buf, print->group_name_max, (*attrib)->group_name);
+	free((*attrib)->group_name);
 	(*buf) = majors_and_size_format((*attrib), print, itoa, buf);
 	ft_cat(" ", buf);
 	print->ptr = (*attrib)->timestamp;

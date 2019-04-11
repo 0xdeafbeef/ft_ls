@@ -83,21 +83,15 @@ t_files_attrib			*read_inner_loop(char *fld_name, DIR *dir,
 	return (holder);
 }
 
-void					ft_open_folder_recurision(t_props *props, DIR *dir,
+void					ft_open_folder_recurision(t_props *props,
 						t_files_attrib *atr)
 {
-	if (g_flag & R_BIG)
-	{
 		while (atr)
 		{
 			if (IS_OK && is_dir(atr->full_path) && !atr->error_message)
-			{
 				ft_open_folder(atr->full_path, 1, props);
-			}
 			atr = atr->next;
 		}
-	}
-	closedir(dir);
 }
 
 void					ft_open_folder(char *fld_name, char rec_cal,
@@ -127,5 +121,7 @@ void					ft_open_folder(char *fld_name, char rec_cal,
 	attrib = read_inner_loop(fld_name, dir, dirp, attrib);
 	ft_merge_sort_wrapper(g_flag, &attrib);
 	print_level(attrib, g_flag, rec_cal, props);
-	ft_open_folder_recurision(props, dir, attrib);
+	if (g_flag & R_BIG)
+		ft_open_folder_recurision(props, attrib);
+	closedir(dir);
 }

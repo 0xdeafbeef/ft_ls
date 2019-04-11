@@ -6,7 +6,7 @@
 /*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 20:31:30 by qhetting          #+#    #+#             */
-/*   Updated: 2019/02/28 16:14:49 by qhetting         ###   ########.fr       */
+/*   Updated: 2019/02/26 21:47:55 by qhetting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char		*ft_strjoin(char const *s1, char const *s2)
 
 	if (!s1 || !s2)
 		return (NULL);
-	temp = ft_memalloc(sizeof(*temp) * (ft_strlen(s1) + (ft_strlen(s2) + 1)));
+	temp = malloc(sizeof(*temp) * (ft_strlen(s1) + (ft_strlen(s2) + 1)));
 	if (!temp)
 		return (NULL);
 	ft_strcpy(temp, s1);

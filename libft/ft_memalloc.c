@@ -6,11 +6,12 @@
 /*   By: qhetting <qhetting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/27 19:36:01 by qhetting          #+#    #+#             */
-/*   Updated: 2019/02/28 16:14:49 by qhetting         ###   ########.fr       */
+/*   Updated: 2019/03/14 14:15:51 by qhetting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+
 
 t_gc_vector *g_memaloced = NULL;
 void *ft_memalloc(size_t size)

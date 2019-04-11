@@ -30,9 +30,9 @@ void	scan_flags_internal(char **argv, t_bool *is_first_asign, t_path **pat,
 						t_path **p_handler)
 {
 	(*pat) = ft_path_append_horizontal((*pat), *argv);
-	if (is_first_asign)
+	if (*is_first_asign)
 		(*p_handler) = (*pat);
-	*is_first_asign = false;
+	*is_first_asign = 0;
 }
 
 t_props	*scan_flags_path(char **argv, int argc)
@@ -42,6 +42,7 @@ t_props	*scan_flags_path(char **argv, int argc)
 	t_path	*p_handler;
 	t_bool	is_first_asign;
 
+	is_first_asign = 1;
 	assign_all(&props, &pat, &p_handler, &is_first_asign);
 	if (argc < 2)
 	{

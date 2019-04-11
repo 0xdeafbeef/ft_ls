@@ -27,6 +27,7 @@ void			get_path_list(t_props *current)
 		errno = 0;
 		if (++assigment)
 		{
+			write(1, "\n", 1);
 			ft_putstr(current_path->path);
 			ft_putendl(":");
 		}

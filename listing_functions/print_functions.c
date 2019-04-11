@@ -45,7 +45,9 @@ blkcnt_t			get_print_props(t_files_attrib *attrib, t_print *print)
 char				*concat_full_path(t_files_attrib *attrib, char **buf)
 {
 	char	*temp;
+	char	*fp_hdnler;
 
+	fp_hdnler = attrib->full_path;
 	if (!(temp = ft_strrchr(attrib->full_path, '/')))
 		temp = attrib->full_path + ft_strlen(attrib->full_path);
 	while (attrib->full_path != temp)
@@ -57,6 +59,7 @@ char				*concat_full_path(t_files_attrib *attrib, char **buf)
 		++attrib->full_path;
 	}
 	ft_cat("\n", buf);
+	attrib->full_path = fp_hdnler;
 	return (*buf);
 }
 

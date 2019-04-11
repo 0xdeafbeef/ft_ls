@@ -12,6 +12,20 @@
 
 #include <ft_ls.h>
 
+void			path_print(const t_path *current_path)
+{
+	write(1, "\n", 1);
+	ft_putstr(current_path->path);
+	ft_putendl(":");
+}
+
+int				ft_love_norme(t_files_attrib **at)
+{
+	*at = 0;
+	errno = 0;
+	return (1);
+}
+
 void			get_path_list(t_props *current)
 {
 	t_path		*current_path;
@@ -26,11 +40,7 @@ void			get_path_list(t_props *current)
 	{
 		errno = 0;
 		if (++assigment)
-		{
-			write(1, "\n", 1);
-			ft_putstr(current_path->path);
-			ft_putendl(":");
-		}
+			path_print(current_path);
 		if (-1 == access(current_path->path, F_OK))
 		{
 			print_error(current_path->path, errno, NULL);

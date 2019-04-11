@@ -12,6 +12,7 @@
 
 #include <ft_ls.h>
 
+t_bool g_first_print = 1;
 char *g_buf_start;
 char *g_buf_end;
 
@@ -50,6 +51,10 @@ char				*concat_full_path(t_files_attrib *attrib, char **buf)
 	fp_hdnler = attrib->full_path;
 	if (!(temp = ft_strrchr(attrib->full_path, '/')))
 		temp = attrib->full_path + ft_strlen(attrib->full_path);
+	if (g_first_print)
+		g_first_print = 0;
+	else
+		ft_cat("\n", buf);
 	while (attrib->full_path != temp)
 	{
 		if ((*buf) == g_buf_end)

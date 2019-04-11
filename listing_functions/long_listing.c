@@ -49,8 +49,7 @@ void	long_listing_parser(t_print *print, t_files_attrib **attrib,
 	ft_cat((*attrib)->st_mode_to_char, buf);
 	ft_cat(" ", buf);
 	free((*attrib)->st_mode_to_char);
-	itoa = ft_itoa((*attrib)->link_count);
-	add_spaces(buf, print->links_max, itoa);
+	add_spaces(buf, print->links_max, (itoa = ft_itoa((*attrib)->link_count)));
 	ft_cat(itoa, buf);
 	free(itoa);
 	ft_cat(" ", buf);

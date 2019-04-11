@@ -53,7 +53,7 @@ t_props					*get_t_size_and_flags(int argc, char **argv);
 void					print_error(char const *z, int r, t_files_attrib *zl);
 int						is_dir(const char *path);
 t_files_attrib			*create_atr(char *name);
-void					ft_open_folder(char *fld_name, char ll, t_props *lz);
+void					ft_open_folder(char *f_name, char ll, t_props *lz);
 void					ft_merge_sort(t_files_attrib **head_ref,
 						t_bool(*comp)(t_files_attrib *a, t_files_attrib *b));
 t_bool					comparator_lex_inv_ch(char *a, char *b);
@@ -95,7 +95,7 @@ void					ft_open_folder_recurision(t_props *props,
 						t_files_attrib *atr);
 char					*get_full_path(char *fld_name, char *name);
 void					assign_all(t_props **props, t_path **pat,
-						t_path **p_handler,	t_bool *is_first_asign);
+						t_path **p_handler, t_bool *is_first_asign);
 char					*concat_full_path(t_files_attrib *attrib, char **buf);
 int						*calc_column_props(t_props *property,
 						t_files_attrib *attr, int *prop, t_column *col);
@@ -110,4 +110,5 @@ void					long_listing_parser(t_print *print,
 						t_files_attrib **attrib, char **buf);
 void					print_concat_free(t_files_attrib **attrib,
 						t_print *print, char **buf);
+int						ft_love_norme(t_files_attrib **at);
 #endif

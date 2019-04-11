@@ -86,15 +86,15 @@ t_files_attrib			*read_inner_loop(char *fld_name, DIR *dir,
 void					ft_open_folder_recurision(t_props *props,
 						t_files_attrib *atr)
 {
-		while (atr)
-		{
-			if (IS_OK && is_dir(atr->full_path) && !atr->error_message)
-				ft_open_folder(atr->full_path, 1, props);
-			atr = atr->next;
-		}
+	while (atr)
+	{
+		if (IS_OK && is_dir(atr->full_path) && !atr->error_message)
+			ft_open_folder(atr->full_path, 1, props);
+		atr = atr->next;
+	}
 }
 
-void					ft_open_folder(char *fld_name, char rec_cal,
+void					ft_open_folder(char *f_name, char rec_cal,
 						t_props *props)
 {
 	DIR					*dir;
@@ -102,23 +102,21 @@ void					ft_open_folder(char *fld_name, char rec_cal,
 	t_files_attrib		*attrib;
 	struct stat			structstat;
 
-	attrib = NULL;
-	errno = 0;
-	if (!(dir = opendir(fld_name)))
+	if (!((dir = opendir(f_name)) && ft_love_norme(&attrib)))
 	{
-		if (lstat(fld_name, &structstat) == 0)
+		if (lstat(f_name, &structstat) == 0)
 		{
-			attrib = ft_relink(attrib, fld_name, fld_name);
+			attrib = ft_relink(attrib, f_name, f_name);
 			if (errno && rec_cal)
 			{
-				print_error(fld_name, errno, NULL);
+				print_error(f_name, errno, NULL);
 				return ;
 			}
 			print_level(attrib, g_flag, rec_cal, props);
 		}
 		return ;
 	}
-	attrib = read_inner_loop(fld_name, dir, dirp, attrib);
+	attrib = read_inner_loop(f_name, dir, dirp, attrib);
 	ft_merge_sort_wrapper(g_flag, &attrib);
 	print_level(attrib, g_flag, rec_cal, props);
 	if (g_flag & R_BIG)

@@ -12,13 +12,14 @@
 
 #include "libft.h"
 
-
 t_gc_vector *g_memaloced = NULL;
-void *ft_memalloc(size_t size)
+
+void	*ft_memalloc(size_t size)
 {
 	void *ch;
+
 	ch = NULL;
-	if(!g_memaloced)
+	if (!g_memaloced)
 		g_memaloced = init_tgc_vector(sizeof(size_t *));
 	ch = malloc(size);
 	ft_bzero(ch, size);
